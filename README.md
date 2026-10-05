@@ -1,96 +1,152 @@
 # AI Study Future Planner
 
-AI Study Future Planner is a production web application that will help students define a future goal and follow a personalized learning journey.
+AI Study Future Planner helps students turn a future goal into a structured learning journey.
 
-This repository is in the **foundation phase**. The public home page, project structure, styling system, environment setup, and documentation are in place. Product features such as accounts, data storage, and AI generation are not implemented yet.
+This file is the master project index. Detailed specifications live in [`docs/`](docs/). Agent instructions live in [`AGENTS.md`](AGENTS.md). These Markdown files are project context. They are not a database and must not store student data.
 
-## Documentation
+## 1. Product Overview
 
-README.md is the master index. The files below are project knowledge for product, architecture, and development. They are not a database, and they must not store user data.
+A student names the future they are studying toward. The product then keeps roadmap, study, practice, and review on one path:
+
+Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Performance Tracking → Adaptive Study Plan → AI Tutor
+
+The public home page introduces that journey. It does not create a goal, generate a plan, or call an AI provider.
+
+Product specification: [docs/product.md](docs/product.md). Feature status: [docs/features.md](docs/features.md).
+
+## 2. Product Vision
+
+The long-term purpose is a calm, trustworthy study platform where planning, daily work, practice, and tutoring stay tied to the same goal. Progress should change what the student does next. The product should feel precise and student-focused, not like a generic chat tool or a copy of another product.
+
+## 3. Current Development Status
+
+The repository is in the foundation phase. Source control is on GitHub: [msalmanofficial2293-creator/ai-study-future-planner](https://github.com/msalmanofficial2293-creator/ai-study-future-planner).
+
+Implemented:
+
+- Next.js application shell with TypeScript, Tailwind CSS, and ESLint
+- Public landing page, shared layout, and the Ink and Horizon visual system
+- Not-found and recoverable error pages
+- Public metadata, `robots.txt`, and `sitemap.xml`
+- Environment variable structure for the public site URL
+- Project documentation
+
+Not implemented:
+
+- Authentication, onboarding, profile, and settings
+- Future Planner, AI Future Roadmap, Study Plan, and Daily Tasks
+- AI Quiz, Performance Tracking, Adaptive Study Plan, and AI Tutor
+- Database, application API routes, and AI provider integration
+- Payments, cloud hosting, staging, production, and a custom domain
+
+Do not describe a planned area as implemented.
+
+## 4. Technology Stack
+
+| Layer | Current choice |
+| --- | --- |
+| UI | Next.js 16 (App Router), React 19, TypeScript (strict), Tailwind CSS 4 |
+| Server | Next.js server rendering and, later, route handlers in this repository |
+| Database | Not connected. A cloud database is a later phase. |
+| AI | Not connected. Requests must go through a server-side boundary. |
+| Quality | ESLint and `tsc`. No test runner is installed yet. |
+| Source | Git and GitHub |
+
+Node.js 20 or newer and npm are required locally.
+
+## 5. Documentation Index
 
 | Document | Purpose |
 | --- | --- |
-| [Product](docs/product.md) | Who the product is for, the learning journey, and the current phase. |
-| [Architecture](docs/architecture.md) | How the codebase is organized and how later layers should fit. |
-| [Features](docs/features.md) | Planned product capabilities and what exists today. |
-| [UI design](docs/ui-design.md) | Visual identity, responsive behavior, and accessibility. |
-| [Database](docs/database.md) | Rules for the future production database. |
-| [API](docs/api.md) | Rules for future server and API boundaries. |
-| [AI system](docs/ai-system.md) | Rules for the future server-side AI integration. |
-| [Security](docs/security.md) | Secret handling and the current security baseline. |
-| [Testing](docs/testing.md) | How to check the foundation, and what testing comes later. |
-| [Deployment](docs/deployment.md) | Local run steps and deployment boundaries. |
+| [Product](docs/product.md) | Purpose, users, journey, product areas, and phase. |
+| [Features](docs/features.md) | Implemented and planned behavior. |
+| [Architecture](docs/architecture.md) | Current code layout and intended production boundaries. |
+| [UI design](docs/ui-design.md) | Visual identity, accessibility, and interface states. |
+| [Database](docs/database.md) | Future conceptual data model. No database is connected. |
+| [API](docs/api.md) | Future server API strategy. No product API exists yet. |
+| [AI system](docs/ai-system.md) | Future server-side AI boundary. No provider is connected. |
+| [Security](docs/security.md) | Current baseline and production security principles. |
+| [Testing](docs/testing.md) | Current checks and the intended QA path. |
+| [Deployment](docs/deployment.md) | Local run steps and the intended release path. |
 
-## Stack
+## 6. Project Structure
 
-- Next.js 16 (App Router)
-- React 19
-- TypeScript (strict)
-- Tailwind CSS 4
-- ESLint
+```text
+src/app/                  Routes, root layout, global CSS, SEO files
+src/components/brand/     Product mark
+src/components/layout/    Header, footer, skip link
+src/components/ui/        Shared interface primitives
+src/components/home/      Landing page sections
+src/config/               Public site config, env parsing, page content
+src/lib/                  Shared utilities
+docs/                     Product and engineering documentation
+```
 
-## Requirements
+Later code belongs in the locations in [docs/architecture.md](docs/architecture.md). Add a directory when it has real code.
 
-- Node.js 20 or newer
-- npm
+## 7. Development Rules
 
-## Getting started
+Authoritative agent instructions: [AGENTS.md](AGENTS.md). [CLAUDE.md](CLAUDE.md) points at that file.
+
+- Inspect existing code before changing it.
+- Work only on the requested task. Do not start a later phase without permission.
+- Do not rewrite a working feature unless the task requires it.
+- Follow the current architecture and visual system.
+- Use TypeScript strictly. Prefer reusable components. Avoid duplicated logic and unnecessary dependencies.
+- Keep UI, business logic, services, API handlers, configuration, and types separated.
+- Keep public pages responsive and accessible.
+- Handle loading, empty, success, and error states when a feature has those states.
+- Run the checks that match the change, then report what was actually tested.
+
+Workflow: Inspect → Plan → Implement → Validate → Report.
+
+## 8. Security Rules
+
+Details: [docs/security.md](docs/security.md).
+
+- Secrets belong in server-only environment variables or the host environment. Do not commit them.
+- `NEXT_PUBLIC_` values are visible to the browser. The only public variable now is `NEXT_PUBLIC_APP_URL`.
+- Do not put AI provider API keys, database URLs, or session secrets in client code.
+- AI requests, database access, and authentication checks must run on the server when those phases exist.
+- Authentication is not implemented. Do not store or return personal study data before authorization exists.
+- Error pages may show a safe reference. They must not reveal internal details.
+
+## 9. Testing
+
+Details: [docs/testing.md](docs/testing.md).
+
+Current local checks:
+
+```bash
+npm run lint
+npm run typecheck
+npm run build
+```
+
+No unit, integration, or end-to-end runner is installed. Add one when a feature needs automated coverage. The intended path is development, local validation, pull request, CI checks, staging, then production. CI, staging, and production are not set up.
+
+## 10. Deployment
+
+Details: [docs/deployment.md](docs/deployment.md).
+
+Intended flow, not yet provisioned beyond GitHub:
+
+Local development → Git → GitHub → Cloud deployment → Production → Custom domain
+
+Environments to keep separate later: development, staging, and production. Only local development exists today. Nothing has been deployed to a cloud host, and no custom domain is connected.
+
+Local setup:
 
 ```bash
 npm install
-cp .env.example .env.local
-npm run dev
 ```
-
-On Windows PowerShell, copy the example file with:
 
 ```powershell
 Copy-Item .env.example .env.local
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
-
-`.env.local` is gitignored. Only `NEXT_PUBLIC_APP_URL` is used in this phase. Do not add API keys, database URLs, or other secrets to client-side code.
-
-## Scripts
-
-| Command | Purpose |
-| --- | --- |
-| `npm run dev` | Start the local development server. |
-| `npm run lint` | Run ESLint. |
-| `npm run typecheck` | Run the TypeScript compiler without emitting files. |
-| `npm run build` | Create a production build. |
-| `npm run start` | Serve the production build. |
-
-## Project structure
-
-```text
-src/
-  app/            Routes, layouts, global styles, and metadata
-  components/     Reusable UI, layout, and brand components
-  config/         Site, environment, and public page content
-  lib/            Small shared utilities
-docs/             Project documentation
+```bash
+npm run dev
 ```
 
-Feature modules, services, API routes, and shared domain types will be added when those phases start. See [Architecture](docs/architecture.md).
-
-## Current boundaries
-
-Do not add these until a later phase explicitly asks for them:
-
-- Authentication
-- Database integration
-- AI provider calls or API keys
-- Payments
-- Dashboard, quiz, study planner, or roadmap generator
-
-## Development rules
-
-1. Work only on the phase that was requested.
-2. Inspect existing files before changing them.
-3. Keep routes, UI, business logic, services, API code, utilities, types, configuration, and documentation separated.
-4. Use TypeScript strictly. Do not introduce `any` to silence errors.
-5. Keep secrets in server-side environment variables. Never expose them with `NEXT_PUBLIC_` or in client components.
-6. Handle loading, empty, success, and error states when a feature has those states.
-7. Keep public pages responsive, accessible, and indexable.
+Open [http://localhost:3000](http://localhost:3000). `npm run build` then `npm run start` checks the production build locally. `.env.local` is gitignored.

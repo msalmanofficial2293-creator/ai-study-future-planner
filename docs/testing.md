@@ -1,10 +1,10 @@
 # Testing
 
-This document describes how to check the project. No automated test runner is installed in the foundation.
+QA strategy for AI Study Future Planner. No automated test runner is installed. Do not add one in a phase that has no behavior to test.
 
-## Checks for this phase
+## Current checks
 
-Run these from the repository root:
+From the repository root:
 
 ```bash
 npm run lint
@@ -12,24 +12,54 @@ npm run typecheck
 npm run build
 ```
 
-`npm run dev` must start the site and serve the home page at [http://localhost:3000](http://localhost:3000).
+`npm run dev` serves the landing page at [http://localhost:3000](http://localhost:3000).
 
-## What to verify on the home page
+Verify the landing page when its UI changes:
 
-- The page renders the product name, the learning sequence, and the approach.
+- The product name, learning sequence, and approach render.
 - Keyboard users can skip to content and see a focus state.
-- Layout remains usable at phone, tablet, and desktop widths.
-- Unknown routes show the not-found page.
+- Layout remains usable on a phone, a tablet, and a desktop.
+- An unknown route shows the not-found page.
 - The page has a title and description.
 
-## Later testing
+## Intended test layers
 
-Add an automated test runner when a feature needs unit, integration, or end-to-end coverage. Record the tool and the required commands here at that time. Do not add a test framework during a phase that has no behavior to test.
+Add a layer when a feature needs it. Record the tool and the command in this file at that time.
 
-Feature work should cover loading, empty, success, and error paths when that feature fetches or submits data.
+| Layer | What it should cover |
+| --- | --- |
+| Unit testing | Pure business rules, env parsing, and response validation. |
+| Integration testing | A service with its database or AI boundary, using test doubles for external providers. |
+| Component testing | Shared UI states: default, loading, empty, error, and disabled. |
+| End-to-end testing | A student path such as sign-in through creating a Goal, once those features exist. |
+| API testing | Auth, validation, authorization, and error shapes for route handlers. |
+| Accessibility testing | Keyboard access, names, focus, contrast, and headings on changed screens. |
+| Responsive testing | Phone, tablet, and desktop for changed layout. |
+| Security testing | Secret handling, authorization, input rejection, and safe error responses. |
+| Performance testing | Page and API response times once real data and AI calls exist. |
+
+Feature work that fetches or submits data must cover loading, empty, success, and error paths.
+
+## Release path
+
+Intended sequence:
+
+Development → Local validation → Pull request → CI checks → Staging → Production
+
+| Stage | Status |
+| --- | --- |
+| Development | In use on a local machine. |
+| Local validation | `lint`, `typecheck`, and `build` are available. |
+| Pull request | The GitHub repository exists. Required review checks are not configured in this phase. |
+| CI checks | Not set up. |
+| Staging | Not set up. |
+| Production | Not deployed. |
+
+Do not claim CI, staging, or production verification has happened.
 
 ## Related documents
 
 - [Deployment](deployment.md)
 - [UI design](ui-design.md)
+- [Security](security.md)
 - [README](../README.md)
