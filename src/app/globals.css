@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
+  --ink: #102033;
+  --ink-soft: #243447;
+  --paper: #f3efe7;
+  --paper-raised: #fbf9f5;
+  --line: #e3dcd0;
+  --muted: #3f4d5c;
+  --horizon: #b85a28;
+  --horizon-deep: #8d431c;
+  --tide: #1d5f5b;
+}
+
+@theme inline {
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-paper: var(--paper);
+  --color-paper-raised: var(--paper-raised);
+  --color-line: var(--line);
+  --color-muted: var(--muted);
+  --color-horizon: var(--horizon);
+  --color-horizon-deep: var(--horizon-deep);
+  --color-tide: var(--tide);
+  --font-sans: var(--font-outfit), sans-serif;
+  --font-display: var(--font-fraunces), serif;
+}
+
+html {
+  scroll-padding-top: 5.5rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  background:
+    radial-gradient(980px 420px at 100% -10%, rgb(184 90 40 / 0.09), transparent 58%),
+    radial-gradient(760px 380px at -12% 8%, rgb(29 95 91 / 0.07), transparent 55%),
+    var(--paper);
+  color: var(--ink);
+  overflow-x: clip;
+}
+
+:focus-visible {
+  outline: 2px solid var(--horizon-deep);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: rgb(184 90 40 / 0.22);
+  color: var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
