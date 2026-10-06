@@ -9,6 +9,7 @@ import {
   type WeeklyStudyTime,
 } from "@/features/onboarding/options";
 import type { OnboardingInput } from "@/features/onboarding/validation";
+import { profileIsComplete } from "@/services/onboarding-status";
 import { createSupabaseServerClient, getAuthenticatedUser } from "@/lib/supabase/server";
 
 export type OnboardingLoad =
@@ -54,7 +55,7 @@ export async function loadOnboarding(fallbackName: string): Promise<OnboardingLo
 
   const profile = asRecord(profileResult.data);
 
-  if (readTimestamp(profile, "onboarding_completed_at")) {
+  if (profileIsComplete(profileResult.data)) {
     return { status: "completed" };
   }
 
@@ -117,7 +118,7 @@ export async function saveOnboarding(
     return { ok: false, reason: "failed" };
   }
 
-  if (readTimestamp(asRecord(existingProfile.data), "onboarding_completed_at")) {
+  if (profileIsComplete(existingProfile.data)) {
     return { ok: false, reason: "completed" };
   }
 
@@ -205,11 +206,6 @@ function asRecord(value: unknown): Record<string, unknown> | null {
 function readString(record: Record<string, unknown> | null, key: string): string {
   const value = record?.[key];
   return typeof value === "string" ? value.trim() : "";
-}
-
-function readTimestamp(record: Record<string, unknown> | null, key: string): string {
-  const value = record?.[key];
-  return typeof value === "string" ? value : "";
 }
 
 function readChoice(

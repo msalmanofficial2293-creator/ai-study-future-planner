@@ -48,6 +48,7 @@ src/components/home/      Landing page sections
 src/features/onboarding/  Onboarding validation, action, and form
 src/features/auth/        Auth actions, validation, and forms
 src/services/onboarding.ts  Profile and first-goal reads and writes
+src/services/onboarding-status.ts  Shared onboarding completion check
 src/config/               Site config, public env parsing, page content
 src/lib/supabase/         Browser client, server client, session refresh
 src/proxy.ts              Request session refresh and auth redirects
@@ -80,7 +81,7 @@ Supabase Auth is the only authentication provider.
 | `createSupabaseBrowserClient` | Browser client for later client-side auth calls. Forms in this phase use server actions. |
 | `createSupabaseServerClient` | Server client. Reads and writes the auth cookies from `next/headers`. |
 | `getAuthenticatedUser` | Calls `auth.getUser()` so the server validates the session. |
-| `src/proxy.ts` | Refreshes the session cookie and redirects. Unauthenticated `/app` and `/onboarding` go to `/login`. Authenticated `/login` and `/signup` go to `/app`. |
+| `src/proxy.ts` | Refreshes the session cookie and redirects. Unauthenticated `/app` and `/onboarding` go to `/login`. Authenticated `/login` and `/signup` go to `/onboarding` until `profiles.onboarding_completed_at` is set, then to `/app`. |
 
 `/auth/callback` exchanges an auth `code` for a session. It can also verify an email `token_hash` on the server, then redirects to `/app`. Failures go to `/login` with a fixed error code. Tokens are not written into the page.
 

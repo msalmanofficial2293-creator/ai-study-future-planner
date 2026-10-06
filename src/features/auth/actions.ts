@@ -10,6 +10,7 @@ import {
   validateSignup,
   type AuthFormState,
 } from "@/features/auth/validation";
+import { authDestination, hasCompletedOnboarding } from "@/services/onboarding-status";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 const signupInFlight = new Map<string, Promise<AuthFormState>>();
@@ -52,18 +53,26 @@ export async function loginAction(
 
   try {
     const supabase = await createSupabaseServerClient();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
       const info = authErrorInfo(error);
       logAuthDiagnostic("login", info);
       return { formError: mapAuthError(info) };
     }
-  } catch {
+
+    if (!data.user) {
+      return { formError: authMessages.unexpected };
+    }
+
+    redirect(authDestination(await hasCompletedOnboarding(supabase, data.user.id)));
+  } catch (error) {
+    if (isRedirectError(error)) {
+      throw error;
+    }
+
     return { formError: authMessages.unexpected };
   }
-
-  redirect("/app");
 }
 
 export async function signupAction(
@@ -105,6 +114,7 @@ async function runSignup(
   password: string,
 ): Promise<AuthFormState> {
   let outcome: "signed-in" | "confirm" | "registered" = "confirm";
+  let signedInUserId = "";
 
   try {
     const supabase = await createSupabaseServerClient();
@@ -127,8 +137,9 @@ async function runSignup(
 
     if (data.user && Array.isArray(identities) && identities.length === 0) {
       outcome = "registered";
-    } else if (data.session) {
+    } else if (data.session && data.user) {
       outcome = "signed-in";
+      signedInUserId = data.user.id;
     } else {
       outcome = "confirm";
     }
@@ -144,7 +155,18 @@ async function runSignup(
     return { message: authMessages.confirmEmail };
   }
 
-  redirect("/app");
+  const supabase = await createSupabaseServerClient();
+  redirect(authDestination(await hasCompletedOnboarding(supabase, signedInUserId)));
+}
+
+function isRedirectError(error: unknown): boolean {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "digest" in error &&
+    typeof error.digest === "string" &&
+    error.digest.startsWith("NEXT_REDIRECT")
+  );
 }
 
 export async function logoutAction(): Promise<void> {

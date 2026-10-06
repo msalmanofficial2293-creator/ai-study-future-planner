@@ -3,7 +3,8 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AuthPanel } from "@/components/auth/auth-panel";
 import { SignupForm } from "@/features/auth/signup-form";
-import { getAuthenticatedUser } from "@/lib/supabase/server";
+import { authDestination, hasCompletedOnboarding } from "@/services/onboarding-status";
+import { createSupabaseServerClient, getAuthenticatedUser } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "Create an account",
@@ -14,7 +15,8 @@ export default async function SignupPage() {
   const user = await getAuthenticatedUser();
 
   if (user) {
-    redirect("/app");
+    const supabase = await createSupabaseServerClient();
+    redirect(authDestination(await hasCompletedOnboarding(supabase, user.id)));
   }
 
   return (

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { authDestination, hasCompletedOnboarding } from "@/services/onboarding-status";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export async function GET(request: Request) {
@@ -7,7 +8,6 @@ export async function GET(request: Request) {
   const tokenHash = url.searchParams.get("token_hash");
   const type = url.searchParams.get("type");
   const providerError = url.searchParams.get("error");
-  const nextPath = safeNextPath(url.searchParams.get("next"));
 
   if (providerError || (!code && !tokenHash)) {
     return NextResponse.redirect(new URL("/login?error=callback", url.origin));
@@ -16,35 +16,38 @@ export async function GET(request: Request) {
   const supabase = await createSupabaseServerClient();
 
   if (code) {
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error) {
-      return NextResponse.redirect(new URL(nextPath, url.origin));
+      return NextResponse.redirect(new URL(await destinationFor(supabase, data.user?.id), url.origin));
     }
 
     return NextResponse.redirect(new URL("/login?error=callback", url.origin));
   }
 
   if (tokenHash && isEmailOtpType(type)) {
-    const { error } = await supabase.auth.verifyOtp({
+    const { data, error } = await supabase.auth.verifyOtp({
       type,
       token_hash: tokenHash,
     });
 
     if (!error) {
-      return NextResponse.redirect(new URL(nextPath, url.origin));
+      return NextResponse.redirect(new URL(await destinationFor(supabase, data.user?.id), url.origin));
     }
   }
 
   return NextResponse.redirect(new URL("/login?error=callback", url.origin));
 }
 
-function safeNextPath(value: string | null): string {
-  if (!value || !value.startsWith("/") || value.startsWith("//")) {
-    return "/app";
+async function destinationFor(
+  supabase: Parameters<typeof hasCompletedOnboarding>[0],
+  userId: string | undefined,
+): Promise<"/app" | "/onboarding"> {
+  if (!userId) {
+    return "/onboarding";
   }
 
-  return value === "/app" || value.startsWith("/app/") ? value : "/app";
+  return authDestination(await hasCompletedOnboarding(supabase, userId));
 }
 
 function isEmailOtpType(

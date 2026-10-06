@@ -4,7 +4,8 @@ import { redirect } from "next/navigation";
 import { AuthPanel } from "@/components/auth/auth-panel";
 import { authMessages } from "@/features/auth/messages";
 import { LoginForm } from "@/features/auth/login-form";
-import { getAuthenticatedUser } from "@/lib/supabase/server";
+import { authDestination, hasCompletedOnboarding } from "@/services/onboarding-status";
+import { createSupabaseServerClient, getAuthenticatedUser } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "Log in",
@@ -19,7 +20,8 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   const user = await getAuthenticatedUser();
 
   if (user) {
-    redirect("/app");
+    const supabase = await createSupabaseServerClient();
+    redirect(authDestination(await hasCompletedOnboarding(supabase, user.id)));
   }
 
   const params = await searchParams;

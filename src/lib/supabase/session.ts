@@ -5,6 +5,7 @@ import {
   readSupabasePublicConfig,
 } from "@/lib/supabase/config";
 import { hasSupabaseSessionCookie } from "@/lib/supabase/cookies";
+import { authDestination, hasCompletedOnboarding } from "@/services/onboarding-status";
 
 const AUTH_ROUTES = new Set(["/login", "/signup"]);
 
@@ -63,7 +64,8 @@ export async function updateSession(request: NextRequest) {
   }
 
   if (user && isAuthRoute) {
-    return redirectWithSession(request, response, "/app");
+    const completed = await hasCompletedOnboarding(supabase, user.id);
+    return redirectWithSession(request, response, authDestination(completed));
   }
 
   return response;
