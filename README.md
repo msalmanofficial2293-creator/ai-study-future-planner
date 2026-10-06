@@ -64,7 +64,7 @@ Node.js 20 or newer and npm are required locally.
 | [Features](docs/features.md) | Implemented and planned behavior. |
 | [Architecture](docs/architecture.md) | Current code layout and intended production boundaries. |
 | [UI design](docs/ui-design.md) | Visual identity, accessibility, and interface states. |
-| [Database](docs/database.md) | PostgreSQL schema and row level security. The app does not query it yet. |
+| [Database](docs/database.md) | PostgreSQL schema and row level security. The app reads and writes `profiles` and the first `goals` row. |
 | [API](docs/api.md) | Future server API strategy. No product API exists yet. |
 | [AI system](docs/ai-system.md) | Future server-side AI boundary. No provider is connected. |
 | [Security](docs/security.md) | Current baseline and production security principles. |
@@ -76,6 +76,7 @@ Node.js 20 or newer and npm are required locally.
 ```text
 src/app/                  Routes, root layout, global CSS, SEO files
 src/app/onboarding/       Protected onboarding form
+src/app/app/profile/      Protected profile view and update
 src/components/brand/     Product mark
 src/components/layout/    Header, footer, skip link
 src/components/ui/        Shared interface primitives
@@ -83,7 +84,9 @@ src/components/home/      Landing page sections
 src/config/               Public site config, env parsing, page content
 src/features/auth/        Authentication actions and forms
 src/features/onboarding/  Onboarding validation, action, and form
-src/services/onboarding.ts  Profile and first-goal database access
+src/features/profile/     Profile view, edit form, and avatar initials
+src/services/onboarding.ts  Profile and first-goal database access for onboarding
+src/services/profile.ts   Read and update the signed-in profile and first goal
 src/lib/                  Shared utilities
 src/lib/supabase/         Supabase browser client, server client, session refresh
 src/proxy.ts              Auth session refresh and route protection

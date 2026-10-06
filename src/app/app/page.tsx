@@ -43,6 +43,9 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
         Signed in as <span className="font-medium">{user.email}</span>
       </p>
       <div className="mt-8 flex flex-col gap-3">
+        <Button href="/app/profile" variant="secondary">
+          Profile
+        </Button>
         <Button href="/app/future-planner">Open Future Planner</Button>
         <LogoutButton />
       </div>

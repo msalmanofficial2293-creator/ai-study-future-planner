@@ -1,6 +1,6 @@
 # Database
 
-Supabase PostgreSQL schema for AI Study Future Planner. The SQL lives in [supabase/migrations/20261006125000_database_foundation.sql](../supabase/migrations/20261006125000_database_foundation.sql). The Next.js app reads and writes `profiles` and the student's first `goals` row during onboarding and in the Future Planner. It does not query the other study tables yet. Do not store student records in Markdown.
+Supabase PostgreSQL schema for AI Study Future Planner. The SQL lives in [supabase/migrations/20261006125000_database_foundation.sql](../supabase/migrations/20261006125000_database_foundation.sql). The Next.js app reads and writes `profiles` and the student's first `goals` row during onboarding, in the Future Planner, and on the profile page. It does not query the other study tables yet. Do not store student records in Markdown.
 
 ## Current decision
 
@@ -15,7 +15,7 @@ Onboarding then updates the same profile. Apply [supabase/migrations/20261006143
 - Every student table has row level security. A signed-in student can read and change only rows they own.
 - `profiles.id` is the Auth user id. Every other student table has `user_id` referencing `auth.users`.
 - Child rows also store `user_id`. A composite foreign key keeps that id the same as the parent row, so a student cannot attach their row to someone else's goal, roadmap, plan, or quiz.
-- Queries for onboarding run in `src/services/onboarding.ts`. The Future Planner reads the same profile and first goal from `src/services/future-planner.ts`, and updates only that goal. The browser must not open a database connection or receive a database password.
+- Queries for onboarding run in `src/services/onboarding.ts`. The Future Planner and the profile page read the same profile and first goal. The Future Planner updates the goal. The profile page updates that profile and the goal. Email stays on the Auth user and is not written to `profiles`. The browser must not open a database connection or receive a database password.
 - Do not commit credentials, dumps, or real student data.
 - Deleting the Auth user deletes the profile and owned rows through `ON DELETE CASCADE`.
 

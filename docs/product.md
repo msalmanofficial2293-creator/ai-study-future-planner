@@ -58,7 +58,7 @@ Only the public description of the later journey exists today. Onboarding can sa
 | Performance Tracking | Progress, gaps, and consistency. | Planned |
 | Adaptive Study Plan | A revised plan based on performance. | Planned |
 | AI Tutor | Guidance tied to the goal and recent work. | Planned |
-| Profile and Settings | Identity, preferences, and account controls. | Planned |
+| Profile and Settings | View and update profile and goal details. Account deletion and password recovery are not built. | Profile editing implemented |
 
 Behavior for each area is in [features.md](features.md). Do not build a planned area unless a task asks for it.
 
@@ -80,9 +80,9 @@ A later business decision may consider a free student journey and optional paid 
 
 Foundation phase.
 
-Implemented: the public landing page, application shell, visual system, environment structure, authentication, onboarding, the Future Planner, documentation, and the PostgreSQL schema in `supabase/migrations`. Onboarding and the Future Planner use `profiles` and the first `goals` row. The other study tables are not queried yet.
+Implemented: the public landing page, application shell, visual system, environment structure, authentication, onboarding, the Future Planner, profile editing, documentation, and the PostgreSQL schema in `supabase/migrations`. Onboarding, the Future Planner, and the profile page use `profiles` and the first `goals` row. The other study tables are not queried yet.
 
-Not started: roadmap generation, study plans, tasks, quizzes, tracking, adaptive planning, tutoring, profile settings, application APIs, and AI calls.
+Not started: roadmap generation, study plans, tasks, quizzes, tracking, adaptive planning, tutoring, account deletion, application APIs, and AI calls.
 
 ## Related documents
 

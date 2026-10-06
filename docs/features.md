@@ -30,7 +30,7 @@ Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Perfor
 
 - Purpose: identify a student before the product stores personal study data.
 - User value: the student can create an account and return to it.
-- Expected behavior: a student can sign up with full name, email, and password, log in, and log out. The server reads the session from Supabase auth cookies. `/app` is a temporary verification page that shows the product name, a welcome, the signed-in email, and a logout button. Anonymous visitors to `/app` or `/onboarding` are redirected to `/login`. A signed-in student who still needs onboarding is sent to `/onboarding` from login, signup, and the auth callback. A student whose `profiles.onboarding_completed_at` is set is sent to `/app`. `/auth/callback` exchanges the auth code for a session.
+- Expected behavior: a student can sign up with full name, email, and password, log in, and log out. The server reads the session from Supabase auth cookies. `/app` is a temporary verification page that shows the product name, a welcome, the signed-in email, links to the profile and Future Planner, and a logout button. Anonymous visitors to `/app` or `/onboarding` are redirected to `/login`. A signed-in student who still needs onboarding is sent to `/onboarding` from login, signup, and the auth callback. A student whose `profiles.onboarding_completed_at` is set is sent to `/app`. `/auth/callback` exchanges the auth code for a session.
 - Important states: field validation, loading, invalid credentials, email already registered, weak password, unexpected failure, and email confirmation. When confirmation is required, signup stays on the form and tells the student to check their email. It does not open `/app` without a session.
 - Dependencies: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, and Supabase Auth. No secret or service-role key is used. See [security.md](security.md) and [architecture.md](architecture.md).
 - Future implementation notes: password recovery and account deletion are not implemented. Signup still stores `full_name` in user metadata, and the database trigger copies it into `profiles`. `/app` is not the product dashboard.
@@ -52,6 +52,15 @@ Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Perfor
 - Important states: loading, no goal yet, saved, validation error, save failure, and a failure to load the student's records. The submit control stays disabled while the save is in progress, and a second submit is ignored.
 - Dependencies: Authentication, completed onboarding, and the existing row level security policies. No service-role key is used.
 - Future implementation notes: keep the object name Goal. Do not rename it to a roadmap or a plan. AI generation stays a later step.
+
+### Profile
+
+- Purpose: let a signed-in student see and update the identity and study context already stored for them.
+- User value: the student can correct their name, learning context, and goal without starting over.
+- Expected behavior: `/app/profile` is available only to a signed-in student. It shows full name, email, education level, field of study, skill level, weekly study time, learning style, career goal, and target outcome. Email is read-only. Edit profile opens the form. Save changes writes `profiles` for that student and the earliest `goals` row, or inserts a goal if none exists. Cancel leaves the saved values in place. The avatar is the student's initials. Photo upload is not available, and no image is stored.
+- Important states: loading, not set yet, editing, saving, saved, validation error, save failure, and a profile row that is not ready. The save control stays disabled while the request is in progress, and a second submit is ignored.
+- Dependencies: Authentication and the existing row level security policies. No service-role key and no storage bucket are used.
+- Future implementation notes: account deletion, password recovery, and avatar upload are not part of this page.
 
 ## Planned
 
@@ -118,12 +127,12 @@ Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Perfor
 - Dependencies: Authentication, Goal context, the AI boundary, and stored conversation history.
 - Future implementation notes: do not send secrets or unrelated personal data in the prompt. Do not expose the provider key.
 
-### Profile and settings
+### Account settings
 
-- Purpose: let the student manage identity, preferences, and account controls.
-- User value: the account remains understandable and reversible.
-- Expected behavior: the student can view profile details, update preferences, and, when accounts exist, request account deletion as described in [security.md](security.md).
-- Important states: loading, saved, validation error, signed out, and deletion pending or failed.
+- Purpose: account controls beyond the profile page.
+- User value: the student can recover access and remove the account.
+- Expected behavior: password recovery and account deletion, as described in [security.md](security.md). Photo upload is not part of the profile page.
+- Important states: recovery sent, signed out, and deletion pending or failed.
 - Dependencies: Authentication and the database.
 - Future implementation notes: do not collect fields that no current feature uses.
 
