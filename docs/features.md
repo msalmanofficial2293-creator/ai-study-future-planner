@@ -33,7 +33,7 @@ Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Perfor
 - Expected behavior: a student can sign up with full name, email, and password, log in, and log out. The server reads the session from Supabase auth cookies. `/app` is a temporary verification page that shows the product name, a welcome, the signed-in email, and a logout button. Anonymous visitors to `/app` are redirected to `/login`. Signed-in visitors to `/login` or `/signup` are redirected to `/app`. `/auth/callback` exchanges the auth code for a session.
 - Important states: field validation, loading, invalid credentials, email already registered, weak password, unexpected failure, and email confirmation. When confirmation is required, signup stays on the form and tells the student to check their email. It does not open `/app` without a session.
 - Dependencies: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, and Supabase Auth. No secret or service-role key is used. See [security.md](security.md) and [architecture.md](architecture.md).
-- Future implementation notes: password recovery, account deletion, and a profile table are not implemented. Do not store study data in this phase. `/app` is not the product dashboard.
+- Future implementation notes: password recovery and account deletion are not implemented. `profiles` is created by the database migration from signup metadata. The app does not show or query it yet. Do not store study data in application code in this phase. `/app` is not the product dashboard.
 
 ## Planned
 

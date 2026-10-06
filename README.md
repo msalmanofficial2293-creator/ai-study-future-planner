@@ -64,7 +64,7 @@ Node.js 20 or newer and npm are required locally.
 | [Features](docs/features.md) | Implemented and planned behavior. |
 | [Architecture](docs/architecture.md) | Current code layout and intended production boundaries. |
 | [UI design](docs/ui-design.md) | Visual identity, accessibility, and interface states. |
-| [Database](docs/database.md) | Conceptual data model. Auth users only. No application schema. |
+| [Database](docs/database.md) | PostgreSQL schema and row level security. The app does not query it yet. |
 | [API](docs/api.md) | Future server API strategy. No product API exists yet. |
 | [AI system](docs/ai-system.md) | Future server-side AI boundary. No provider is connected. |
 | [Security](docs/security.md) | Current baseline and production security principles. |
@@ -84,6 +84,7 @@ src/features/auth/        Authentication actions and forms
 src/lib/                  Shared utilities
 src/lib/supabase/         Supabase browser client, server client, session refresh
 src/proxy.ts              Auth session refresh and route protection
+supabase/migrations/      PostgreSQL schema. Not executed by the Next.js app.
 docs/                     Product and engineering documentation
 ```
 

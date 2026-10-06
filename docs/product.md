@@ -80,9 +80,9 @@ A later business decision may consider a free student journey and optional paid 
 
 Foundation phase.
 
-Implemented: the public landing page, application shell, visual system, environment structure, and documentation.
+Implemented: the public landing page, application shell, visual system, environment structure, authentication, documentation, and the PostgreSQL schema in `supabase/migrations`. The app does not query those tables yet.
 
-Not started: accounts, saved goals, roadmap generation, study plans, tasks, quizzes, tracking, adaptive planning, tutoring, profile settings, database, application APIs, and AI calls.
+Not started: saved goals, roadmap generation, study plans, tasks, quizzes, tracking, adaptive planning, tutoring, profile settings, application APIs, and AI calls.
 
 ## Related documents
 

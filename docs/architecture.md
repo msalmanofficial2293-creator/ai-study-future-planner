@@ -9,7 +9,7 @@ Intended production shape for AI Study Future Planner, and the structure that ex
 | Frontend | Next.js 16 App Router, React 19, TypeScript, Tailwind CSS 4 |
 | Server | Next.js server rendering now. Route handlers in this repository when a feature needs an API. |
 | Authentication | Supabase Auth through `@supabase/ssr`. Email and password only. |
-| Database | No application database is connected. Supabase is used for Auth only. |
+| Database | Supabase PostgreSQL. The schema is in `supabase/migrations`. The app does not query it yet. |
 | AI | No provider is connected. Future requests go through a secure server-side boundary. |
 | Deployment | Intended path is GitHub, then a cloud deployment, then a custom domain. Only GitHub is in place. |
 
@@ -23,7 +23,7 @@ A separate backend service may replace in-process services later if scale requir
 | Business logic | Feature rules that do not talk to a provider directly. | `src/features/<feature>` when a feature exists |
 | Services | Database, AI, and other external calls. Auth session access lives in `src/lib/supabase` because it is shared by the proxy, server actions, and server pages. | `src/services` when database or AI calls exist |
 | API | HTTP validation, auth checks, and service calls. | `src/app/api` when a route is required |
-| Database | Persistence of student data. | Server-side services only. See [database.md](database.md). |
+| Database | Student tables, keys, and row level security. Queries are not in the app yet. | Server-side services only, after a feature needs them. See [database.md](database.md). |
 | AI | Provider prompts, model calls, and response checks. | Server-side AI service. See [ai-system.md](ai-system.md). |
 | Configuration | Public site config and env parsing. | `src/config` |
 | Types | Shared contracts. Feature-local types stay in the feature. | `src/types` for cross-feature types |
@@ -48,6 +48,7 @@ src/features/auth/        Auth actions, validation, and forms
 src/config/               Site config, public env parsing, page content
 src/lib/supabase/         Browser client, server client, session refresh
 src/proxy.ts              Request session refresh and auth redirects
+supabase/migrations/      PostgreSQL schema. Not executed by the Next.js app.
 docs/                     Documentation
 ```
 
@@ -80,7 +81,7 @@ Supabase Auth is the only authentication provider.
 
 `/auth/callback` exchanges an auth `code` for a session. It can also verify an email `token_hash` on the server, then redirects to `/app`. Failures go to `/login` with a fixed error code. Tokens are not written into the page.
 
-Signup stores the full name in Supabase user metadata (`full_name`). There is no profile table. If email confirmation is enabled, signup returns no session and the form asks the student to check their email. It does not send them to `/app` until a session exists.
+Signup stores the full name in Supabase user metadata (`full_name`). The database migration copies that name into `profiles` when it has been applied. If email confirmation is enabled, signup returns no session and the form asks the student to check their email. It does not send them to `/app` until a session exists.
 
 Logout calls `auth.signOut()` in a server action, which clears the auth cookies, then redirects to `/login`.
 
@@ -96,7 +97,7 @@ Details: [api.md](api.md).
 
 ## Explicitly deferred
 
-- Application database clients, schemas, and migrations
+- Application queries against the study tables
 - Password recovery and account deletion
 - AI provider clients
 - A separate backend service

@@ -10,7 +10,7 @@ Production security principles for AI Study Future Planner, plus the baseline th
 - The Supabase URL must be `https`. The publishable key is the public Supabase key. A secret key or service-role key is not configured and must not be added to client code or to a `NEXT_PUBLIC_` name.
 - The Next.js `X-Powered-By` header is disabled.
 - The route error view may show a digest reference. It does not show an internal error message.
-- No database or AI credentials exist.
+- No AI provider credential exists. The study schema is defined in SQL and is not queried by the app yet.
 
 ## Secrets and environment variables
 
@@ -30,7 +30,7 @@ Supabase Auth provides email and password accounts. The application does not sto
 - Auth cookies are written by `@supabase/ssr`. Do not copy access tokens or refresh tokens into page HTML, logs, or query strings.
 - Signup, login, and logout run as server actions. Validation runs again on the server. Friendly errors replace provider messages. Passwords and tokens are not logged.
 - Email confirmation depends on the Supabase project. If it is enabled, signup does not create a local session until the student confirms.
-- Protected product data does not exist yet. When it does, authorize every read and write against that student's own records.
+- Protected product screens do not read the study tables yet. When they do, authorize every read and write against that student's own records. Row level security is the database enforcement. See [database.md](database.md).
 - Password recovery and account deletion are not implemented.
 
 ## Validation
@@ -45,10 +45,17 @@ Not implemented. Account, generation, and tutor routes will need limits so one c
 
 ## Database access
 
-- Connect from server-side services only.
-- Use a least-privilege database credential.
-- Do not expose the connection string to the browser or to logs.
-- See [database.md](database.md).
+The study schema is in `supabase/migrations/20261006125000_database_foundation.sql`. The application does not query it yet.
+
+- Apply the migration in Supabase. Do not create or alter these tables from Next.js route handlers.
+- The browser uses the publishable key only. Do not add a service-role or secret key to the app, the client, or a `NEXT_PUBLIC_` variable.
+- Row level security is enabled and forced on `profiles`, `goals`, `roadmaps`, `roadmap_milestones`, `study_plans`, `study_tasks`, `quizzes`, `quiz_questions`, `quiz_attempts`, `quiz_answers`, `performance_records`, and `adaptive_plans`.
+- `anon` has no privileges on those tables.
+- `profiles` lets the signed-in student select and update only `id = auth.uid()`.
+- Each other table lets the signed-in student select, insert, update, and delete only `user_id = auth.uid()`.
+- Composite foreign keys stop a student from hanging one of their rows off another student's parent row.
+- Future queries run in server-side services. Do not log query results that contain a student's plan, answers, or performance.
+- Deleting the Auth user cascades to the profile and owned study rows. A student-facing delete control is not built yet.
 
 ## XSS
 
@@ -78,7 +85,7 @@ Login, signup, and logout are Next.js server actions. Next.js checks the action 
 
 Student study data is personal. Collect only what the current feature needs.
 
-When accounts exist, a student must be able to delete the account and the associated profile, goals, plans, tasks, attempts, and tutor conversations. Deletion is not implemented. Design it with the authentication and database phases, including what backups may retain and for how long.
+A student must be able to delete the account and the associated profile, goals, plans, tasks, attempts, and tutor conversations. The schema deletes the profile and owned study rows when the Auth user is deleted. A student-facing delete control is not implemented. Tutor conversations are not a table yet. Backups and how long they keep a deleted account still need a decision.
 
 ## Dependencies
 
