@@ -10,12 +10,14 @@ const outfit = Outfit({
   subsets: ["latin"],
   variable: "--font-outfit",
   display: "swap",
+  weight: ["400", "500", "600"],
 });
 
 const fraunces = Fraunces({
   subsets: ["latin"],
   variable: "--font-fraunces",
   display: "swap",
+  weight: ["500", "600"],
 });
 
 export const metadata: Metadata = {

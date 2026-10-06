@@ -1,71 +1,79 @@
-import { journeySteps } from "@/config/home-content";
+import { heroPath } from "@/config/home-content";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Container } from "@/components/ui/container";
+import { Section } from "@/components/ui/section";
 
 export function HeroSection() {
   return (
-    <section aria-labelledby="hero-heading" className="border-b border-line">
-      <Container className="grid items-end gap-12 py-16 sm:py-20 lg:grid-cols-[minmax(0,1.15fr)_minmax(18rem,0.85fr)] lg:py-28">
+    <Section labelledBy="hero-heading">
+      <Container className="grid items-center gap-12 lg:grid-cols-[minmax(0,1.12fr)_minmax(18rem,0.88fr)] lg:gap-16">
         <div>
-          <p className="text-sm font-medium tracking-[0.14em] text-tide uppercase">
-            Student learning, with a destination
-          </p>
-          <div
-            aria-hidden="true"
-            className="mt-5 h-px w-16 bg-horizon"
-          />
-          <h1
-            id="hero-heading"
-            className="mt-5 max-w-xl font-display text-4xl leading-tight tracking-tight text-balance text-ink sm:text-5xl lg:text-6xl"
-          >
-            Name the future you are studying for.
+          <p className="eyebrow">For students with a destination</p>
+          <div aria-hidden="true" className="mt-5 h-px w-16 bg-accent" />
+          <h1 id="hero-heading" className="display-heading mt-5 max-w-xl">
+            Turn your future goal into a clear learning path.
           </h1>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">
-            AI Study Future Planner helps students turn one serious goal into a
-            learning journey: a roadmap, a study plan, daily work, practice, and
-            a path that can adapt as they improve.
+          <p className="lede mt-6 max-w-xl">
+            AI Study Future Planner helps students turn one future goal into a
+            learning journey. The path is designed to connect a goal, a roadmap,
+            a study plan, daily tasks, practice, and progress.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Button href="#journey" className="w-full sm:w-auto">
-              View the journey
+            <Button href="#start" className="w-full sm:w-auto">
+              Build My Study Plan
             </Button>
             <Button
-              href="#approach"
+              href="#how-it-works"
               variant="secondary"
               className="w-full sm:w-auto"
             >
-              How it is shaped
+              See How It Works
             </Button>
           </div>
-        </div>
-        <aside
-          aria-labelledby="sequence-heading"
-          className="rounded-3xl border border-line bg-paper-raised p-6 shadow-[0_24px_50px_-36px_rgba(16,32,51,0.7)] sm:p-7"
-        >
-          <h2 id="sequence-heading" className="font-display text-2xl text-ink">
-            The sequence
-          </h2>
-          <p className="mt-2 text-sm leading-relaxed text-muted">
-            One path, from the goal you choose to the guidance that follows.
+          <p className="caption mt-4 max-w-xl">
+            Personal planning is not open yet. This page explains the path. It
+            does not create an account.
           </p>
-          <ol className="mt-6 border-l border-line">
-            {journeySteps.map((step, index) => (
-              <li key={step.title} className="relative py-1.5 pl-5">
-                <span
-                  aria-hidden="true"
-                  className={
-                    index === 0
-                      ? "absolute top-3 -left-[5px] size-2.5 rounded-full bg-horizon"
-                      : "absolute top-3.5 -left-[4px] size-2 rounded-full bg-tide"
-                  }
-                />
-                <span className="sr-only">Step {index + 1}: </span>
-                <span className="text-sm font-medium text-ink">{step.title}</span>
-              </li>
-            ))}
-          </ol>
+        </div>
+        <aside aria-labelledby="path-heading" className="min-w-0">
+          <Card variant="elevated">
+            <div>
+              <p id="path-heading" className="principle-heading">
+                The path
+              </p>
+              <p className="caption mt-2">
+                One journey, from the goal you name to the work that follows.
+              </p>
+            </div>
+            <ol className="border-l border-border">
+              {heroPath.map((step, index) => (
+                <li key={step.title} className="relative py-2 pl-5">
+                  <span
+                    aria-hidden="true"
+                    className={
+                      index === 0
+                        ? "absolute top-4 -left-1.5 size-2.5 rounded-full bg-accent"
+                        : "absolute top-5 -left-1 size-2 rounded-full bg-accent-secondary"
+                    }
+                  />
+                  <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                    <Badge tone={index === 0 ? "accent" : "secondary"}>
+                      <span className="sr-only">Step </span>
+                      {index + 1}
+                    </Badge>
+                    <p className="text-sm font-medium text-foreground">
+                      {step.title}
+                    </p>
+                  </div>
+                  <p className="caption mt-1">{step.detail}</p>
+                </li>
+              ))}
+            </ol>
+          </Card>
         </aside>
       </Container>
-    </section>
+    </Section>
   );
 }

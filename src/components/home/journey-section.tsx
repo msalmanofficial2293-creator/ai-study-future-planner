@@ -1,35 +1,49 @@
 import { journeySteps } from "@/config/home-content";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
 import { Container } from "@/components/ui/container";
+import { Section } from "@/components/ui/section";
 import { SectionHeading } from "@/components/ui/section-heading";
 
 export function JourneySection() {
   return (
-    <section id="journey" aria-labelledby="journey-heading" className="border-b border-line bg-paper-raised">
-      <Container className="py-16 sm:py-20">
+    <Section id="journey" labelledBy="journey-heading" tone="raised">
+      <Container>
         <SectionHeading
           id="journey-heading"
-          eyebrow="The journey"
-          title="From a goal to guided practice"
-          description="The platform is organized as one sequence, so planning, study, and review stay connected to the same future."
+          eyebrow="Learning journey"
+          title="From a goal to guided practice."
+          description="Eight stages, in this order. Each one is meant to use the same goal. You cannot walk this path in the product yet."
         />
-        <ol className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <ol className="relative mx-auto mt-12 max-w-3xl">
+          <span
+            aria-hidden="true"
+            className="absolute top-4 bottom-4 left-[7px] w-px bg-border"
+          />
           {journeySteps.map((step, index) => (
-            <li
-              key={step.title}
-              className="rounded-2xl border border-line bg-paper p-5"
-            >
-              <p className="font-display text-sm text-horizon-deep">
-                <span className="sr-only">Step </span>
-                {String(index + 1).padStart(2, "0")}
-              </p>
-              <h3 className="mt-3 font-display text-xl text-ink">{step.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted">
-                {step.summary}
-              </p>
+            <li key={step.title} className="relative pb-4 pl-8 last:pb-0 sm:pl-10">
+              <span
+                aria-hidden="true"
+                className={
+                  index === 0
+                    ? "absolute top-5 left-0 size-4 rounded-full border-2 border-background bg-accent"
+                    : "absolute top-5 left-0.5 size-3 rounded-full border-2 border-background bg-accent-secondary"
+                }
+              />
+              <Card variant={index % 2 === 0 ? "elevated" : "quiet"}>
+                <div className="flex flex-wrap items-center gap-3">
+                  <Badge tone={index === 0 ? "accent" : "secondary"}>
+                    <span className="sr-only">Stage </span>
+                    {String(index + 1).padStart(2, "0")}
+                  </Badge>
+                  <h3 className="card-heading">{step.title}</h3>
+                </div>
+                <p className="body-secondary">{step.summary}</p>
+              </Card>
             </li>
           ))}
         </ol>
       </Container>
-    </section>
+    </Section>
   );
 }

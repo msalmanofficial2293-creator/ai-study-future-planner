@@ -1,20 +1,28 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
 const variants = {
-  primary: "bg-ink text-paper hover:bg-ink-soft",
-  secondary:
-    "border border-line bg-paper-raised text-ink hover:border-horizon-deep",
+  primary: "button-primary",
+  secondary: "button-secondary",
+  outline: "button-outline",
+  ghost: "button-ghost",
+  destructive: "button-destructive",
 } as const;
 
+type ButtonVariant = keyof typeof variants;
+
 type ButtonCommonProps = {
-  variant?: keyof typeof variants;
-  children: React.ReactNode;
+  variant?: ButtonVariant;
+  children: ReactNode;
   className?: string;
+  disabled?: boolean;
+  loading?: boolean;
 };
 
 type ButtonLinkProps = ButtonCommonProps & {
   href: string;
+  onClick?: () => void;
 };
 
 type ButtonActionProps = ButtonCommonProps & {
@@ -25,17 +33,42 @@ type ButtonActionProps = ButtonCommonProps & {
 
 type ButtonProps = ButtonLinkProps | ButtonActionProps;
 
+function ButtonLabel({
+  loading,
+  children,
+}: {
+  loading?: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <>
+      {loading ? <span className="spinner" aria-hidden="true" /> : null}
+      <span>{children}</span>
+      {loading ? <span className="sr-only">Loading</span> : null}
+    </>
+  );
+}
+
 export function Button(props: ButtonProps) {
+  const unavailable = Boolean(props.disabled || props.loading);
   const className = cn(
-    "inline-flex min-h-11 items-center justify-center rounded-full px-5 text-sm font-medium transition-colors",
+    "button",
     variants[props.variant ?? "primary"],
     props.className,
   );
 
   if (typeof props.href === "string") {
+    if (unavailable) {
+      return (
+        <span aria-disabled="true" className={className}>
+          <ButtonLabel loading={props.loading}>{props.children}</ButtonLabel>
+        </span>
+      );
+    }
+
     return (
-      <Link href={props.href} className={className}>
-        {props.children}
+      <Link href={props.href} className={className} onClick={props.onClick}>
+        <ButtonLabel loading={props.loading}>{props.children}</ButtonLabel>
       </Link>
     );
   }
@@ -45,8 +78,10 @@ export function Button(props: ButtonProps) {
       type={props.type ?? "button"}
       onClick={props.onClick}
       className={className}
+      disabled={unavailable}
+      aria-busy={props.loading || undefined}
     >
-      {props.children}
+      <ButtonLabel loading={props.loading}>{props.children}</ButtonLabel>
     </button>
   );
 }

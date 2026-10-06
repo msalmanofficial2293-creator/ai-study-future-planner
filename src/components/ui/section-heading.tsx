@@ -13,18 +13,11 @@ export function SectionHeading({
 }: SectionHeadingProps) {
   return (
     <div className="max-w-2xl">
-      <p className="text-sm font-medium tracking-[0.14em] text-tide uppercase">
-        {eyebrow}
-      </p>
-      <h2
-        id={id}
-        className="mt-3 font-display text-3xl tracking-tight text-balance text-ink sm:text-4xl"
-      >
+      <p className="eyebrow">{eyebrow}</p>
+      <h2 id={id} className="section-heading mt-3">
         {title}
       </h2>
-      <p className="mt-4 text-base leading-relaxed text-muted sm:text-lg">
-        {description}
-      </p>
+      <p className="body-secondary mt-4 max-w-2xl">{description}</p>
     </div>
   );
 }
