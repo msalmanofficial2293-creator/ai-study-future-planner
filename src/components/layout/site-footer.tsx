@@ -18,7 +18,7 @@ export function SiteFooter() {
           </Link>
           <p className="caption mt-4">
             A study platform designed to turn one future goal into a clear
-            learning path. Personal planning is not open yet.
+            learning path. Study tools are not open yet.
           </p>
         </div>
         <div className="grid gap-8 sm:grid-cols-2">
@@ -49,8 +49,8 @@ export function SiteFooter() {
         </div>
         <div className="flex flex-col gap-3 border-t border-border pt-6 sm:flex-row sm:items-end sm:justify-between lg:col-span-2">
           <p className="caption max-w-md">
-            Privacy and terms will be published before accounts open. This site
-            does not collect a study plan.
+            Privacy and terms will be published before study data is stored. This
+            site does not collect a study plan.
           </p>
           <p className="caption">
             © {siteConfig.copyrightYear} {siteConfig.name}

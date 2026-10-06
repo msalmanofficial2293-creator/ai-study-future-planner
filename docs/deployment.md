@@ -45,7 +45,9 @@ npm run start
 
 | Variable | Required now | Exposure | Purpose |
 | --- | --- | --- | --- |
-| `NEXT_PUBLIC_APP_URL` | No. Defaults to `http://localhost:3000` if unset. | Public | Canonical URL, Open Graph URL, and the sitemap link. |
+| `NEXT_PUBLIC_APP_URL` | No. Defaults to `http://localhost:3000` if unset. | Public | Canonical URL, Open Graph URL, the sitemap link, and the auth email redirect origin. |
+| `NEXT_PUBLIC_SUPABASE_URL` | Yes, for sign-in. | Public | Supabase project URL. Must be `https`. |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Yes, for sign-in. | Public | Supabase publishable key. Not a secret or service-role key. |
 
 If the variable is set, it must be an absolute `http` or `https` URL. An invalid value fails startup.
 

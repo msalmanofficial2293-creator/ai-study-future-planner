@@ -8,7 +8,8 @@ Intended production shape for AI Study Future Planner, and the structure that ex
 | --- | --- |
 | Frontend | Next.js 16 App Router, React 19, TypeScript, Tailwind CSS 4 |
 | Server | Next.js server rendering now. Route handlers in this repository when a feature needs an API. |
-| Database | A cloud database will be added later. None is connected. |
+| Authentication | Supabase Auth through `@supabase/ssr`. Email and password only. |
+| Database | No application database is connected. Supabase is used for Auth only. |
 | AI | No provider is connected. Future requests go through a secure server-side boundary. |
 | Deployment | Intended path is GitHub, then a cloud deployment, then a custom domain. Only GitHub is in place. |
 
@@ -20,7 +21,7 @@ A separate backend service may replace in-process services later if scale requir
 | --- | --- | --- |
 | UI | Pages, layout, and reusable presentation. | `src/app`, `src/components` |
 | Business logic | Feature rules that do not talk to a provider directly. | `src/features/<feature>` when a feature exists |
-| Services | Database, AI, and other external calls. | `src/services` when those calls exist |
+| Services | Database, AI, and other external calls. Auth session access lives in `src/lib/supabase` because it is shared by the proxy, server actions, and server pages. | `src/services` when database or AI calls exist |
 | API | HTTP validation, auth checks, and service calls. | `src/app/api` when a route is required |
 | Database | Persistence of student data. | Server-side services only. See [database.md](database.md). |
 | AI | Provider prompts, model calls, and response checks. | Server-side AI service. See [ai-system.md](ai-system.md). |
@@ -34,16 +35,23 @@ Add a directory when it has real code. Do not create empty trees.
 
 ```text
 src/app/                  Routes, root layout, global CSS, SEO files
+src/app/login/            Login page
+src/app/signup/           Signup page
+src/app/auth/callback/    Auth code exchange route
+src/app/app/              Temporary signed-in verification page
+src/components/auth/      Shared auth panel
 src/components/brand/     Product mark
 src/components/layout/    Header, footer, skip link
 src/components/ui/        Shared primitives
 src/components/home/      Landing page sections
+src/features/auth/        Auth actions, validation, and forms
 src/config/               Site config, public env parsing, page content
-src/lib/                  Shared utilities
+src/lib/supabase/         Browser client, server client, session refresh
+src/proxy.ts              Request session refresh and auth redirects
 docs/                     Documentation
 ```
 
-There is no `src/features`, `src/services`, `src/types`, or `src/app/api` directory yet.
+There is no `src/services`, `src/types`, or `src/app/api` directory yet.
 
 ## Rules for later code
 
@@ -51,12 +59,32 @@ There is no `src/features`, `src/services`, `src/types`, or `src/app/api` direct
 - Share a component from `src/components` only when more than one feature uses it, or when it belongs to the public shell.
 - Route handlers validate input, check authorization, call a service, and return a typed response.
 - Do not put provider logic or database queries in a route file or a client component.
-- `src/config/env.ts` exposes public configuration only. It currently reads the site URL and Node environment. Do not add secrets to that module.
+- `src/config/env.ts` exposes the public site URL and Node environment. Do not add secrets to that module.
+- Public Supabase values are read in `src/lib/supabase/config.ts`: `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. Do not add a secret or service-role key.
 - Add `"use client"` only when a component needs browser state, events beyond simple links, or browser APIs. The route error boundary is a client component because Next.js requires it.
 
 ## Rendering and SEO
 
-The landing page is a server-rendered React tree. Public metadata is set in `src/app/layout.tsx`. `src/app/robots.ts` and `src/app/sitemap.ts` cover the public home page. Add route-specific metadata when a new public page exists.
+The landing page is a server-rendered React tree. Public metadata is set in `src/app/layout.tsx`. `src/app/robots.ts` and `src/app/sitemap.ts` cover the public home page. Login, signup, and `/app` set `noindex`.
+
+## Authentication
+
+Supabase Auth is the only authentication provider.
+
+| Piece | Role |
+| --- | --- |
+| `createSupabaseBrowserClient` | Browser client for later client-side auth calls. Forms in this phase use server actions. |
+| `createSupabaseServerClient` | Server client. Reads and writes the auth cookies from `next/headers`. |
+| `getAuthenticatedUser` | Calls `auth.getUser()` so the server validates the session. |
+| `src/proxy.ts` | Refreshes the session cookie and redirects. Unauthenticated `/app` goes to `/login`. Authenticated `/login` and `/signup` go to `/app`. |
+
+`/auth/callback` exchanges an auth `code` for a session. It can also verify an email `token_hash` on the server, then redirects to `/app`. Failures go to `/login` with a fixed error code. Tokens are not written into the page.
+
+Signup stores the full name in Supabase user metadata (`full_name`). There is no profile table. If email confirmation is enabled, signup returns no session and the form asks the student to check their email. It does not send them to `/app` until a session exists.
+
+Logout calls `auth.signOut()` in a server action, which clears the auth cookies, then redirects to `/login`.
+
+There is one browser client factory and one server client factory. Do not create another Supabase client.
 
 ## Request path when APIs exist
 
@@ -68,8 +96,8 @@ Details: [api.md](api.md).
 
 ## Explicitly deferred
 
-- Authentication and session handling
-- Database clients, schemas, and migrations
+- Application database clients, schemas, and migrations
+- Password recovery and account deletion
 - AI provider clients
 - A separate backend service
 - Cloud hosting, staging, production, and a custom domain

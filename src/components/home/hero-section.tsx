@@ -33,8 +33,8 @@ export function HeroSection() {
             </Button>
           </div>
           <p className="caption mt-4 max-w-xl">
-            Personal planning is not open yet. This page explains the path. It
-            does not create an account.
+            Study plans are not available yet. You can create an account and sign
+            in. An account does not generate a study plan.
           </p>
         </div>
         <aside aria-labelledby="path-heading" className="min-w-0">

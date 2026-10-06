@@ -1,10 +1,15 @@
 "use client";
 
 import { useEffect, useId, useState } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { planningCta, primaryNav } from "@/config/site";
 
-export function MobileNav() {
+type MobileNavProps = {
+  isAuthenticated: boolean;
+};
+
+export function MobileNav({ isAuthenticated }: MobileNavProps) {
   const [open, setOpen] = useState(false);
   const panelId = useId();
 
@@ -52,6 +57,15 @@ export function MobileNav() {
                   </a>
                 </li>
               ))}
+              <li>
+                <Link
+                  href={isAuthenticated ? "/app" : "/login"}
+                  className="nav-link w-full"
+                  onClick={() => setOpen(false)}
+                >
+                  {isAuthenticated ? "Account" : "Log in"}
+                </Link>
+              </li>
             </ul>
           </nav>
           <div className="px-5 pb-4 sm:hidden sm:px-8">

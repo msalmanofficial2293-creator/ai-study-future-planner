@@ -13,8 +13,8 @@ export function FinalCtaSection() {
             Your future needs a plan.
           </h2>
           <p className="body-secondary mt-4 max-w-xl">
-            Personal planning is part of the product roadmap. This page does not
-            create an account, save a goal, or generate a study plan.
+            Study plans are not available yet. You can create an account from Log
+            in. This section does not save a goal or generate a study plan.
           </p>
           <div className="mt-8 w-full sm:w-auto">
             <Button href="#how-it-works" className="w-full sm:w-auto">
@@ -22,8 +22,8 @@ export function FinalCtaSection() {
             </Button>
           </div>
           <p className="caption mt-4 max-w-xl">
-            This does not open an account. It shows the path a plan is designed
-            to follow.
+            Creating an account does not generate a study plan. This button shows
+            the path a plan is designed to follow.
           </p>
         </Card>
       </Container>

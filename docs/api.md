@@ -36,10 +36,11 @@ Route handlers stay thin. Provider prompts and queries live in services. See [ar
 
 ## Authentication boundaries
 
-Authentication is not implemented. When it exists:
+Email and password authentication is implemented with Supabase Auth. Study data routes are not.
 
-- Public routes remain the landing page and other explicitly public pages.
-- Study data routes require an authenticated student.
+- Public routes remain the landing page, login, signup, and the auth callback.
+- `/app` requires an authenticated student. It only confirms the session.
+- Study data routes, when they exist, require an authenticated student.
 - A student can read and change only their own Goal, plan, tasks, attempts, and tutor conversations.
 - Missing or invalid sessions receive an authorization error, not another student's data.
 

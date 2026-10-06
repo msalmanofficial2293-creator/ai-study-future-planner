@@ -179,7 +179,7 @@ export const faqs = [
   {
     question: "Is the platform free?",
     answer:
-      "Pricing has not been decided. Nothing on this site is for sale, and there is no account to upgrade. You can read this explanation without signing in.",
+      "Pricing has not been decided. Nothing on this site is for sale. You can read this explanation without signing in. Creating an account does not start a paid plan.",
   },
   {
     question: "Will there be an AI tutor?",
@@ -189,6 +189,6 @@ export const faqs = [
   {
     question: "Is my data secure?",
     answer:
-      "This page does not ask for an account and does not store a goal, plan, or quiz result. No student study record is collected here. A later version that stores personal study data will require sign-in before that data exists.",
+      "You can create an account and sign in. This site does not store a goal, plan, quiz result, or other study record. Passwords are handled by the authentication service. Study data will require sign-in before it is stored.",
   },
 ] as const;

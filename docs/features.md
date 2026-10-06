@@ -11,7 +11,7 @@ Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Perfor
 ### Landing page
 
 - Purpose: introduce AI Study Future Planner and the learning journey.
-- User value: a student can understand the product before accounts or AI exist.
+- User value: a student can understand the product before study tools or AI exist.
 - Expected behavior: the home page shows the product name, the sequence from Goal through AI Tutor, and the study approach. In-page links move to those sections. The header and footer stay available.
 - Important states: the page is static content. Unknown URLs use the not-found page. Unexpected render failures use the error page and a retry action. There is no data-loading or empty-data state.
 - Dependencies: none beyond the application shell.
@@ -26,16 +26,16 @@ Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Perfor
 - Dependencies: Node.js 20 or newer and npm.
 - Future implementation notes: add feature folders, services, and API routes only when a feature needs them. See [architecture.md](architecture.md).
 
-## Planned
-
 ### Authentication
 
 - Purpose: identify a student before the product stores personal study data.
-- User value: the student's goal and progress stay with their account.
-- Expected behavior: a student can create an account, sign in, sign out, and recover access. Protected areas reject anonymous visitors.
-- Important states: loading, invalid credentials, success, locked or unavailable service, and signed-out empty state.
-- Dependencies: a later auth design, server-side sessions, and [security.md](security.md). No provider is chosen.
-- Future implementation notes: do not store study data before this exists. Do not put session secrets in client code.
+- User value: the student can create an account and return to it. Study records are not stored yet.
+- Expected behavior: a student can sign up with full name, email, and password, log in, and log out. The server reads the session from Supabase auth cookies. `/app` is a temporary verification page that shows the product name, a welcome, the signed-in email, and a logout button. Anonymous visitors to `/app` are redirected to `/login`. Signed-in visitors to `/login` or `/signup` are redirected to `/app`. `/auth/callback` exchanges the auth code for a session.
+- Important states: field validation, loading, invalid credentials, email already registered, weak password, unexpected failure, and email confirmation. When confirmation is required, signup stays on the form and tells the student to check their email. It does not open `/app` without a session.
+- Dependencies: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, and Supabase Auth. No secret or service-role key is used. See [security.md](security.md) and [architecture.md](architecture.md).
+- Future implementation notes: password recovery, account deletion, and a profile table are not implemented. Do not store study data in this phase. `/app` is not the product dashboard.
+
+## Planned
 
 ### User onboarding
 

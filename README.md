@@ -28,12 +28,13 @@ Implemented:
 - Public landing page, shared layout, and the Ink and Horizon visual system
 - Not-found and recoverable error pages
 - Public metadata, `robots.txt`, and `sitemap.xml`
-- Environment variable structure for the public site URL
+- Environment variable structure for the public site URL and public Supabase Auth values
+- Email and password authentication with server-side sessions
 - Project documentation
 
 Not implemented:
 
-- Authentication, onboarding, profile, and settings
+- Onboarding, profile, settings, and password recovery
 - Future Planner, AI Future Roadmap, Study Plan, and Daily Tasks
 - AI Quiz, Performance Tracking, Adaptive Study Plan, and AI Tutor
 - Database, application API routes, and AI provider integration
@@ -47,7 +48,8 @@ Do not describe a planned area as implemented.
 | --- | --- |
 | UI | Next.js 16 (App Router), React 19, TypeScript (strict), Tailwind CSS 4 |
 | Server | Next.js server rendering and, later, route handlers in this repository |
-| Database | Not connected. A cloud database is a later phase. |
+| Authentication | Supabase Auth. Email and password, server-side sessions. |
+| Database | Not connected. Supabase is used for Auth only. |
 | AI | Not connected. Requests must go through a server-side boundary. |
 | Quality | ESLint and `tsc`. No test runner is installed yet. |
 | Source | Git and GitHub |
@@ -62,7 +64,7 @@ Node.js 20 or newer and npm are required locally.
 | [Features](docs/features.md) | Implemented and planned behavior. |
 | [Architecture](docs/architecture.md) | Current code layout and intended production boundaries. |
 | [UI design](docs/ui-design.md) | Visual identity, accessibility, and interface states. |
-| [Database](docs/database.md) | Future conceptual data model. No database is connected. |
+| [Database](docs/database.md) | Conceptual data model. Auth users only. No application schema. |
 | [API](docs/api.md) | Future server API strategy. No product API exists yet. |
 | [AI system](docs/ai-system.md) | Future server-side AI boundary. No provider is connected. |
 | [Security](docs/security.md) | Current baseline and production security principles. |
@@ -78,7 +80,10 @@ src/components/layout/    Header, footer, skip link
 src/components/ui/        Shared interface primitives
 src/components/home/      Landing page sections
 src/config/               Public site config, env parsing, page content
+src/features/auth/        Authentication actions and forms
 src/lib/                  Shared utilities
+src/lib/supabase/         Supabase browser client, server client, session refresh
+src/proxy.ts              Auth session refresh and route protection
 docs/                     Product and engineering documentation
 ```
 
@@ -105,10 +110,10 @@ Workflow: Inspect → Plan → Implement → Validate → Report.
 Details: [docs/security.md](docs/security.md).
 
 - Secrets belong in server-only environment variables or the host environment. Do not commit them.
-- `NEXT_PUBLIC_` values are visible to the browser. The only public variable now is `NEXT_PUBLIC_APP_URL`.
-- Do not put AI provider API keys, database URLs, or session secrets in client code.
-- AI requests, database access, and authentication checks must run on the server when those phases exist.
-- Authentication is not implemented. Do not store or return personal study data before authorization exists.
+- `NEXT_PUBLIC_` values are visible to the browser. Public names are `NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_SUPABASE_URL`, and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
+- Do not put AI provider API keys, database URLs, service-role keys, or session secrets in client code.
+- AI requests and database access must run on the server when those phases exist. Authentication checks already run on the server.
+- Do not store or return personal study data. Accounts exist. Study records do not.
 - Error pages may show a safe reference. They must not reveal internal details.
 
 ## 9. Testing

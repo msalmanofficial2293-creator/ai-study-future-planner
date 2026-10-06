@@ -1,12 +1,14 @@
 # Database
 
-Future data model for AI Study Future Planner. No database is connected. This file does not define tables, columns, indexes, or migrations.
+Future data model for AI Study Future Planner. No application database is connected. Supabase Auth holds the account only. This file does not define tables, columns, indexes, or migrations.
 
 Markdown in this repository is documentation. It must not store student records or be treated as a seed database.
 
 ## Current decision
 
-Student data is not stored. Do not add a database client, ORM, migration tool, or hosted database until a task asks for that phase. When that phase starts, choose the cloud database here before writing queries.
+Supabase Auth is connected for accounts only. The signed-in user is a Supabase Auth user. The full name is stored in user metadata as `full_name`. There is no profile table and no application schema.
+
+Do not add tables, an ORM, a migration tool, or queries for Goals, Roadmaps, Study Plans, tasks, quizzes, performance, or the tutor until that phase is requested. The Supabase client in `src/lib/supabase` is for Auth. It is not an application database client.
 
 ## Access rules
 
@@ -22,8 +24,8 @@ These names describe the product. They are not a schema.
 
 | Entity | Meaning |
 | --- | --- |
-| User | The authenticated student account. |
-| Profile | Preferences and display details for one User. |
+| User | The authenticated student account. Today this is the Supabase Auth user, including `full_name` in user metadata. |
+| Profile | Preferences and display details for one User. Not created. |
 | Goal | The future outcome the student is studying toward. |
 | Roadmap | The AI Future Roadmap generated for one Goal. |
 | Roadmap Milestone | One ordered step on a Roadmap. |

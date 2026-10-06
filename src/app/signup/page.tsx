@@ -1,0 +1,36 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { AuthPanel } from "@/components/auth/auth-panel";
+import { SignupForm } from "@/features/auth/signup-form";
+import { getAuthenticatedUser } from "@/lib/supabase/server";
+
+export const metadata: Metadata = {
+  title: "Create an account",
+  robots: { index: false, follow: false },
+};
+
+export default async function SignupPage() {
+  const user = await getAuthenticatedUser();
+
+  if (user) {
+    redirect("/app");
+  }
+
+  return (
+    <AuthPanel
+      title="Create your account"
+      description="Start building your personalized learning journey."
+      footer={
+        <>
+          Already have an account?{" "}
+          <Link href="/login" className="font-medium text-accent-deep underline underline-offset-4">
+            Log in
+          </Link>
+        </>
+      }
+    >
+      <SignupForm />
+    </AuthPanel>
+  );
+}

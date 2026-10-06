@@ -4,12 +4,13 @@ Production security principles for AI Study Future Planner, plus the baseline th
 
 ## Current baseline
 
-- `.env*` is gitignored. `.env.example` is committed and contains only the public site URL placeholder.
-- The only configured value is `NEXT_PUBLIC_APP_URL`. Public variables are readable by the browser, so they must stay non-secret.
-- `src/config/env.ts` accepts that URL only when it is an absolute `http` or `https` URL.
+- `.env*` is gitignored. `.env.example` is committed and lists names only. It does not contain real values.
+- Public variables are `NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_SUPABASE_URL`, and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. They are readable by the browser, so they must stay non-secret.
+- `src/config/env.ts` accepts the site URL only when it is an absolute `http` or `https` URL.
+- The Supabase URL must be `https`. The publishable key is the public Supabase key. A secret key or service-role key is not configured and must not be added to client code or to a `NEXT_PUBLIC_` name.
 - The Next.js `X-Powered-By` header is disabled.
 - The route error view may show a digest reference. It does not show an internal error message.
-- No authentication, database, or AI credentials exist.
+- No database or AI credentials exist.
 
 ## Secrets and environment variables
 
@@ -21,11 +22,16 @@ Production security principles for AI Study Future Planner, plus the baseline th
 
 ## Authentication and authorization
 
-Authentication is not implemented. Before any feature stores or returns personal study data:
+Supabase Auth provides email and password accounts. The application does not store passwords.
 
-- Require an authenticated student.
-- Authorize every read and write against that student's own records.
-- Treat a missing session and a forbidden record as safe errors, not as empty access to someone else's data.
+- Browser and server clients use only the public Supabase URL and publishable key.
+- The server checks the user with `auth.getUser()`. Client state is not enough to open `/app`.
+- `src/proxy.ts` refreshes the session cookie on matched requests and applies the login and `/app` redirects.
+- Auth cookies are written by `@supabase/ssr`. Do not copy access tokens or refresh tokens into page HTML, logs, or query strings.
+- Signup, login, and logout run as server actions. Validation runs again on the server. Friendly errors replace provider messages. Passwords and tokens are not logged.
+- Email confirmation depends on the Supabase project. If it is enabled, signup does not create a local session until the student confirms.
+- Protected product data does not exist yet. When it does, authorize every read and write against that student's own records.
+- Password recovery and account deletion are not implemented.
 
 ## Validation
 
@@ -54,7 +60,7 @@ React escapes text rendered as children. Keep that default.
 
 ## CSRF
 
-The foundation has no authenticated mutation. When cookie-based sessions and mutating routes exist, use a SameSite cookie policy and the framework's protection for those requests. Document the chosen control in this file at that time. Bearer tokens stored where script can read them are not an acceptable shortcut.
+Login, signup, and logout are Next.js server actions. Next.js checks the action origin. Session cookies come from Supabase SSR and use its cookie options, including SameSite. Do not store the access token where page script reads it as an authorization shortcut.
 
 ## Headers and transport
 
@@ -64,7 +70,7 @@ The foundation has no authenticated mutation. When cookie-based sessions and mut
 
 ## Logging and errors
 
-- Do not log secrets, session tokens, or full student submissions.
+- Do not log secrets, passwords, access tokens, refresh tokens, or full student submissions.
 - Do not return stack traces, SQL, prompts, or provider errors to the browser.
 - An error message should tell the student what to do next, plus a safe reference when one exists.
 

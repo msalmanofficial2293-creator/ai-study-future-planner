@@ -4,8 +4,12 @@ import { MobileNav } from "@/components/layout/mobile-nav";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { planningCta, primaryNav, siteConfig } from "@/config/site";
+import { getAuthenticatedUser } from "@/lib/supabase/server";
 
-export function SiteHeader() {
+export async function SiteHeader() {
+  const user = await getAuthenticatedUser();
+  const isAuthenticated = Boolean(user);
+
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background">
       <Container className="relative flex h-16 items-center justify-between gap-3">
@@ -33,9 +37,14 @@ export function SiteHeader() {
             </ul>
           </nav>
           <div className="hidden sm:block">
+            <Button href={isAuthenticated ? "/app" : "/login"} variant="ghost">
+              {isAuthenticated ? "Account" : "Log in"}
+            </Button>
+          </div>
+          <div className="hidden sm:block">
             <Button href={planningCta.href}>{planningCta.label}</Button>
           </div>
-          <MobileNav />
+          <MobileNav isAuthenticated={isAuthenticated} />
         </div>
       </Container>
     </header>
