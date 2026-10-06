@@ -9,7 +9,7 @@ Intended production shape for AI Study Future Planner, and the structure that ex
 | Frontend | Next.js 16 App Router, React 19, TypeScript, Tailwind CSS 4 |
 | Server | Next.js server rendering now. Route handlers in this repository when a feature needs an API. |
 | Authentication | Supabase Auth through `@supabase/ssr`. Email and password only. |
-| Database | Supabase PostgreSQL. The schema is in `supabase/migrations`. The app does not query it yet. |
+| Database | Supabase PostgreSQL. Onboarding reads and writes `profiles` and `goals` with the signed-in student's session. |
 | AI | No provider is connected. Future requests go through a secure server-side boundary. |
 | Deployment | Intended path is GitHub, then a cloud deployment, then a custom domain. Only GitHub is in place. |
 
@@ -23,7 +23,7 @@ A separate backend service may replace in-process services later if scale requir
 | Business logic | Feature rules that do not talk to a provider directly. | `src/features/<feature>` when a feature exists |
 | Services | Database, AI, and other external calls. Auth session access lives in `src/lib/supabase` because it is shared by the proxy, server actions, and server pages. | `src/services` when database or AI calls exist |
 | API | HTTP validation, auth checks, and service calls. | `src/app/api` when a route is required |
-| Database | Student tables, keys, and row level security. Queries are not in the app yet. | Server-side services only, after a feature needs them. See [database.md](database.md). |
+| Database | Student tables, keys, and row level security. Onboarding uses `profiles` and `goals`. | Server-side service in `src/services/onboarding.ts`. See [database.md](database.md). |
 | AI | Provider prompts, model calls, and response checks. | Server-side AI service. See [ai-system.md](ai-system.md). |
 | Configuration | Public site config and env parsing. | `src/config` |
 | Types | Shared contracts. Feature-local types stay in the feature. | `src/types` for cross-feature types |
@@ -38,13 +38,16 @@ src/app/                  Routes, root layout, global CSS, SEO files
 src/app/login/            Login page
 src/app/signup/           Signup page
 src/app/auth/callback/    Auth code exchange route
+src/app/onboarding/       Protected first-goal onboarding
 src/app/app/              Temporary signed-in verification page
 src/components/auth/      Shared auth panel
 src/components/brand/     Product mark
 src/components/layout/    Header, footer, skip link
 src/components/ui/        Shared primitives
 src/components/home/      Landing page sections
+src/features/onboarding/  Onboarding validation, action, and form
 src/features/auth/        Auth actions, validation, and forms
+src/services/onboarding.ts  Profile and first-goal reads and writes
 src/config/               Site config, public env parsing, page content
 src/lib/supabase/         Browser client, server client, session refresh
 src/proxy.ts              Request session refresh and auth redirects
@@ -52,7 +55,7 @@ supabase/migrations/      PostgreSQL schema. Not executed by the Next.js app.
 docs/                     Documentation
 ```
 
-There is no `src/services`, `src/types`, or `src/app/api` directory yet.
+There is no `src/types` or `src/app/api` directory yet.
 
 ## Rules for later code
 
@@ -77,7 +80,7 @@ Supabase Auth is the only authentication provider.
 | `createSupabaseBrowserClient` | Browser client for later client-side auth calls. Forms in this phase use server actions. |
 | `createSupabaseServerClient` | Server client. Reads and writes the auth cookies from `next/headers`. |
 | `getAuthenticatedUser` | Calls `auth.getUser()` so the server validates the session. |
-| `src/proxy.ts` | Refreshes the session cookie and redirects. Unauthenticated `/app` goes to `/login`. Authenticated `/login` and `/signup` go to `/app`. |
+| `src/proxy.ts` | Refreshes the session cookie and redirects. Unauthenticated `/app` and `/onboarding` go to `/login`. Authenticated `/login` and `/signup` go to `/app`. |
 
 `/auth/callback` exchanges an auth `code` for a session. It can also verify an email `token_hash` on the server, then redirects to `/app`. Failures go to `/login` with a fixed error code. Tokens are not written into the page.
 
@@ -97,7 +100,7 @@ Details: [api.md](api.md).
 
 ## Explicitly deferred
 
-- Application queries against the study tables
+- Queries against roadmaps, study plans, tasks, quizzes, performance, and adaptive plans
 - Password recovery and account deletion
 - AI provider clients
 - A separate backend service

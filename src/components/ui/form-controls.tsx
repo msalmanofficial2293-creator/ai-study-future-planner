@@ -4,6 +4,7 @@ import type {
   SelectHTMLAttributes,
   TextareaHTMLAttributes,
 } from "react";
+import { cn } from "@/lib/cn";
 
 type FieldControlProps = {
   id: string;
@@ -16,16 +17,17 @@ type FieldProps = {
   label: string;
   description?: string;
   error?: string;
+  className?: string;
   children: (control: FieldControlProps) => ReactNode;
 };
 
-export function Field({ id, label, description, error, children }: FieldProps) {
+export function Field({ id, label, description, error, className, children }: FieldProps) {
   const descriptionId = description ? `${id}-description` : undefined;
   const errorId = error ? `${id}-error` : undefined;
   const describedBy = [descriptionId, errorId].filter(Boolean).join(" ") || undefined;
 
   return (
-    <div className="field">
+    <div className={cn("field", className)}>
       <label className="field-label" htmlFor={id}>
         {label}
       </label>

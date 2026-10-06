@@ -30,7 +30,7 @@ Supabase Auth provides email and password accounts. The application does not sto
 - Auth cookies are written by `@supabase/ssr`. Do not copy access tokens or refresh tokens into page HTML, logs, or query strings.
 - Signup, login, and logout run as server actions. Validation runs again on the server. Friendly errors replace provider messages. Passwords and tokens are not logged.
 - Email confirmation depends on the Supabase project. If it is enabled, signup does not create a local session until the student confirms.
-- Protected product screens do not read the study tables yet. When they do, authorize every read and write against that student's own records. Row level security is the database enforcement. See [database.md](database.md).
+- Protected `/app` and `/onboarding` require a signed-in student. Onboarding reads and writes only that student's `profiles` row and first `goals` row. Row level security enforces that boundary. See [database.md](database.md).
 - Password recovery and account deletion are not implemented.
 
 ## Validation

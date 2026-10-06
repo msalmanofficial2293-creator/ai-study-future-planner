@@ -41,15 +41,15 @@ A student should be able to say what future they are studying for, see the path,
 7. An Adaptive Study Plan changes later work from those results.
 8. An AI Tutor answers in the context of the goal and the work already done.
 
-Only the public description of this journey exists today. The student cannot create or save a goal yet.
+Only the public description of the later journey exists today. Onboarding can save a first Goal. The student cannot generate a roadmap yet.
 
 ## Main product areas
 
 | Area | Role | Status |
 | --- | --- | --- |
 | Landing Page | Explain the product and the journey. | Implemented |
-| Authentication | Identify the student before personal data is stored. | Planned |
-| User Onboarding | Collect the minimum context needed to start a goal. | Planned |
+| Authentication | Identify the student before personal data is stored. | Implemented |
+| User Onboarding | Collect the minimum context needed to start a goal. | Implemented |
 | Future Planner | Where the student defines and revises a Goal. | Planned |
 | AI Future Roadmap | Ordered skills and milestones for that goal. | Planned |
 | Study Plan | A followable plan derived from the roadmap. | Planned |
@@ -80,9 +80,9 @@ A later business decision may consider a free student journey and optional paid 
 
 Foundation phase.
 
-Implemented: the public landing page, application shell, visual system, environment structure, authentication, documentation, and the PostgreSQL schema in `supabase/migrations`. The app does not query those tables yet.
+Implemented: the public landing page, application shell, visual system, environment structure, authentication, onboarding, documentation, and the PostgreSQL schema in `supabase/migrations`. Onboarding writes `profiles` and the first `goals` row. The other study tables are not queried yet.
 
-Not started: saved goals, roadmap generation, study plans, tasks, quizzes, tracking, adaptive planning, tutoring, profile settings, application APIs, and AI calls.
+Not started: roadmap generation, study plans, tasks, quizzes, tracking, adaptive planning, tutoring, profile settings, application APIs, and AI calls.
 
 ## Related documents
 

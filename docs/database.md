@@ -1,19 +1,21 @@
 # Database
 
-Supabase PostgreSQL schema for AI Study Future Planner. The SQL lives in [supabase/migrations/20261006125000_database_foundation.sql](../supabase/migrations/20261006125000_database_foundation.sql). The Next.js app does not query these tables yet. Do not store student records in Markdown.
+Supabase PostgreSQL schema for AI Study Future Planner. The SQL lives in [supabase/migrations/20261006125000_database_foundation.sql](../supabase/migrations/20261006125000_database_foundation.sql). The Next.js app reads and writes `profiles` and the student's first `goals` row during onboarding. It does not query the other study tables yet. Do not store student records in Markdown.
 
 ## Current decision
 
 Supabase Auth identifies the student. This migration adds the application tables those later features will use. Apply the migration in the Supabase project before any feature writes study data. The app still uses only the public Supabase URL and publishable key. Do not add a service-role key.
 
-Signup still saves `full_name` in Auth user metadata. After this migration is applied, `handle_new_user` copies that name into `profiles`. Existing Auth users are backfilled by the same migration.
+Signup still saves `full_name` in Auth user metadata. After the foundation migration is applied, `handle_new_user` copies that name into `profiles`. Existing Auth users are backfilled by that migration.
+
+Onboarding then updates the same profile. Apply [supabase/migrations/20261006143000_onboarding_profile.sql](../supabase/migrations/20261006143000_onboarding_profile.sql) after the foundation migration. It adds learner context to `profiles`. It does not add a second profile table.
 
 ## Access rules
 
 - Every student table has row level security. A signed-in student can read and change only rows they own.
 - `profiles.id` is the Auth user id. Every other student table has `user_id` referencing `auth.users`.
 - Child rows also store `user_id`. A composite foreign key keeps that id the same as the parent row, so a student cannot attach their row to someone else's goal, roadmap, plan, or quiz.
-- Queries belong in future server-side services. The browser must not open a database connection or receive a database password.
+- Queries for onboarding run in `src/services/onboarding.ts` with the student's session. The browser must not open a database connection or receive a database password.
 - Do not commit credentials, dumps, or real student data.
 - Deleting the Auth user deletes the profile and owned rows through `ON DELETE CASCADE`.
 
@@ -21,8 +23,8 @@ Signup still saves `full_name` in Auth user metadata. After this migration is ap
 
 | Table | Owns | Purpose |
 | --- | --- | --- |
-| `profiles` | One row per Auth user | Display name copied from signup metadata. |
-| `goals` | The student | The future outcome being studied. |
+| `profiles` | One row per Auth user | Display name, learner context, and whether onboarding is complete. |
+| `goals` | The student | The future outcome being studied. Onboarding stores the career goal in `title` and the target outcome in `description`. |
 | `roadmaps` | One goal | An ordered path for that goal. One row per goal may be `is_current`. |
 | `roadmap_milestones` | One roadmap | Ordered steps on a roadmap. |
 | `study_plans` | One roadmap | A followable plan for that roadmap. One row per roadmap may be `is_current`. |
@@ -59,6 +61,24 @@ Primary keys are UUIDs. `profiles.id` is the Auth user id. Other primary keys de
 
 Saving a roadmap or study plan with `is_current = true` clears that flag on the student's other current row for the same goal or roadmap. A task milestone must sit on the same roadmap as the task's plan. A quiz task must sit on the same plan as the quiz. An answer's question must belong to the attempt's quiz.
 
+## Onboarding columns
+
+`profiles` keeps one row per student. The onboarding migration adds:
+
+| Column | Form field | Stored value |
+| --- | --- | --- |
+| `full_name` | Full name | Text, at most 80 characters. Already present. |
+| `education_level` | Education level | `secondary`, `undergraduate`, `graduate`, `bootcamp`, `professional`, or `other`. |
+| `field_of_study` | Field or major | Text, at most 120 characters. |
+| `skill_level` | Current skill level | `beginner`, `intermediate`, or `advanced`. |
+| `weekly_study_time` | Available study time | `under_5`, `5_to_10`, `10_to_20`, or `over_20`. |
+| `learning_style` | Preferred learning style | `reading`, `practice`, `video`, or `mixed`. |
+| `onboarding_completed_at` | None | Timestamp set when the save succeeds. Empty until then. |
+
+A completed profile must have a name and every learner field. The career goal is `goals.title`. The target outcome is `goals.description`. Onboarding marks that goal `active`. A later save before completion updates the student's earliest goal instead of inserting another one.
+
+The signed-in student updates only `profiles.id = auth.uid()` and inserts or updates only `goals.user_id = auth.uid()`. Those are the existing policies. Students still cannot insert or delete profile rows.
+
 ## Indexes
 
 - `roadmaps_one_current_per_goal` — one current roadmap for each goal.
@@ -87,7 +107,7 @@ Every other table allows `authenticated` to select, insert, update, and delete o
 
 ## Not built in this phase
 
-No onboarding screen, goal editor, roadmap generator, study plan, task list, quiz, performance view, adaptive planner, or tutor. No application query layer. Study sessions and tutor conversations are not tables yet.
+No goal editor, roadmap generator, study plan, task list, quiz, performance view, adaptive planner, or tutor. Study sessions and tutor conversations are not tables yet.
 
 ## Related documents
 

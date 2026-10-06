@@ -75,12 +75,15 @@ Node.js 20 or newer and npm are required locally.
 
 ```text
 src/app/                  Routes, root layout, global CSS, SEO files
+src/app/onboarding/       Protected onboarding form
 src/components/brand/     Product mark
 src/components/layout/    Header, footer, skip link
 src/components/ui/        Shared interface primitives
 src/components/home/      Landing page sections
 src/config/               Public site config, env parsing, page content
 src/features/auth/        Authentication actions and forms
+src/features/onboarding/  Onboarding validation, action, and form
+src/services/onboarding.ts  Profile and first-goal database access
 src/lib/                  Shared utilities
 src/lib/supabase/         Supabase browser client, server client, session refresh
 src/proxy.ts              Auth session refresh and route protection

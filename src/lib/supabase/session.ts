@@ -16,7 +16,11 @@ export async function updateSession(request: NextRequest) {
   }
 
   const { pathname } = request.nextUrl;
-  const isProtected = pathname === "/app" || pathname.startsWith("/app/");
+  const isProtected =
+    pathname === "/app" ||
+    pathname.startsWith("/app/") ||
+    pathname === "/onboarding" ||
+    pathname.startsWith("/onboarding/");
   const isAuthRoute = AUTH_ROUTES.has(pathname);
   const isServerAction = request.headers.has("next-action");
 

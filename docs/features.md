@@ -29,22 +29,22 @@ Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Perfor
 ### Authentication
 
 - Purpose: identify a student before the product stores personal study data.
-- User value: the student can create an account and return to it. Study records are not stored yet.
-- Expected behavior: a student can sign up with full name, email, and password, log in, and log out. The server reads the session from Supabase auth cookies. `/app` is a temporary verification page that shows the product name, a welcome, the signed-in email, and a logout button. Anonymous visitors to `/app` are redirected to `/login`. Signed-in visitors to `/login` or `/signup` are redirected to `/app`. `/auth/callback` exchanges the auth code for a session.
+- User value: the student can create an account and return to it.
+- Expected behavior: a student can sign up with full name, email, and password, log in, and log out. The server reads the session from Supabase auth cookies. `/app` is a temporary verification page that shows the product name, a welcome, the signed-in email, and a logout button. Anonymous visitors to `/app` or `/onboarding` are redirected to `/login`. Signed-in visitors to `/login` or `/signup` are redirected to `/app`. `/auth/callback` exchanges the auth code for a session.
 - Important states: field validation, loading, invalid credentials, email already registered, weak password, unexpected failure, and email confirmation. When confirmation is required, signup stays on the form and tells the student to check their email. It does not open `/app` without a session.
 - Dependencies: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, and Supabase Auth. No secret or service-role key is used. See [security.md](security.md) and [architecture.md](architecture.md).
-- Future implementation notes: password recovery and account deletion are not implemented. `profiles` is created by the database migration from signup metadata. The app does not show or query it yet. Do not store study data in application code in this phase. `/app` is not the product dashboard.
-
-## Planned
+- Future implementation notes: password recovery and account deletion are not implemented. Signup still stores `full_name` in user metadata, and the database trigger copies it into `profiles`. `/app` is not the product dashboard.
 
 ### User onboarding
 
-- Purpose: collect only the context required to define a first Goal.
-- User value: the student reaches the Future Planner without an unrelated setup form.
-- Expected behavior: after authentication, a new student is guided to name the future they are studying for. Returning students skip completed onboarding.
-- Important states: first visit, already completed, validation errors, save failure, and loading.
-- Dependencies: Authentication and the Future Planner. Persistence waits for the database phase.
-- Future implementation notes: do not ask for profile fields that the first goal does not need.
+- Purpose: collect the context for a student's first Goal.
+- User value: a signed-in student can save who they are and the future they are studying toward.
+- Expected behavior: `/onboarding` is available only to a signed-in student. The form asks for full name, education level, field or major, current skill level, career goal, target outcome, available weekly study time, and preferred learning style. Required fields are checked again on the server. Saving updates that student's `profiles` row and creates or updates their first `goals` row. Success redirects to `/app`. A student who already finished onboarding is sent to `/app` instead of seeing the form again.
+- Important states: first visit, already completed, validation errors, save failure, a profile that is not ready, and loading. The submit control stays disabled while the save is in progress, and a second submit is ignored.
+- Dependencies: Authentication, the applied database migrations, and the student's own row level security policies. No service-role key is used.
+- Future implementation notes: this is not the Future Planner. The student cannot revise the goal here after onboarding is complete. Roadmaps, study plans, tasks, quizzes, and tutoring are not created.
+
+## Planned
 
 ### Future Planner
 
