@@ -45,13 +45,16 @@ export default async function FuturePlannerPage() {
   return (
     <Container className="py-12 sm:py-16">
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-8">
-        <div className="max-w-2xl">
-          <p className="eyebrow">Future Planner</p>
-          <h1 className="page-heading mt-3">Your goal</h1>
-          <p className="body-secondary mt-3">
-            This is the destination the rest of your study will follow. Roadmaps, plans, and
-            quizzes are not generated yet.
-          </p>
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-2xl">
+            <p className="eyebrow">Future Planner</p>
+            <h1 className="page-heading mt-3">Your goal</h1>
+            <p className="body-secondary mt-3">
+              This is the destination the rest of your study will follow. Roadmaps, plans, and
+              quizzes are not generated yet.
+            </p>
+          </div>
+          <RoadmapCta />
         </div>
         <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1.4fr)_minmax(18rem,0.8fr)]">
           <div className="flex flex-col gap-5">
@@ -77,18 +80,16 @@ export default async function FuturePlannerPage() {
           </div>
           <div className="flex flex-col gap-5">
             <Card variant="quiet">
-              <h2 className="card-heading">Study context</h2>
+              <h2 className="card-heading">From onboarding</h2>
               <dl className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+                <ContextItem label="Career goal" value={planner.hasGoal ? planner.careerGoal : "Not set yet"} />
+                <ContextItem label="Target outcome" value={planner.targetOutcome || "Not set yet"} />
                 <ContextItem label="Education level" value={planner.educationLevel} />
                 <ContextItem label="Field of study" value={planner.fieldOfStudy} />
                 <ContextItem label="Skill level" value={planner.skillLevel} />
                 <ContextItem label="Weekly study time" value={planner.weeklyStudyTime} />
                 <ContextItem label="Learning style" value={planner.learningStyle} />
               </dl>
-            </Card>
-            <Card variant="elevated">
-              <h2 className="card-heading">Next step</h2>
-              <RoadmapCta />
             </Card>
           </div>
         </div>

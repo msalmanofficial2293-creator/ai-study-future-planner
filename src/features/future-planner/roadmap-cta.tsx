@@ -10,6 +10,7 @@ export function RoadmapCta() {
     <div className="flex flex-col items-start gap-4">
       <Button
         type="button"
+        className="w-full sm:w-auto"
         onClick={() => {
           setNotice(
             "AI roadmap generation is not available yet. Your goal is saved here and will be the input when that step opens.",
