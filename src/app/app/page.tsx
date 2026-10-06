@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { AuthPanel } from "@/components/auth/auth-panel";
+import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/config/site";
 import { authMessages } from "@/features/auth/messages";
 import { LogoutButton } from "@/features/auth/logout-button";
@@ -41,7 +42,8 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
       <p className="body-secondary">
         Signed in as <span className="font-medium">{user.email}</span>
       </p>
-      <div className="mt-8">
+      <div className="mt-8 flex flex-col gap-3">
+        <Button href="/app/future-planner">Open Future Planner</Button>
         <LogoutButton />
       </div>
     </AuthPanel>

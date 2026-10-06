@@ -9,7 +9,7 @@ Intended production shape for AI Study Future Planner, and the structure that ex
 | Frontend | Next.js 16 App Router, React 19, TypeScript, Tailwind CSS 4 |
 | Server | Next.js server rendering now. Route handlers in this repository when a feature needs an API. |
 | Authentication | Supabase Auth through `@supabase/ssr`. Email and password only. |
-| Database | Supabase PostgreSQL. Onboarding reads and writes `profiles` and `goals` with the signed-in student's session. |
+| Database | Supabase PostgreSQL. Onboarding and the Future Planner read `profiles` and the student's first `goals` row with the signed-in session. |
 | AI | No provider is connected. Future requests go through a secure server-side boundary. |
 | Deployment | Intended path is GitHub, then a cloud deployment, then a custom domain. Only GitHub is in place. |
 
@@ -40,14 +40,17 @@ src/app/signup/           Signup page
 src/app/auth/callback/    Auth code exchange route
 src/app/onboarding/       Protected first-goal onboarding
 src/app/app/              Temporary signed-in verification page
+src/app/app/future-planner/  Protected goal view and goal update
 src/components/auth/      Shared auth panel
 src/components/brand/     Product mark
 src/components/layout/    Header, footer, skip link
 src/components/ui/        Shared primitives
 src/components/home/      Landing page sections
+src/features/future-planner/  Goal update form and roadmap call to action
 src/features/onboarding/  Onboarding validation, action, and form
 src/features/auth/        Auth actions, validation, and forms
 src/services/onboarding.ts  Profile and first-goal reads and writes
+src/services/future-planner.ts  Read profile context and update the first goal
 src/services/onboarding-status.ts  Shared onboarding completion check
 src/config/               Site config, public env parsing, page content
 src/lib/supabase/         Browser client, server client, session refresh

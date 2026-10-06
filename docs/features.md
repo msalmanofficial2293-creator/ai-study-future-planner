@@ -42,18 +42,18 @@ Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Perfor
 - Expected behavior: `/onboarding` is available only to a signed-in student. The form asks for full name, education level, field or major, current skill level, career goal, target outcome, available weekly study time, and preferred learning style. Required fields are checked again on the server. Saving updates that student's `profiles` row and creates or updates their first `goals` row. Success redirects to `/app`. A student who already finished onboarding is sent to `/app` instead of seeing the form again.
 - Important states: first visit, already completed, validation errors, save failure, a profile that is not ready, and loading. The submit control stays disabled while the save is in progress, and a second submit is ignored.
 - Dependencies: Authentication, the applied database migrations, and the student's own row level security policies. No service-role key is used.
-- Future implementation notes: this is not the Future Planner. The student cannot revise the goal here after onboarding is complete. Roadmaps, study plans, tasks, quizzes, and tutoring are not created.
-
-## Planned
+- Future implementation notes: this is not the Future Planner. Roadmaps, study plans, tasks, quizzes, and tutoring are not created.
 
 ### Future Planner
 
-- Purpose: the place a student defines and revises a Goal.
-- User value: study starts from a destination instead of an unrelated task list.
-- Expected behavior: the student can create a Goal, see it, and update it. A Goal is the input to an AI Future Roadmap.
-- Important states: no goal yet, saving, saved, validation error, and save failure.
-- Dependencies: Authentication, User Onboarding, and the future database. AI generation is a separate step.
-- Future implementation notes: keep the object name Goal. Do not rename it to a roadmap or a plan.
+- Purpose: the place a student sees and revises the Goal collected during onboarding.
+- User value: the student can confirm the destination before any roadmap exists.
+- Expected behavior: `/app/future-planner` is available only to a signed-in student who has finished onboarding. It shows the current career goal, target outcome, education level, field of study, skill level, weekly study time, and learning style. The student can update the career goal and target outcome. The save writes that student's earliest `goals` row, or inserts one if none exists. Profile context is read from `profiles` and is not edited here. "Generate My AI Future Roadmap" explains that generation is not available and does not call an AI provider or create a roadmap.
+- Important states: loading, no goal yet, saved, validation error, save failure, and a failure to load the student's records. The submit control stays disabled while the save is in progress, and a second submit is ignored.
+- Dependencies: Authentication, completed onboarding, and the existing row level security policies. No service-role key is used.
+- Future implementation notes: keep the object name Goal. Do not rename it to a roadmap or a plan. AI generation stays a later step.
+
+## Planned
 
 ### AI Future Roadmap
 
