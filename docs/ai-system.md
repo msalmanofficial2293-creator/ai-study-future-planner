@@ -1,6 +1,6 @@
 # AI system
 
-Server-side OpenAI boundary for AI Study Future Planner. The client and a connectivity check exist. Future Planner generates a development roadmap through `createRoadmapGenerator()` and does not call this client. Study Plan and Daily Tasks save tasks without a model. AI Quiz generates development questions through `createQuizGenerator()` and does not call this client. Performance Tracking reads saved tasks, attempts, and snapshots and does not call this client. Tutor generation is not implemented.
+Server-side OpenAI boundary for AI Study Future Planner. The client and a connectivity check exist. Future Planner generates a development roadmap through `createRoadmapGenerator()` and does not call this client. Study Plan and Daily Tasks save tasks without a model. AI Quiz generates development questions through `createQuizGenerator()` and does not call this client. Performance Tracking reads saved tasks, attempts, and snapshots and does not call this client. Adaptive Study Plan applies server-side rules to those saved results and does not call this client. Tutor generation is not implemented.
 
 ## Role in the product
 
@@ -20,10 +20,10 @@ Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Perfor
 | Daily task generation | Propose Daily Tasks from the current plan. |
 | Quiz generation | A development generator already writes local questions from the study plan. A paid model is not connected. |
 | Performance analysis | The performance page reads stored tasks, attempts, and snapshots. It does not call a model. |
-| Adaptive planning | Revise the Study Plan from performance evidence. |
+| Adaptive planning | The adaptive page revises later tasks from saved scores with server-side rules. A paid model is not connected. |
 | AI tutoring | Answer inside an AI Tutor conversation tied to the Goal. |
 
-Performance Tracking displays stored history without a model call. Adaptive planning still uses the server AI boundary and is not built.
+Performance Tracking displays stored history without a model call. Adaptive planning uses saved scores and local rules. It does not call this client.
 
 ## Required flow
 

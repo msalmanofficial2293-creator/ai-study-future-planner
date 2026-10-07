@@ -154,7 +154,7 @@ export const faqs = [
   {
     question: "What is AI Study Future Planner?",
     answer:
-      "It is a study platform designed to turn one future goal into a connected learning journey: a roadmap, a study plan, daily tasks, practice, progress, and guidance. A signed-in student can save a development roadmap, study tasks, daily tasks, a development quiz, and a performance view of those saved results. Tutoring is not open yet.",
+      "It is a study platform designed to turn one future goal into a connected learning journey: a roadmap, a study plan, daily tasks, practice, progress, and guidance. A signed-in student can save a development roadmap, study tasks, daily tasks, a development quiz, a performance view, and a rule-based adaptive update of the current study plan. Tutoring is not open yet.",
   },
   {
     question: "Who is it for?",
@@ -169,12 +169,12 @@ export const faqs = [
   {
     question: "Can I create a personalized study plan?",
     answer:
-      "A signed-in student can save study tasks from the current roadmap on the Study Plan page. The plan does not adapt itself yet.",
+      "A signed-in student can save study tasks from the current roadmap on the Study Plan page. A separate adaptive page can add tasks from saved quiz scores. It does not call a paid AI provider.",
   },
   {
     question: "Will the plan adapt to my progress?",
     answer:
-      "The adaptive study plan is designed to change later work when practice shows a gap. That adjustment is on the product roadmap and does not run yet.",
+      "A signed-in student can open Adaptive Study Plan, review rule-based changes from saved quiz scores, and apply those tasks to the current study plan. It does not call a paid AI provider.",
   },
   {
     question: "Is the platform free?",

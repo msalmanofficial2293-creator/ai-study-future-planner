@@ -87,7 +87,7 @@ Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Perfor
 - Expected behavior: `/app/study-plan` is available only to a signed-in student who has finished onboarding. It loads that student's current roadmap and milestones. It shows the roadmap, current learning stage, weekly study target, subjects, planned study time, the related milestone, and weekly progress. The student can add, edit, complete, reopen, and delete tasks. The first task creates the current `study_plans` row for that roadmap. Tasks are stored in `study_tasks`. Skill and estimated duration are kept in `details` because the table has no separate columns for them. The page does not call a paid AI provider and does not adapt the plan.
 - Important states: loading, no roadmap yet, no tasks yet, saving, saved, validation error, save failure, and a failure to load the student's records. Submit controls stay disabled while a request is in progress.
 - Dependencies: a saved current roadmap, completed onboarding, and the existing row level security policies. No new table and no API key are used.
-- Future implementation notes: an Adaptive Study Plan is a later revision. Do not create a second plan table.
+- Future implementation notes: the adaptive page can add tasks to this plan. Do not create a second plan table.
 
 ### Daily Tasks
 
@@ -96,7 +96,7 @@ Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Perfor
 - Expected behavior: `/app/daily-tasks` is available only to a signed-in student who has finished onboarding. It loads that student's current study plan and `study_tasks` rows. It shows today's tasks, upcoming tasks, and completed tasks, with title, description, skill, duration, planned date, status, the study plan, and the roadmap milestone when one is linked. The student can add a task for a chosen date, view details, edit, delete, and mark a task complete or incomplete. Daily progress is completed tasks planned for today divided by every task planned for today. Saving uses the existing study plan actions and tables. The page does not call a paid AI provider and does not adapt the plan.
 - Important states: loading, no roadmap yet, nothing due today, saving, saved, validation error, save failure, and a failure to load the student's records. Submit controls stay disabled while a request is in progress.
 - Dependencies: the current study plan data, completed onboarding, and the existing row level security policies. No new table and no API key are used.
-- Future implementation notes: an Adaptive Study Plan is a later step. Do not create a second task table.
+- Future implementation notes: the adaptive page can add tasks to this list. Do not create a second task table.
 
 ### AI Quiz
 
@@ -105,7 +105,7 @@ Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Perfor
 - Expected behavior: `/app/quiz` is available only to a signed-in student who has finished onboarding. It lists that student's ready quizzes and submitted attempts. Creating a quiz runs a server-side development generator from the current roadmap skills and study tasks. It does not call a paid AI provider. Each quiz is stored in `quizzes` and `quiz_questions` on the current study plan. Starting a quiz creates a `quiz_attempts` row. The student answers one question at a time, then submits. The server scores the answers, stores each one in `quiz_answers`, saves the percentage on the attempt, and writes a `performance_records` snapshot for the goal. The result shows the score, percentage, correct count, incorrect count, total, and a review with explanations. Refreshing keeps the attempt in quiz history. The page does not revise the study plan.
 - Important states: loading, no roadmap yet, no study plan yet, no quizzes yet, creating, in progress, submitting, saved result, validation error, save failure, and a failure to load the student's records.
 - Dependencies: a current study plan, completed onboarding, and the existing row level security policies. No new table and no API key are used.
-- Future implementation notes: model quiz generation can replace `createQuizGenerator()` later. An Adaptive Study Plan is a later step.
+- Future implementation notes: model quiz generation can replace `createQuizGenerator()` later.
 
 ### Performance Tracking
 
@@ -114,18 +114,18 @@ Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Perfor
 - Expected behavior: `/app/performance` is available only to a signed-in student who has finished onboarding. It reads that student's quiz attempts, quiz answers, performance snapshots, study tasks, study plans, and roadmap milestones. It shows overall progress, average quiz score, quizzes completed, tasks completed, task completion, current plan progress, a quiz score trend, task completion by milestone, strong and weak skills from saved answers, recent quiz results, recent activity, and the latest performance snapshots. Figures are calculated from stored rows. If no task is complete and no quiz is submitted, the page shows an empty state. Submitting a quiz already writes a `performance_records` snapshot. Marking a task complete or incomplete writes another snapshot and does not change the task screens. The page does not call a paid AI provider and does not revise the study plan.
 - Important states: loading, not enough saved work, progress loaded, and a failure to load the student's records.
 - Dependencies: Daily Tasks, AI Quiz attempts, and the existing row level security policies. No new table and no API key are used.
-- Future implementation notes: this view feeds a later Adaptive Study Plan. It is not itself a new plan.
-
-## Planned
+- Future implementation notes: the adaptive page reads this evidence. This view does not revise the plan.
 
 ### Adaptive Study Plan
 
 - Purpose: change later study when performance shows what needs attention.
-- User value: the plan stays honest as the student improves or struggles.
-- Expected behavior: a server-side update revises the Study Plan from performance evidence. The student can see what changed and why.
-- Important states: no evidence yet, updating, updated, provider or validation failure, and unchanged plan.
-- Dependencies: Performance Tracking, the current Study Plan, and the AI boundary.
-- Future implementation notes: keep the revised plan on the same Goal. Do not replace a failed update with a fabricated plan.
+- User value: the student can see what to revise, what to keep, and what to do next.
+- Expected behavior: `/app/adaptive-plan` is available only to a signed-in student who has finished onboarding. It reads that student's quiz attempts, quiz answers, study tasks, study plan, roadmap milestones, and the latest performance snapshot. Rules on the server classify each skill with saved answers: below 50% adds a revision task, 50% to 79% keeps the topic and adds targeted practice, and 80% or above skips another repeat and recommends the next roadmap skill. The page shows current status, weak areas, strong areas, recommended changes, updated priorities, and the next tasks. Saving writes a draft `adaptive_plans` row. Applying adds the missing tasks to the current `study_tasks` rows and marks that adaptive plan applied. Refreshing keeps the saved row and the new tasks. The page does not call a paid AI provider. If no quiz answers are saved, it explains that a quiz is needed and does not invent recommendations.
+- Important states: loading, no roadmap yet, no study plan yet, not enough quiz evidence, recommendation ready, saved, applied, already on the plan, and a failure to load or save.
+- Dependencies: Performance Tracking evidence, the current study plan, and the existing row level security policies. No new table and no API key are used.
+- Future implementation notes: a paid model can replace these rules later. Keep the revised tasks on the same study plan.
+
+## Planned
 
 ### AI Tutor
 
