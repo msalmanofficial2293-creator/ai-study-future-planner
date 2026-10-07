@@ -13,6 +13,8 @@ import { createSupabaseServerClient, getAuthenticatedUser } from "@/lib/supabase
 export type ProfileRecord = {
   email: string;
   fullName: string;
+  username: string;
+  bio: string;
   educationLevel: string;
   fieldOfStudy: string;
   skillLevel: string;
@@ -20,6 +22,9 @@ export type ProfileRecord = {
   learningStyle: string;
   careerGoal: string;
   targetOutcome: string;
+  interests: string;
+  notifyStudyReminders: boolean;
+  notifyProductUpdates: boolean;
 };
 
 export type ProfileLoad =
@@ -30,10 +35,12 @@ export type ProfileLoad =
 
 export type ProfileSaveResult =
   | { ok: true }
-  | { ok: false; reason: "unauthenticated" | "missing" | "failed" };
+  | { ok: false; reason: "unauthenticated" | "missing" | "username-taken" | "failed" };
 
 export type ProfileUpdate = {
   fullName: string;
+  username: string;
+  bio: string;
   educationLevel: EducationLevel;
   fieldOfStudy: string;
   skillLevel: SkillLevel;
@@ -41,6 +48,12 @@ export type ProfileUpdate = {
   learningStyle: LearningStyle;
   careerGoal: string;
   targetOutcome: string;
+  interests: string;
+};
+
+export type NotificationPreferences = {
+  notifyStudyReminders: boolean;
+  notifyProductUpdates: boolean;
 };
 
 export async function loadProfile(): Promise<ProfileLoad> {
@@ -53,7 +66,9 @@ export async function loadProfile(): Promise<ProfileLoad> {
   const supabase = await createSupabaseServerClient();
   const profileResult = await supabase
     .from("profiles")
-    .select("full_name, education_level, field_of_study, skill_level, weekly_study_time, learning_style")
+    .select(
+      "full_name, username, bio, education_level, field_of_study, skill_level, weekly_study_time, learning_style, interests, notify_study_reminders, notify_product_updates",
+    )
     .eq("id", user.id)
     .maybeSingle();
 
@@ -87,6 +102,8 @@ export async function loadProfile(): Promise<ProfileLoad> {
     profile: {
       email: user.email,
       fullName: readString(profile, "full_name"),
+      username: readString(profile, "username"),
+      bio: readString(profile, "bio"),
       educationLevel: readChoice(profile, "education_level", isEducationLevel),
       fieldOfStudy: readString(profile, "field_of_study"),
       skillLevel: readChoice(profile, "skill_level", isSkillLevel),
@@ -94,6 +111,9 @@ export async function loadProfile(): Promise<ProfileLoad> {
       learningStyle: readChoice(profile, "learning_style", isLearningStyle),
       careerGoal: readString(goal, "title"),
       targetOutcome: readString(goal, "description"),
+      interests: readString(profile, "interests"),
+      notifyStudyReminders: readBoolean(profile, "notify_study_reminders", true),
+      notifyProductUpdates: readBoolean(profile, "notify_product_updates", false),
     },
   };
 }
@@ -110,11 +130,14 @@ export async function saveProfile(userId: string, input: ProfileUpdate): Promise
     .from("profiles")
     .update({
       full_name: input.fullName,
+      username: input.username,
+      bio: input.bio || null,
       education_level: input.educationLevel,
       field_of_study: input.fieldOfStudy,
       skill_level: input.skillLevel,
       weekly_study_time: input.weeklyStudyTime,
       learning_style: input.learningStyle,
+      interests: input.interests || null,
     })
     .eq("id", userId)
     .select("id")
@@ -122,7 +145,7 @@ export async function saveProfile(userId: string, input: ProfileUpdate): Promise
 
   if (profileWrite.error) {
     logProfileDiagnostic("write-profile", profileWrite.error);
-    return { ok: false, reason: "failed" };
+    return { ok: false, reason: isUniqueViolation(profileWrite.error) ? "username-taken" : "failed" };
   }
 
   if (!profileWrite.data) {
@@ -174,12 +197,54 @@ export async function saveProfile(userId: string, input: ProfileUpdate): Promise
   return { ok: true };
 }
 
+export async function saveNotificationPreferences(
+  userId: string,
+  input: NotificationPreferences,
+): Promise<ProfileSaveResult> {
+  const user = await getAuthenticatedUser();
+
+  if (!user || user.id !== userId) {
+    return { ok: false, reason: "unauthenticated" };
+  }
+
+  const supabase = await createSupabaseServerClient();
+  const write = await supabase
+    .from("profiles")
+    .update({
+      notify_study_reminders: input.notifyStudyReminders,
+      notify_product_updates: input.notifyProductUpdates,
+    })
+    .eq("id", userId)
+    .select("id")
+    .maybeSingle();
+
+  if (write.error) {
+    logProfileDiagnostic("write-notifications", write.error);
+    return { ok: false, reason: "failed" };
+  }
+
+  if (!write.data) {
+    return { ok: false, reason: "missing" };
+  }
+
+  return { ok: true };
+}
+
 function asRecord(value: unknown): Record<string, unknown> | null {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
     return null;
   }
 
   return value as Record<string, unknown>;
+}
+
+function isUniqueViolation(error: { code?: string; message: string }): boolean {
+  return error.code === "23505" || error.message.toLowerCase().includes("profiles_username_key");
+}
+
+function readBoolean(record: Record<string, unknown> | null, key: string, fallback: boolean): boolean {
+  const value = record?.[key];
+  return typeof value === "boolean" ? value : fallback;
 }
 
 function readString(record: Record<string, unknown> | null, key: string): string {

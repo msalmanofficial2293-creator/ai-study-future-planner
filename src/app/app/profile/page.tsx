@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Card } from "@/components/ui/card";
 import { Container } from "@/components/ui/container";
 import { ProfileEditor } from "@/features/profile/profile-editor";
 import { loadProfile } from "@/services/profile";
@@ -19,19 +18,17 @@ export default async function ProfilePage() {
   }
 
   return (
-    <Container className="py-12 sm:py-16">
-      <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
+    <Container className="py-10 sm:py-14 lg:py-16">
+      <div className="mx-auto flex w-full max-w-5xl flex-col gap-6">
         <div>
           <p className="eyebrow">Account</p>
           <h1 className="page-heading mt-3">Profile</h1>
-          <p className="body-secondary mt-3">
-            Your name, study context, and goal. Email stays with your account.
+          <p className="body-secondary mt-3 max-w-2xl">
+            Your identity, learning context, and goal. Email stays with your account.
           </p>
         </div>
         {loaded.status === "ready" ? (
-          <Card variant="elevated">
-            <ProfileEditor profile={loaded.profile} />
-          </Card>
+          <ProfileEditor profile={loaded.profile} />
         ) : (
           <div className="flex flex-col items-start gap-4">
             <p className="field-error" role="alert">

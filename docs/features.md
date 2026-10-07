@@ -57,10 +57,10 @@ Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Perfor
 
 - Purpose: let a signed-in student see and update the identity and study context already stored for them.
 - User value: the student can correct their name, learning context, and goal without starting over.
-- Expected behavior: `/app/profile` is available only to a signed-in student. It shows full name, email, education level, field of study, skill level, weekly study time, learning style, career goal, and target outcome. Email is read-only. Edit profile opens the form. Save changes writes `profiles` for that student and the earliest `goals` row, or inserts a goal if none exists. Cancel leaves the saved values in place. The avatar is the student's initials. Photo upload is not available, and no image is stored.
-- Important states: loading, not set yet, editing, saving, saved, validation error, save failure, and a profile row that is not ready. The save control stays disabled while the request is in progress, and a second submit is ignored.
-- Dependencies: Authentication and the existing row level security policies. No service-role key and no storage bucket are used.
-- Future implementation notes: account deletion, password recovery, and avatar upload are not part of this page.
+- Expected behavior: `/app/profile` is available only to a signed-in student. The header shows initials, full name, username, email, and bio, with Edit Profile. Personal information, education and learning, and career and goals can be edited and saved. Email is read-only. Save writes that student's `profiles` row and the earliest `goals` row, or inserts a goal if none exists. Username, bio, and interests live on `profiles`. Cancel leaves the saved values in place. The account section can change the password and save notification preferences. Logout uses the existing sign-out action. Delete account explains that deletion is not available and does not remove anything. A signed-in header and menu include a Profile link.
+- Important states: loading, not set yet, editing, saving, saved, validation error, username already taken, save failure, password failure, and a profile row that is not ready. Save controls stay disabled while a request is in progress, and a second submit is ignored.
+- Dependencies: Authentication, the profile account migration, and the existing row level security policies. No service-role key and no storage bucket are used.
+- Future implementation notes: password recovery, account deletion, and photo upload are not implemented. The delete control is a placeholder.
 
 ## Planned
 
@@ -131,7 +131,7 @@ Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Perfor
 
 - Purpose: account controls beyond the profile page.
 - User value: the student can recover access and remove the account.
-- Expected behavior: password recovery and account deletion, as described in [security.md](security.md). Photo upload is not part of the profile page.
+- Expected behavior: password recovery for a student who cannot sign in, and account deletion, as described in [security.md](security.md). Changing a password while signed in is already on the profile page. Photo upload is not part of the profile page.
 - Important states: recovery sent, signed out, and deletion pending or failed.
 - Dependencies: Authentication and the database.
 - Future implementation notes: do not collect fields that no current feature uses.

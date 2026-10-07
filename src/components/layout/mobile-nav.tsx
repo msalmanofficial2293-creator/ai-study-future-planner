@@ -57,6 +57,13 @@ export function MobileNav({ isAuthenticated }: MobileNavProps) {
                   </a>
                 </li>
               ))}
+              {isAuthenticated ? (
+                <li>
+                  <Link href="/app/profile" className="nav-link w-full" onClick={() => setOpen(false)}>
+                    Profile
+                  </Link>
+                </li>
+              ) : null}
               <li>
                 <Link
                   href={isAuthenticated ? "/app" : "/login"}

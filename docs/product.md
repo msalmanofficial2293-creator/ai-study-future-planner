@@ -58,7 +58,7 @@ Only the public description of the later journey exists today. Onboarding can sa
 | Performance Tracking | Progress, gaps, and consistency. | Planned |
 | Adaptive Study Plan | A revised plan based on performance. | Planned |
 | AI Tutor | Guidance tied to the goal and recent work. | Planned |
-| Profile and Settings | View and update profile and goal details. Account deletion and password recovery are not built. | Profile editing implemented |
+| Profile and Settings | View and update profile, goal, password, and notification details. Account deletion and password recovery are not built. | Profile editing implemented |
 
 Behavior for each area is in [features.md](features.md). Do not build a planned area unless a task asks for it.
 

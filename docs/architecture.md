@@ -47,7 +47,7 @@ src/components/brand/     Product mark
 src/components/layout/    Header, footer, skip link
 src/components/ui/        Shared primitives
 src/components/home/      Landing page sections
-src/features/profile/      Profile view, edit form, and avatar initials
+src/features/profile/      Profile view, edit form, account controls, and avatar initials
 src/features/future-planner/  Goal update form and roadmap call to action
 src/features/onboarding/  Onboarding validation, action, and form
 src/features/auth/        Auth actions, validation, and forms

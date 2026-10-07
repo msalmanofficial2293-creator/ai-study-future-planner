@@ -64,12 +64,19 @@ async function persistProfile(userId: string, formData: FormData): Promise<Profi
     skillLevel: input.skillLevel,
     weeklyStudyTime: input.weeklyStudyTime,
     learningStyle: input.learningStyle,
+    username: input.username,
+    bio: input.bio,
     careerGoal: input.careerGoal,
     targetOutcome: input.targetOutcome,
+    interests: input.interests,
   });
 
   if (!result.ok && result.reason === "unauthenticated") {
     redirect("/login");
+  }
+
+  if (!result.ok && result.reason === "username-taken") {
+    return { fieldErrors: { username: "That username is already taken." } };
   }
 
   if (!result.ok && result.reason === "missing") {

@@ -31,7 +31,8 @@ Supabase Auth provides email and password accounts. The application does not sto
 - Signup, login, and logout run as server actions. Validation runs again on the server. Friendly errors replace provider messages. Passwords and tokens are not logged.
 - Email confirmation depends on the Supabase project. If it is enabled, signup does not create a local session until the student confirms.
 - Protected `/app`, `/app/future-planner`, `/app/profile`, and `/onboarding` require a signed-in student. Onboarding, the Future Planner, and the profile page read and write only that student's `profiles` row and first `goals` row. Row level security enforces that boundary. See [database.md](database.md).
-- Password recovery and account deletion are not implemented.
+- A signed-in student can change the password from `/app/profile`. The server checks the current password with that student's session, then updates Auth. The new password is not written to `profiles` and is not logged.
+- Password recovery and account deletion are not implemented. The profile page includes a delete control that does not delete the account.
 
 ## Validation
 

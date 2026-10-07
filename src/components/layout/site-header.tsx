@@ -36,6 +36,13 @@ export async function SiteHeader() {
               ))}
             </ul>
           </nav>
+          {isAuthenticated ? (
+            <div className="hidden lg:block">
+              <Button href="/app/profile" variant="ghost">
+                Profile
+              </Button>
+            </div>
+          ) : null}
           <div className="hidden sm:block">
             <Button href={isAuthenticated ? "/app" : "/login"} variant="ghost">
               {isAuthenticated ? "Account" : "Log in"}

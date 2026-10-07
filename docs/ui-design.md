@@ -113,7 +113,7 @@ In-page links use the section ids `product`, `how-it-works`, `features`, `why`, 
 
 ### Forms
 
-No product form exists on the landing page. Onboarding at `/onboarding` collects the first goal. The Future Planner at `/app/future-planner` lets the student revise that goal. Profile at `/app/profile` shows the same details, keeps email read-only, and uses initials in place of a photo:
+No product form exists on the landing page. Onboarding at `/onboarding` collects the first goal. The Future Planner at `/app/future-planner` lets the student revise that goal. Profile at `/app/profile` shows identity, education, goals, and account controls. Email stays read-only. The avatar is initials. A signed-in header links to Profile:
 
 - `Field` supplies a visible label, optional description, and an error announced with `role="alert"`.
 - The message starts with "Error:" so the state is not color alone.

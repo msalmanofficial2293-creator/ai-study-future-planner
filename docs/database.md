@@ -10,6 +10,8 @@ Signup still saves `full_name` in Auth user metadata. After the foundation migra
 
 Onboarding then updates the same profile. Apply [supabase/migrations/20261006143000_onboarding_profile.sql](../supabase/migrations/20261006143000_onboarding_profile.sql) after the foundation migration. It adds learner context to `profiles`. It does not add a second profile table.
 
+The profile page also stores username, bio, interests, and notification preferences on that same row. Apply [supabase/migrations/20261007120000_profile_account_fields.sql](../supabase/migrations/20261007120000_profile_account_fields.sql) after the onboarding migration. It does not add a table or change the profile policies.
+
 ## Access rules
 
 - Every student table has row level security. A signed-in student can read and change only rows they own.
@@ -23,7 +25,7 @@ Onboarding then updates the same profile. Apply [supabase/migrations/20261006143
 
 | Table | Owns | Purpose |
 | --- | --- | --- |
-| `profiles` | One row per Auth user | Display name, learner context, and whether onboarding is complete. |
+| `profiles` | One row per Auth user | Display name, username, bio, learner context, interests, notification preferences, and whether onboarding is complete. |
 | `goals` | The student | The future outcome being studied. Onboarding stores the career goal in `title` and the target outcome in `description`. |
 | `roadmaps` | One goal | An ordered path for that goal. One row per goal may be `is_current`. |
 | `roadmap_milestones` | One roadmap | Ordered steps on a roadmap. |
@@ -78,6 +80,20 @@ Saving a roadmap or study plan with `is_current = true` clears that flag on the 
 A completed profile must have a name and every learner field. The career goal is `goals.title`. The target outcome is `goals.description`. Onboarding marks that goal `active`. A later save before completion updates the student's earliest goal instead of inserting another one.
 
 The signed-in student updates only `profiles.id = auth.uid()` and inserts or updates only `goals.user_id = auth.uid()`. Those are the existing policies. Students still cannot insert or delete profile rows.
+
+## Profile account columns
+
+Apply `20261007120000_profile_account_fields.sql` after the onboarding migration. The new columns stay on `profiles`, so the existing select and update policies still limit each student to `id = auth.uid()`.
+
+| Column | Form field | Stored value |
+| --- | --- | --- |
+| `username` | Username | Optional until the student saves a profile. Then 3 to 30 lowercase letters, numbers, or underscores. Unique. |
+| `bio` | Bio | Optional text, at most 280 characters. |
+| `interests` | Interests | Optional text, at most 200 characters. |
+| `notify_study_reminders` | Study reminders | Boolean. Defaults to true. |
+| `notify_product_updates` | Product updates | Boolean. Defaults to false. |
+
+Email is not a profile column. Password changes use the signed-in Auth session and are not stored in `profiles`.
 
 ## Indexes
 
