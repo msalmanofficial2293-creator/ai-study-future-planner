@@ -46,6 +46,7 @@ src/app/app/daily-tasks/  Protected day view of the current study plan tasks
 src/app/app/quiz/         Protected development quiz for the current study plan
 src/app/app/performance/  Protected performance view of saved tasks, quizzes, and snapshots
 src/app/app/adaptive-plan/  Protected rule-based update of the current study plan
+src/app/app/ai-tutor/     Protected development tutor for the signed-in student
 src/app/app/profile/      Protected profile view and update
 src/components/auth/      Shared auth panel
 src/components/brand/     Product mark
@@ -60,6 +61,7 @@ src/features/daily-tasks/ Day-focused task list
 src/features/quiz/        Development quiz questions, attempt flow, and result review
 src/features/performance/ Performance metrics and dashboard from saved study rows
 src/features/adaptive-plan/  Rule-based recommendations and apply action for the current study plan
+src/features/tutor/       Tutor chat, development replies, and conversation actions
 src/features/ai/          Connectivity-check validation and allowance
 src/features/onboarding/  Onboarding validation, action, and form
 src/features/auth/        Auth actions, validation, and forms
@@ -71,6 +73,9 @@ src/services/daily-tasks.ts  Load today's progress from the current study plan a
 src/services/quiz.ts      Load and save the signed-in student's quizzes, attempts, answers, and performance snapshot
 src/services/performance.ts  Load performance metrics and save a snapshot when a task status changes
 src/services/adaptive-plan.ts  Load quiz evidence and save or apply an adaptive plan on the current study plan
+src/services/tutor.ts     Load and save the signed-in student's tutor conversations and messages
+src/services/tutor-context.ts  Build a short study context for the tutor from that student's rows
+src/services/tutor-generator.ts  Replaceable server tutor generator. The current one is local.
 src/services/quiz-generator.ts  Replaceable server quiz generator. The current one is local.
 src/services/roadmap-generator.ts  Replaceable server generator. The current one is local.
 src/services/ai.ts        Server-only OpenAI Responses client
@@ -131,7 +136,7 @@ Details: [api.md](api.md).
 ## Explicitly deferred
 
 - Password recovery and account deletion
-- Paid-model roadmap generation, plus plan, quiz, and tutor generation
+- Paid-model roadmap, plan, quiz, and tutor generation. The tutor page uses a local generator until that change.
 - A separate backend service
 - Cloud hosting, staging, production, and a custom domain
 

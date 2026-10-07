@@ -37,7 +37,10 @@ export async function SiteHeader() {
             </ul>
           </nav>
           {isAuthenticated ? (
-            <div className="hidden lg:block">
+            <div className="hidden items-center gap-1 lg:flex">
+              <Button href="/app/ai-tutor" variant="ghost">
+                AI Tutor
+              </Button>
               <Button href="/app/profile" variant="ghost">
                 Profile
               </Button>

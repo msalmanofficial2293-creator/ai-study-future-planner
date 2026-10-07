@@ -37,11 +37,11 @@ Implemented:
 - Development AI Quiz on the current study plan, stored in the existing quiz tables. It does not call a paid AI provider.
 - Performance Tracking from saved tasks, quiz attempts, and performance snapshots. It does not call a paid AI provider.
 - Adaptive Study Plan rules that can add tasks to the current study plan from saved quiz scores. They do not call a paid AI provider.
+- AI Tutor on `/app/ai-tutor`, stored in `tutor_conversations` and `tutor_messages`. Replies come from a local generator and do not call a paid AI provider.
 
 Not implemented:
 
 - Onboarding, profile, settings, and password recovery
-- AI Tutor
 - Database, application API routes, and AI provider integration
 - Payments, cloud hosting, staging, production, and a custom domain
 

@@ -31,7 +31,7 @@ Supabase Auth provides email and password accounts. The application does not sto
 - Auth cookies are written by `@supabase/ssr`. Do not copy access tokens or refresh tokens into page HTML, logs, or query strings.
 - Signup, login, and logout run as server actions. Validation runs again on the server. Friendly errors replace provider messages. Passwords and tokens are not logged.
 - Email confirmation depends on the Supabase project. If it is enabled, signup does not create a local session until the student confirms.
-- Protected `/app`, `/app/future-planner`, `/app/study-plan`, `/app/daily-tasks`, `/app/quiz`, `/app/performance`, `/app/adaptive-plan`, `/app/profile`, and `/onboarding` require a signed-in student. Onboarding, the Future Planner, and the profile page read and write only that student's `profiles` row and first `goals` row. Future Planner roadmap writes, Study Plan and Daily Tasks writes, AI Quiz writes, Performance Tracking reads, and Adaptive Study Plan reads and writes use the same session and the existing policies. Task completion also writes that student's `performance_records` row. Applying an adaptive recommendation writes that student's `adaptive_plans` row and any new `study_tasks` rows. Row level security enforces that boundary. See [database.md](database.md).
+- Protected `/app`, `/app/future-planner`, `/app/study-plan`, `/app/daily-tasks`, `/app/quiz`, `/app/performance`, `/app/adaptive-plan`, `/app/ai-tutor`, `/app/profile`, and `/onboarding` require a signed-in student. Onboarding, the Future Planner, and the profile page read and write only that student's `profiles` row and first `goals` row. Future Planner roadmap writes, Study Plan and Daily Tasks writes, AI Quiz writes, Performance Tracking reads, and Adaptive Study Plan reads and writes use the same session and the existing policies. Task completion also writes that student's `performance_records` row. Applying an adaptive recommendation writes that student's `adaptive_plans` row and any new `study_tasks` rows. AI Tutor reads that student's study context and reads and writes only that student's `tutor_conversations` and `tutor_messages` rows. Row level security enforces that boundary. See [database.md](database.md).
 - A signed-in student can change the password from `/app/profile`. The server checks the current password with that student's session, then updates Auth. The new password is not written to `profiles` and is not logged.
 - Password recovery and account deletion are not implemented. The profile page includes a delete control that does not delete the account.
 
@@ -47,11 +47,11 @@ Supabase Auth provides email and password accounts. The application does not sto
 
 ## Database access
 
-The study schema is in `supabase/migrations`. Onboarding, the Future Planner, and the profile page query `profiles` and the first `goals` row. Future Planner also writes `roadmaps` and `roadmap_milestones` for that student. Study Plan writes `study_plans` and `study_tasks` for that student. Performance Tracking reads that student's saved rows, and task completion writes a `performance_records` snapshot. Adaptive Study Plan reads that evidence and writes `adaptive_plans` and applied `study_tasks` rows. The AI connectivity check does not.
+The study schema is in `supabase/migrations`. Onboarding, the Future Planner, and the profile page query `profiles` and the first `goals` row. Future Planner also writes `roadmaps` and `roadmap_milestones` for that student. Study Plan writes `study_plans` and `study_tasks` for that student. Performance Tracking reads that student's saved rows, and task completion writes a `performance_records` snapshot. Adaptive Study Plan reads that evidence and writes `adaptive_plans` and applied `study_tasks` rows. AI Tutor reads that context and writes `tutor_conversations` and `tutor_messages` for that student. The AI connectivity check does not.
 
 - Apply the migration in Supabase. Do not create or alter these tables from Next.js route handlers.
 - The browser uses the publishable key only. Do not add a service-role or secret key to the app, the client, or a `NEXT_PUBLIC_` variable.
-- Row level security is enabled and forced on `profiles`, `goals`, `roadmaps`, `roadmap_milestones`, `study_plans`, `study_tasks`, `quizzes`, `quiz_questions`, `quiz_attempts`, `quiz_answers`, `performance_records`, and `adaptive_plans`.
+- Row level security is enabled and forced on `profiles`, `goals`, `roadmaps`, `roadmap_milestones`, `study_plans`, `study_tasks`, `quizzes`, `quiz_questions`, `quiz_attempts`, `quiz_answers`, `performance_records`, `adaptive_plans`, `tutor_conversations`, and `tutor_messages`.
 - `anon` has no privileges on those tables.
 - `profiles` lets the signed-in student select and update only `id = auth.uid()`.
 - Each other table lets the signed-in student select, insert, update, and delete only `user_id = auth.uid()`.
@@ -88,7 +88,7 @@ Login, signup, and logout are Next.js server actions. Next.js checks the action 
 
 Student study data is personal. Collect only what the current feature needs.
 
-A student must be able to delete the account and the associated profile, goals, plans, tasks, attempts, and tutor conversations. The schema deletes the profile and owned study rows when the Auth user is deleted. A student-facing delete control is not implemented. Tutor conversations are not a table yet. Backups and how long they keep a deleted account still need a decision.
+A student must be able to delete the account and the associated profile, goals, plans, tasks, attempts, and tutor conversations. The schema deletes the profile, owned study rows, and tutor conversations when the Auth user is deleted. A student-facing delete control is not implemented. Backups and how long they keep a deleted account still need a decision.
 
 ## Dependencies
 

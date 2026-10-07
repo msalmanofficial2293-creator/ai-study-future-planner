@@ -125,16 +125,16 @@ Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Perfor
 - Dependencies: Performance Tracking evidence, the current study plan, and the existing row level security policies. No new table and no API key are used.
 - Future implementation notes: a paid model can replace these rules later. Keep the revised tasks on the same study plan.
 
-## Planned
-
 ### AI Tutor
 
 - Purpose: answer the student in the context of their Goal and recent work.
 - User value: guidance stays on the learning journey instead of becoming a general chat.
-- Expected behavior: the student asks a question, the server sends the allowed context to the provider, and the reply is validated before it is shown or stored.
-- Important states: no conversation yet, waiting for a reply, reply shown, provider failure, and rejected output.
-- Dependencies: Authentication, Goal context, the AI boundary, and stored conversation history.
-- Future implementation notes: do not send secrets or unrelated personal data in the prompt. Do not expose the provider key.
+- Expected behavior: `/app/ai-tutor` is available only to a signed-in student who has finished onboarding. The page shows the career goal, current roadmap stage, and current study focus. The student can start a chat, reopen it, rename it, clear its messages, or delete it. A question is saved as a `user` message. The server builds a short context from that student's profile, goal, roadmap, study plan, tasks, quizzes, and performance, then `createTutorGenerator()` writes a local reply and saves it as an `assistant` message. The reply uses short explanation, key points, example, practice, and next step. If a fact is not saved, the tutor says so and does not invent a score. Refresh keeps the conversation. This page does not call a paid AI provider and does not read `OPENAI_API_KEY`.
+- Important states: loading, empty conversation, waiting for a reply, reply shown, renamed, cleared, deleted, missing conversation, and a failure to load or save.
+- Dependencies: Authentication, the student's saved study rows, `tutor_conversations`, `tutor_messages`, and row level security. No API key is used.
+- Future implementation notes: replace `createTutorGenerator()` with a call through `src/services/ai.ts` when a later task turns on a paid model. Keep context building, storage, and the page separate from that generator.
+
+## Planned
 
 ### Account settings
 
