@@ -30,7 +30,7 @@ export type ProfileRecord = {
 export type ProfileLoad =
   | { status: "unauthenticated" }
   | { status: "missing" }
-  | { status: "unavailable" }
+  | { status: "unavailable"; detail: string }
   | { status: "ready"; profile: ProfileRecord };
 
 export type ProfileSaveResult =
@@ -74,7 +74,7 @@ export async function loadProfile(): Promise<ProfileLoad> {
 
   if (profileResult.error) {
     logProfileDiagnostic("load-profile", profileResult.error);
-    return { status: "unavailable" };
+    return { status: "unavailable", detail: readQueryError(profileResult.error) };
   }
 
   if (!profileResult.data) {
@@ -91,7 +91,7 @@ export async function loadProfile(): Promise<ProfileLoad> {
 
   if (goalResult.error) {
     logProfileDiagnostic("load-goal", goalResult.error);
-    return { status: "unavailable" };
+    return { status: "unavailable", detail: readQueryError(goalResult.error) };
   }
 
   const profile = asRecord(profileResult.data);
@@ -261,13 +261,15 @@ function readChoice(
   return matches(value) ? value : "";
 }
 
-function logProfileDiagnostic(step: string, error: { message: string; code?: string } | null) {
+function readQueryError(error: { message?: string; code?: string }): string {
+  const code = error.code ? `${error.code}: ` : "";
+  return `${code}${error.message || "The profile request failed."}`;
+}
+
+function logProfileDiagnostic(step: string, error: { message?: string; code?: string } | null) {
   if (process.env.NODE_ENV === "production" || !error) {
     return;
   }
 
-  console.error(`[profile:${step}]`, {
-    code: error.code ?? null,
-    message: error.message,
-  });
+  console.error(`[profile:${step}] ${readQueryError(error)}`);
 }

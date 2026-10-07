@@ -3,7 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Container } from "@/components/ui/container";
 import { ProfileEditor } from "@/features/profile/profile-editor";
-import { loadProfile } from "@/services/profile";
+import { loadProfile, type ProfileLoad } from "@/services/profile";
 
 export const metadata: Metadata = {
   title: "Profile",
@@ -32,10 +32,7 @@ export default async function ProfilePage() {
         ) : (
           <div className="flex flex-col items-start gap-4">
             <p className="field-error" role="alert">
-              Error:{" "}
-              {loaded.status === "missing"
-                ? "Your profile is not ready yet. Please try again in a moment."
-                : "Something went wrong. Please try again."}
+              Error: {profileErrorMessage(loaded)}
             </p>
             <Link href="/app/profile" className="font-medium text-accent-deep underline underline-offset-4">
               Try again
@@ -45,4 +42,16 @@ export default async function ProfilePage() {
       </div>
     </Container>
   );
+}
+
+function profileErrorMessage(loaded: Exclude<ProfileLoad, { status: "unauthenticated" | "ready" }>): string {
+  if (loaded.status === "missing") {
+    return "Your profile is not ready yet. Please try again in a moment.";
+  }
+
+  if (process.env.NODE_ENV !== "production") {
+    return loaded.detail;
+  }
+
+  return "Something went wrong. Please try again.";
 }
