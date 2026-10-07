@@ -10,7 +10,7 @@ Intended production shape for AI Study Future Planner, and the structure that ex
 | Server | Next.js server rendering now. Route handlers in this repository when a feature needs an API. |
 | Authentication | Supabase Auth through `@supabase/ssr`. Email and password only. |
 | Database | Supabase PostgreSQL. Onboarding and the Future Planner read `profiles` and the student's first `goals` row with the signed-in session. |
-| AI | No provider is connected. Future requests go through a secure server-side boundary. |
+| AI | OpenAI Responses API through `src/services/ai.ts`. The key stays server-only. Roadmap generation is not implemented. |
 | Deployment | Intended path is GitHub, then a cloud deployment, then a custom domain. Only GitHub is in place. |
 
 A separate backend service may replace in-process services later if scale requires it. UI should call a small server boundary so that move stays local. Do not add that service now.
@@ -49,20 +49,24 @@ src/components/ui/        Shared primitives
 src/components/home/      Landing page sections
 src/features/profile/      Profile view, edit form, account controls, and avatar initials
 src/features/future-planner/  Goal update form and roadmap call to action
+src/features/ai/          Connectivity-check validation and allowance
 src/features/onboarding/  Onboarding validation, action, and form
 src/features/auth/        Auth actions, validation, and forms
 src/services/profile.ts     Read and update the signed-in profile and first goal
 src/services/future-planner.ts  Read profile context and update the first goal
+src/services/ai.ts        Server-only OpenAI Responses client
 src/services/onboarding.ts  Profile and first-goal reads and writes for onboarding
 src/services/onboarding-status.ts  Shared onboarding completion check
 src/config/               Site config, public env parsing, page content
 src/lib/supabase/         Browser client, server client, session refresh
+src/lib/ai/               Server-only OpenAI key and model config
+src/app/api/ai/test/      Authenticated connectivity route
 src/proxy.ts              Request session refresh and auth redirects
 supabase/migrations/      PostgreSQL schema. Not executed by the Next.js app.
 docs/                     Documentation
 ```
 
-There is no `src/types` or `src/app/api` directory yet.
+There is no `src/types` directory yet. `src/app/api/ai/test/route.ts` is the connectivity route.
 
 ## Rules for later code
 
@@ -99,7 +103,7 @@ There is one browser client factory and one server client factory. Do not create
 
 ## Request path when APIs exist
 
-This flow is not implemented. It is the target shape:
+`POST /api/ai/test` uses this shape. Study generation routes are not built yet.
 
 Client → Server API → Authentication → Validation → Business logic → AI or database → Response
 
@@ -109,7 +113,7 @@ Details: [api.md](api.md).
 
 - Queries against roadmaps, study plans, tasks, quizzes, performance, and adaptive plans
 - Password recovery and account deletion
-- AI provider clients
+- Roadmap, plan, quiz, and tutor generation
 - A separate backend service
 - Cloud hosting, staging, production, and a custom domain
 

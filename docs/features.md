@@ -53,6 +53,15 @@ Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Perfor
 - Dependencies: Authentication, completed onboarding, and the existing row level security policies. No service-role key is used.
 - Future implementation notes: keep the object name Goal. Do not rename it to a roadmap or a plan. AI generation stays a later step.
 
+### AI integration foundation
+
+- Purpose: give later study features a server-side OpenAI client.
+- User value: a signed-in student can confirm the provider is reachable without generating a study plan.
+- Expected behavior: `POST /api/ai/test` requires the existing Supabase session. The body is a short `message`. The server calls the OpenAI Responses API and returns one short confirmation, or a safe error. A missing `OPENAI_API_KEY` returns a clear configuration error and does not crash the app. The Future Planner button does not call this route.
+- Important states: unauthenticated, invalid input, missing key, invalid configuration, local rate limit, provider rate limit, timeout, provider failure, and success.
+- Dependencies: `OPENAI_API_KEY`, optional `OPENAI_MODEL`, and the existing session check. No new table is used.
+- Future implementation notes: roadmap, plan, quiz, and tutor generation are not this check. Do not store the reply as study content.
+
 ### Profile
 
 - Purpose: let a signed-in student see and update the identity and study context already stored for them.

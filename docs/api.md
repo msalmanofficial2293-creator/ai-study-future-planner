@@ -1,10 +1,16 @@
 # API
 
-Future API strategy for AI Study Future Planner. No product API routes exist.
+API strategy for AI Study Future Planner. One authenticated connectivity route exists. Study generation routes do not.
 
 ## Current surface
 
-Next.js serves the landing page, `robots.txt`, and `sitemap.xml`. There is no `src/app/api` route. The landing page does not call a backend.
+Next.js serves the landing page, `robots.txt`, and `sitemap.xml`. The only product route handler is `POST /api/ai/test`.
+
+| Route | Auth | Purpose |
+| --- | --- | --- |
+| `POST /api/ai/test` | Signed-in Supabase user via `getAuthenticatedUser()` | Connectivity check through the OpenAI Responses API. It does not create a roadmap or write the database. |
+
+The body is `{ "message": "..." }`. `message` is required, must be text, and must be 500 characters or fewer. Unknown fields are rejected. Success returns `{ "ok": true, "model": "...", "text": "..." }`. Failure returns `{ "ok": false, "error": { "code": "...", "message": "..." } }` with no stack trace, prompt, or secret.
 
 ## Client and server
 
@@ -21,7 +27,7 @@ The browser never receives provider keys, database credentials, or session secre
 
 ## Target request flow
 
-This flow is the intended design. It is not implemented.
+`POST /api/ai/test` uses this shape. Later study routes should keep it.
 
 Client → Server API → Authentication → Validation → Business logic → AI or database → Response
 
@@ -36,10 +42,11 @@ Route handlers stay thin. Provider prompts and queries live in services. See [ar
 
 ## Authentication boundaries
 
-Email and password authentication is implemented with Supabase Auth. Study data routes are not.
+Email and password authentication is implemented with Supabase Auth. `POST /api/ai/test` requires that session. Study generation routes are not built.
 
 - Public routes remain the landing page, login, signup, and the auth callback.
 - `/app` requires an authenticated student. It only confirms the session.
+- `POST /api/ai/test` returns 401 when `getAuthenticatedUser()` finds no user.
 - Study data routes, when they exist, require an authenticated student.
 - A student can read and change only their own Goal, plan, tasks, attempts, and tutor conversations.
 - Missing or invalid sessions receive an authorization error, not another student's data.
@@ -58,11 +65,11 @@ Authorization is distinct from authentication. Signing in is not enough. The ser
 
 ## Rate limiting
 
-Not implemented. When AI or account routes exist, limit repeated generation, sign-in attempts, and other expensive calls per student and per address. Record the chosen limit in this file at that time. A limit response must be understandable to the student.
+`POST /api/ai/test` allows 10 calls per signed-in user per 60 seconds. The count is kept in server memory and resets when the process restarts. A blocked call returns HTTP 429 and `error.code` `rate-limited`. An OpenAI 429 uses the same public code and does not include the provider payload. Sign-in limits are still not implemented.
 
 ## AI request flow
 
-The client asks the server for a roadmap, plan, quiz, adaptation, or tutor reply. The server checks auth and input, calls the provider, validates the structured result, then stores or returns it. Details: [ai-system.md](ai-system.md).
+The connectivity check asks the server for one short reply. The server checks auth and input, calls OpenAI, and returns the text or a safe error. It does not store the reply. Later roadmap, plan, quiz, adaptation, and tutor routes must validate structured output before storing it. Details: [ai-system.md](ai-system.md).
 
 ## Database access
 
@@ -74,7 +81,7 @@ If a separate backend replaces these routes, the UI should keep calling one serv
 
 ## Not in this phase
 
-Do not add route handlers, mock servers, or fake JSON endpoints.
+Do not add roadmap, plan, quiz, or tutor routes until those features are requested. Do not add a mock generator that pretends those results exist.
 
 ## Related documents
 

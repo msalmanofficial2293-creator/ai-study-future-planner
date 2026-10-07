@@ -48,10 +48,12 @@ npm run start
 | `NEXT_PUBLIC_APP_URL` | No. Defaults to `http://localhost:3000` if unset. | Public | Canonical URL, Open Graph URL, the sitemap link, and the auth email redirect origin. |
 | `NEXT_PUBLIC_SUPABASE_URL` | Yes, for sign-in. | Public | Supabase project URL. Must be `https`. |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Yes, for sign-in. | Public | Supabase publishable key. Not a secret or service-role key. |
+| `OPENAI_API_KEY` | Yes, before `POST /api/ai/test` can call OpenAI. | Server only | OpenAI key. Never use `NEXT_PUBLIC_`. Leave it empty in `.env.example`. |
+| `OPENAI_MODEL` | No. Defaults to `gpt-4.1-mini`. | Server only | Model id for the Responses API. |
 
 If the variable is set, it must be an absolute `http` or `https` URL. An invalid value fails startup.
 
-Future secrets, including a database URL and an AI provider key, belong in the host environment or in `.env.local`. Do not prefix secrets with `NEXT_PUBLIC_`. Do not commit real values. When staging and production exist, set `NEXT_PUBLIC_APP_URL` to that environment's public origin.
+Put `OPENAI_API_KEY` in `.env.local` or the host environment. Do not prefix it with `NEXT_PUBLIC_`. Do not commit a real value. When staging and production exist, set `NEXT_PUBLIC_APP_URL` to that environment's public origin and give each environment its own OpenAI key.
 
 ## Build process
 

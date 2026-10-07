@@ -1,6 +1,6 @@
 # AI system
 
-Future AI architecture for AI Study Future Planner. No provider is connected. Do not add an SDK, API key, prompt library, or simulated generation in the foundation phase.
+Server-side OpenAI boundary for AI Study Future Planner. The client and a connectivity check exist. Roadmap, plan, quiz, and tutor generation are not implemented.
 
 ## Role in the product
 
@@ -27,28 +27,31 @@ Performance Tracking can display stored history without a model call. Analysis a
 
 ## Required flow
 
-This flow is not implemented.
+The connectivity check follows this path. Study generation does not yet store a result.
 
-User → Web UI → Secure server API → AI provider → Validation and structured response → Database → User
+User → Web UI or `POST /api/ai/test` → Secure server API → OpenAI Responses API → Safe response
 
-1. The student acts in the web UI.
-2. The UI calls a server API. It does not call the provider.
-3. The server checks authentication, authorization, and input.
-4. A server-side service sends the prompt with the AI API key.
-5. The service validates the structured response.
-6. Valid output may be stored and then shown.
-7. Invalid or unavailable output produces an error state. It is not replaced with fabricated study guidance.
+1. The caller sends only the fields the action needs. The browser does not call OpenAI.
+2. The server confirms a signed-in Supabase user with `getAuthenticatedUser()`.
+3. The server validates the payload before any provider call.
+4. `src/services/ai.ts` sends the request with the server API key.
+5. Later study features must validate structured output before storing it.
+6. Invalid or unavailable output produces an error state. It is not replaced with fabricated study guidance.
+
+`POST /api/ai/test` asks for one short confirmation sentence. It does not create a roadmap, plan, quiz, or database row.
 
 ## Key handling
 
 The AI API key must never be exposed to the browser.
 
-- Store it in a server-only environment variable.
+- Provider: OpenAI, through the official `openai` package and the Responses API.
+- Key: `OPENAI_API_KEY`, read only in `src/lib/ai/config.ts`.
+- Model: `OPENAI_MODEL`. When it is unset, the server uses `gpt-4.1-mini`.
 - Do not use the `NEXT_PUBLIC_` prefix.
-- Do not import it into a client component, a public config module, or documentation.
+- Do not import the key into a client component, `src/config/env.ts`, or documentation.
 - Do not return it in an API response or a log.
-
-No provider is chosen. Record the provider, model, and environment variable name in this file when the AI phase selects them.
+- The service sets the SDK log level to off and pins the base URL to `https://api.openai.com/v1`.
+- `import "server-only"` guards the config, service, and AI feature modules.
 
 ## Validation
 
@@ -67,7 +70,7 @@ AI-generated content must be validated before it is stored or displayed as a roa
 
 ## Not in this phase
 
-Do not integrate a provider, choose a model, or add a fake generator that pretends to be AI.
+Roadmap generation, study plans, quizzes, tutoring, and storing model output are not implemented. Do not treat the connectivity check as a study result.
 
 ## Related documents
 

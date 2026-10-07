@@ -41,7 +41,7 @@ A student should be able to say what future they are studying for, see the path,
 7. An Adaptive Study Plan changes later work from those results.
 8. An AI Tutor answers in the context of the goal and the work already done.
 
-Only the public description of the later journey exists today. Onboarding can save a first Goal, and the Future Planner can show and update it. The student cannot generate a roadmap yet.
+Onboarding can save a first Goal, and the Future Planner can show and update it. A server-side OpenAI connectivity check exists. The student cannot generate a roadmap yet.
 
 ## Main product areas
 
@@ -80,9 +80,9 @@ A later business decision may consider a free student journey and optional paid 
 
 Foundation phase.
 
-Implemented: the public landing page, application shell, visual system, environment structure, authentication, onboarding, the Future Planner, profile editing, documentation, and the PostgreSQL schema in `supabase/migrations`. Onboarding, the Future Planner, and the profile page use `profiles` and the first `goals` row. The other study tables are not queried yet.
+Implemented: the public landing page, application shell, visual system, environment structure, authentication, onboarding, the Future Planner, profile editing, a server-only OpenAI connectivity check, documentation, and the PostgreSQL schema in `supabase/migrations`. Onboarding, the Future Planner, and the profile page use `profiles` and the first `goals` row. The other study tables are not queried yet.
 
-Not started: roadmap generation, study plans, tasks, quizzes, tracking, adaptive planning, tutoring, account deletion, application APIs, and AI calls.
+Not started: roadmap generation, study plans, tasks, quizzes, tracking, adaptive planning, tutoring, and account deletion.
 
 ## Related documents
 

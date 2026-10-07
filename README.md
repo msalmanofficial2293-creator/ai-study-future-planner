@@ -65,8 +65,8 @@ Node.js 20 or newer and npm are required locally.
 | [Architecture](docs/architecture.md) | Current code layout and intended production boundaries. |
 | [UI design](docs/ui-design.md) | Visual identity, accessibility, and interface states. |
 | [Database](docs/database.md) | PostgreSQL schema and row level security. The app reads and writes `profiles` and the first `goals` row. |
-| [API](docs/api.md) | Future server API strategy. No product API exists yet. |
-| [AI system](docs/ai-system.md) | Future server-side AI boundary. No provider is connected. |
+| [API](docs/api.md) | Server API strategy. `POST /api/ai/test` is the connectivity route. |
+| [AI system](docs/ai-system.md) | Server-side OpenAI boundary. Roadmap generation is not connected to the UI. |
 | [Security](docs/security.md) | Current baseline and production security principles. |
 | [Testing](docs/testing.md) | Current checks and the intended QA path. |
 | [Deployment](docs/deployment.md) | Local run steps and the intended release path. |
@@ -87,6 +87,8 @@ src/features/onboarding/  Onboarding validation, action, and form
 src/features/profile/     Profile view, edit form, and avatar initials
 src/services/onboarding.ts  Profile and first-goal database access for onboarding
 src/services/profile.ts   Read and update the signed-in profile and first goal
+src/services/ai.ts        Server-only OpenAI Responses client
+src/app/api/ai/test/      Authenticated AI connectivity route
 src/lib/                  Shared utilities
 src/lib/supabase/         Supabase browser client, server client, session refresh
 src/proxy.ts              Auth session refresh and route protection
@@ -119,7 +121,7 @@ Details: [docs/security.md](docs/security.md).
 - Secrets belong in server-only environment variables or the host environment. Do not commit them.
 - `NEXT_PUBLIC_` values are visible to the browser. Public names are `NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_SUPABASE_URL`, and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
 - Do not put AI provider API keys, database URLs, service-role keys, or session secrets in client code.
-- AI requests and database access must run on the server when those phases exist. Authentication checks already run on the server.
+- AI requests run on the server. `POST /api/ai/test` checks the Supabase session before it calls OpenAI. The API key is `OPENAI_API_KEY` and is not a `NEXT_PUBLIC_` variable.
 - Do not store or return personal study data. Accounts exist. Study records do not.
 - Error pages may show a safe reference. They must not reveal internal details.
 

@@ -10,14 +10,15 @@ Production security principles for AI Study Future Planner, plus the baseline th
 - The Supabase URL must be `https`. The publishable key is the public Supabase key. A secret key or service-role key is not configured and must not be added to client code or to a `NEXT_PUBLIC_` name.
 - The Next.js `X-Powered-By` header is disabled.
 - The route error view may show a digest reference. It does not show an internal error message.
-- No AI provider credential exists. The study schema is defined in SQL and is not queried by the app yet.
+- `OPENAI_API_KEY` is a server-only secret. `.env.example` lists the name with an empty value. The real key stays in `.env.local` or the host environment.
+- The study schema is defined in SQL. Onboarding, the Future Planner, and the profile page query `profiles` and the first `goals` row. The AI connectivity check does not query the database.
 
 ## Secrets and environment variables
 
 - Keep API keys, database URLs, and session secrets in server-only environment variables or the host environment.
 - Never commit secrets, never put them in Markdown, and never prefix them with `NEXT_PUBLIC_`.
 - Never put an AI provider API key in client-side code.
-- Read secrets inside server services or route handlers when those features exist.
+- `OPENAI_API_KEY` and `OPENAI_MODEL` are read in `src/lib/ai/config.ts`. That module, the AI service, and the AI feature modules import `server-only`.
 - `.env.example` may list a variable name. It must not contain a real value.
 
 ## Authentication and authorization
@@ -42,11 +43,11 @@ Supabase Auth provides email and password accounts. The application does not sto
 
 ## Rate limiting
 
-Not implemented. Account, generation, and tutor routes will need limits so one client cannot exhaust the AI provider or the database. Choose the limits in the phase that adds those routes.
+`POST /api/ai/test` allows 10 calls per signed-in user per 60 seconds in server memory. See [api.md](api.md). Account and later generation routes still need their own limits.
 
 ## Database access
 
-The study schema is in `supabase/migrations/20261006125000_database_foundation.sql`. The application does not query it yet.
+The study schema is in `supabase/migrations`. Onboarding, the Future Planner, and the profile page query `profiles` and the first `goals` row. The AI connectivity check does not.
 
 - Apply the migration in Supabase. Do not create or alter these tables from Next.js route handlers.
 - The browser uses the publishable key only. Do not add a service-role or secret key to the app, the client, or a `NEXT_PUBLIC_` variable.
@@ -78,7 +79,8 @@ Login, signup, and logout are Next.js server actions. Next.js checks the action 
 
 ## Logging and errors
 
-- Do not log secrets, passwords, access tokens, refresh tokens, or full student submissions.
+- Do not log secrets, passwords, access tokens, refresh tokens, authorization headers, or full student submissions.
+- AI diagnostics log a step name and, outside production, a status or provider code. They do not log the API key, request headers, prompt, or provider body.
 - Do not return stack traces, SQL, prompts, or provider errors to the browser.
 - An error message should tell the student what to do next, plus a safe reference when one exists.
 
