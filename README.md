@@ -33,11 +33,11 @@ Implemented:
 - Project documentation
 - Development AI Future Roadmap on Future Planner, stored in the existing roadmap tables. It does not call a paid AI provider.
 - Study Plan tasks for the current roadmap, stored in the existing study plan tables. They do not call a paid AI provider.
+- Daily Tasks for that study plan. Completion stays on the same task rows.
 
 Not implemented:
 
 - Onboarding, profile, settings, and password recovery
-- Daily Tasks as a separate day view
 - AI Quiz, Performance Tracking, Adaptive Study Plan, and AI Tutor
 - Database, application API routes, and AI provider integration
 - Payments, cloud hosting, staging, production, and a custom domain

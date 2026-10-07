@@ -53,7 +53,7 @@ Onboarding can save a first Goal, and the Future Planner can show and update it.
 | Future Planner | Where the student defines and revises a Goal. | Implemented |
 | AI Future Roadmap | Ordered skills and milestones for that goal. A development generator writes the existing roadmap tables. It does not call a paid model. | Implemented |
 | Study Plan | Tasks the student adds from the current roadmap, with weekly progress. It does not call a paid model or adapt itself. | Implemented |
-| Daily Tasks | Focused work for a day. | Planned |
+| Daily Tasks | Today's work from the current study plan, with a daily completion count. It does not call a paid model. | Implemented |
 | AI Quiz | Practice tied to recent study. | Planned |
 | Performance Tracking | Progress, gaps, and consistency. | Planned |
 | Adaptive Study Plan | A revised plan based on performance. | Planned |
@@ -80,7 +80,7 @@ A later business decision may consider a free student journey and optional paid 
 
 Foundation phase.
 
-Implemented: the public landing page, application shell, visual system, environment structure, authentication, onboarding, the Future Planner, a development AI Future Roadmap, a Study Plan of tasks on that roadmap, profile editing, a server-only OpenAI connectivity check, documentation, and the PostgreSQL schema in `supabase/migrations`. Onboarding, the Future Planner, and the profile page use `profiles` and the first `goals` row. Future Planner also writes `roadmaps` and `roadmap_milestones`. Study Plan reads that roadmap and writes `study_plans` and `study_tasks`.
+Implemented: the public landing page, application shell, visual system, environment structure, authentication, onboarding, the Future Planner, a development AI Future Roadmap, a Study Plan of tasks on that roadmap, Daily Tasks for that plan, profile editing, a server-only OpenAI connectivity check, documentation, and the PostgreSQL schema in `supabase/migrations`. Onboarding, the Future Planner, and the profile page use `profiles` and the first `goals` row. Future Planner also writes `roadmaps` and `roadmap_milestones`. Study Plan and Daily Tasks use `study_plans` and `study_tasks`.
 
 Not started: quizzes, tracking, adaptive planning, tutoring, account deletion, and replacing the development roadmap generator with a paid model.
 

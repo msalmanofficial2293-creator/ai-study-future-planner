@@ -123,7 +123,7 @@ Every other table allows `authenticated` to select, insert, update, and delete o
 
 ## Not built in this phase
 
-The Future Planner saves a development roadmap into `roadmaps` and `roadmap_milestones`. Study Plan saves the current plan and its tasks into `study_plans` and `study_tasks`. Skill and estimated duration are stored in `study_tasks.details`. Quizzes, performance views, adaptive planning, and tutoring are not built. Study sessions and tutor conversations are not tables yet. No new table was added.
+The Future Planner saves a development roadmap into `roadmaps` and `roadmap_milestones`. Study Plan and Daily Tasks save the current plan and its tasks into `study_plans` and `study_tasks`. Skill and estimated duration are stored in `study_tasks.details`. Quizzes, performance views, adaptive planning, and tutoring are not built. Study sessions and tutor conversations are not tables yet. No new table was added.
 
 ## Related documents
 

@@ -89,16 +89,16 @@ Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Perfor
 - Dependencies: a saved current roadmap, completed onboarding, and the existing row level security policies. No new table and no API key are used.
 - Future implementation notes: an Adaptive Study Plan is a later revision. Do not create a second plan table.
 
-## Planned
-
 ### Daily Tasks
 
-- Purpose: turn the Study Plan into focused work for a day.
-- User value: the student knows what to do in the next session.
-- Expected behavior: tasks belong to the current plan and can be viewed for a day. Completion is recorded for Performance Tracking.
-- Important states: no tasks yet, today's list, completed, empty day, loading, and save failure.
-- Dependencies: Study Plan and persistence.
-- Future implementation notes: tasks are work items, not a second goal system.
+- Purpose: show the current study plan as the work for a day.
+- User value: the student can see what is due today, what is later, and what is already complete.
+- Expected behavior: `/app/daily-tasks` is available only to a signed-in student who has finished onboarding. It loads that student's current study plan and `study_tasks` rows. It shows today's tasks, upcoming tasks, and completed tasks, with title, description, skill, duration, planned date, status, the study plan, and the roadmap milestone when one is linked. The student can add a task for a chosen date, view details, edit, delete, and mark a task complete or incomplete. Daily progress is completed tasks planned for today divided by every task planned for today. Saving uses the existing study plan actions and tables. The page does not call a paid AI provider and does not adapt the plan.
+- Important states: loading, no roadmap yet, nothing due today, saving, saved, validation error, save failure, and a failure to load the student's records. Submit controls stay disabled while a request is in progress.
+- Dependencies: the current study plan data, completed onboarding, and the existing row level security policies. No new table and no API key are used.
+- Future implementation notes: Performance Tracking and an Adaptive Study Plan are later steps. Do not create a second task table.
+
+## Planned
 
 ### AI Quiz
 
