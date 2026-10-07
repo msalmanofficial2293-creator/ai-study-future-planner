@@ -1,6 +1,6 @@
 # AI system
 
-Server-side OpenAI boundary for AI Study Future Planner. The client and a connectivity check exist. Future Planner generates a development roadmap through `createRoadmapGenerator()` and does not call this client. Study Plan and Daily Tasks save tasks without a model. AI Quiz generates development questions through `createQuizGenerator()` and does not call this client. Tutor generation is not implemented.
+Server-side OpenAI boundary for AI Study Future Planner. The client and a connectivity check exist. Future Planner generates a development roadmap through `createRoadmapGenerator()` and does not call this client. Study Plan and Daily Tasks save tasks without a model. AI Quiz generates development questions through `createQuizGenerator()` and does not call this client. Performance Tracking reads saved tasks, attempts, and snapshots and does not call this client. Tutor generation is not implemented.
 
 ## Role in the product
 
@@ -19,11 +19,11 @@ Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Perfor
 | Study plan generation | Turn the roadmap into a Study Plan. |
 | Daily task generation | Propose Daily Tasks from the current plan. |
 | Quiz generation | A development generator already writes local questions from the study plan. A paid model is not connected. |
-| Performance analysis | Explain gaps and consistency from stored results. |
+| Performance analysis | The performance page reads stored tasks, attempts, and snapshots. It does not call a model. |
 | Adaptive planning | Revise the Study Plan from performance evidence. |
 | AI tutoring | Answer inside an AI Tutor conversation tied to the Goal. |
 
-Performance Tracking can display stored history without a model call. Analysis and adaptation use the server AI boundary.
+Performance Tracking displays stored history without a model call. Adaptive planning still uses the server AI boundary and is not built.
 
 ## Required flow
 

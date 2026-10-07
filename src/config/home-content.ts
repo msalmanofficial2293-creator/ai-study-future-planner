@@ -154,7 +154,7 @@ export const faqs = [
   {
     question: "What is AI Study Future Planner?",
     answer:
-      "It is a study platform designed to turn one future goal into a connected learning journey: a roadmap, a study plan, daily tasks, practice, progress, and guidance. A signed-in student can save a development roadmap, study tasks, daily tasks, and a development quiz. Progress tracking and tutoring are not open yet.",
+      "It is a study platform designed to turn one future goal into a connected learning journey: a roadmap, a study plan, daily tasks, practice, progress, and guidance. A signed-in student can save a development roadmap, study tasks, daily tasks, a development quiz, and a performance view of those saved results. Tutoring is not open yet.",
   },
   {
     question: "Who is it for?",

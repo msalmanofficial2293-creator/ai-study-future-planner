@@ -35,11 +35,12 @@ Implemented:
 - Study Plan tasks for the current roadmap, stored in the existing study plan tables. They do not call a paid AI provider.
 - Daily Tasks for that study plan. Completion stays on the same task rows.
 - Development AI Quiz on the current study plan, stored in the existing quiz tables. It does not call a paid AI provider.
+- Performance Tracking from saved tasks, quiz attempts, and performance snapshots. It does not call a paid AI provider.
 
 Not implemented:
 
 - Onboarding, profile, settings, and password recovery
-- Performance Tracking, Adaptive Study Plan, and AI Tutor
+- Adaptive Study Plan and AI Tutor
 - Database, application API routes, and AI provider integration
 - Payments, cloud hosting, staging, production, and a custom domain
 

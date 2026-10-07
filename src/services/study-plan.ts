@@ -15,6 +15,7 @@ import type {
   StudyTaskStatus,
 } from "@/features/study-plan/types";
 import { profileIsComplete } from "@/services/onboarding-status";
+import { recordTaskPerformance } from "@/services/performance";
 import { createSupabaseServerClient, getAuthenticatedUser } from "@/lib/supabase/server";
 
 export type StudyPlanMutation =
@@ -289,7 +290,7 @@ export async function setStudyTaskStatus(
     .eq("id", taskId)
     .eq("user_id", userId)
     .eq("study_plan_id", context.planId)
-    .select("id");
+    .select("id, title");
 
   if (updated.error) {
     logStudyPlanDiagnostic("update-status", updated.error);
@@ -299,6 +300,14 @@ export async function setStudyTaskStatus(
   if (!updated.data || updated.data.length === 0) {
     return { ok: false, reason: "missing-task" };
   }
+
+  const title = readString(asRecord(updated.data[0]), "title");
+  await recordTaskPerformance(
+    userId,
+    context.planId,
+    status === "completed" ? "completed" : "reopened",
+    title,
+  );
 
   return { ok: true };
 }

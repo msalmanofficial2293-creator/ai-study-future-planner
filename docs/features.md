@@ -96,7 +96,7 @@ Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Perfor
 - Expected behavior: `/app/daily-tasks` is available only to a signed-in student who has finished onboarding. It loads that student's current study plan and `study_tasks` rows. It shows today's tasks, upcoming tasks, and completed tasks, with title, description, skill, duration, planned date, status, the study plan, and the roadmap milestone when one is linked. The student can add a task for a chosen date, view details, edit, delete, and mark a task complete or incomplete. Daily progress is completed tasks planned for today divided by every task planned for today. Saving uses the existing study plan actions and tables. The page does not call a paid AI provider and does not adapt the plan.
 - Important states: loading, no roadmap yet, nothing due today, saving, saved, validation error, save failure, and a failure to load the student's records. Submit controls stay disabled while a request is in progress.
 - Dependencies: the current study plan data, completed onboarding, and the existing row level security policies. No new table and no API key are used.
-- Future implementation notes: Performance Tracking and an Adaptive Study Plan are later steps. Do not create a second task table.
+- Future implementation notes: an Adaptive Study Plan is a later step. Do not create a second task table.
 
 ### AI Quiz
 
@@ -105,18 +105,18 @@ Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Perfor
 - Expected behavior: `/app/quiz` is available only to a signed-in student who has finished onboarding. It lists that student's ready quizzes and submitted attempts. Creating a quiz runs a server-side development generator from the current roadmap skills and study tasks. It does not call a paid AI provider. Each quiz is stored in `quizzes` and `quiz_questions` on the current study plan. Starting a quiz creates a `quiz_attempts` row. The student answers one question at a time, then submits. The server scores the answers, stores each one in `quiz_answers`, saves the percentage on the attempt, and writes a `performance_records` snapshot for the goal. The result shows the score, percentage, correct count, incorrect count, total, and a review with explanations. Refreshing keeps the attempt in quiz history. The page does not revise the study plan.
 - Important states: loading, no roadmap yet, no study plan yet, no quizzes yet, creating, in progress, submitting, saved result, validation error, save failure, and a failure to load the student's records.
 - Dependencies: a current study plan, completed onboarding, and the existing row level security policies. No new table and no API key are used.
-- Future implementation notes: model quiz generation can replace `createQuizGenerator()` later. Performance Tracking as a page, and an Adaptive Study Plan, are later steps.
-
-## Planned
+- Future implementation notes: model quiz generation can replace `createQuizGenerator()` later. An Adaptive Study Plan is a later step.
 
 ### Performance Tracking
 
-- Purpose: show progress, gaps, and consistency over time.
-- User value: the student can see whether the work is moving the Goal forward.
-- Expected behavior: summaries are derived from task completion, quiz attempts, and study activity. The view explains the gap in plain language.
-- Important states: not enough data, loading, ready, and unavailable history.
-- Dependencies: Daily Tasks, AI Quiz attempts, and stored activity. No AI call is required to display saved history.
-- Future implementation notes: this area feeds the Adaptive Study Plan. It is not itself a new plan.
+- Purpose: show progress, gaps, and consistency from saved work.
+- User value: the student can see whether tasks and quizzes are moving the Goal forward.
+- Expected behavior: `/app/performance` is available only to a signed-in student who has finished onboarding. It reads that student's quiz attempts, quiz answers, performance snapshots, study tasks, study plans, and roadmap milestones. It shows overall progress, average quiz score, quizzes completed, tasks completed, task completion, current plan progress, a quiz score trend, task completion by milestone, strong and weak skills from saved answers, recent quiz results, recent activity, and the latest performance snapshots. Figures are calculated from stored rows. If no task is complete and no quiz is submitted, the page shows an empty state. Submitting a quiz already writes a `performance_records` snapshot. Marking a task complete or incomplete writes another snapshot and does not change the task screens. The page does not call a paid AI provider and does not revise the study plan.
+- Important states: loading, not enough saved work, progress loaded, and a failure to load the student's records.
+- Dependencies: Daily Tasks, AI Quiz attempts, and the existing row level security policies. No new table and no API key are used.
+- Future implementation notes: this view feeds a later Adaptive Study Plan. It is not itself a new plan.
+
+## Planned
 
 ### Adaptive Study Plan
 

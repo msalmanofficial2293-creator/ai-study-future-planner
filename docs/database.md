@@ -123,7 +123,7 @@ Every other table allows `authenticated` to select, insert, update, and delete o
 
 ## Not built in this phase
 
-The Future Planner saves a development roadmap into `roadmaps` and `roadmap_milestones`. Study Plan and Daily Tasks save the current plan and its tasks into `study_plans` and `study_tasks`. Skill and estimated duration are stored in `study_tasks.details`. AI Quiz saves development quizzes into `quizzes` and `quiz_questions`, attempts into `quiz_attempts`, answers into `quiz_answers`, and a snapshot into `performance_records`. Topic and difficulty are stored in `quizzes.title` because that table has no separate columns for them. The performance tracking view, adaptive planning, and tutoring are not built. Study sessions and tutor conversations are not tables yet. No new table was added.
+The Future Planner saves a development roadmap into `roadmaps` and `roadmap_milestones`. Study Plan and Daily Tasks save the current plan and its tasks into `study_plans` and `study_tasks`. Skill and estimated duration are stored in `study_tasks.details`. AI Quiz saves development quizzes into `quizzes` and `quiz_questions`, attempts into `quiz_attempts`, answers into `quiz_answers`, and a snapshot into `performance_records`. Topic and difficulty are stored in `quizzes.title` because that table has no separate columns for them. Performance Tracking reads those saved rows. Marking a task complete or incomplete also inserts a `performance_records` snapshot. Adaptive planning and tutoring are not built. Study sessions and tutor conversations are not tables yet. No new table was added.
 
 ## Related documents
 
