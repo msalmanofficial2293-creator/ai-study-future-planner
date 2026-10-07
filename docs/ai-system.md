@@ -1,6 +1,6 @@
 # AI system
 
-Server-side OpenAI boundary for AI Study Future Planner. The client and a connectivity check exist. Roadmap, plan, quiz, and tutor generation are not implemented.
+Server-side OpenAI boundary for AI Study Future Planner. The client and a connectivity check exist. Future Planner generates a development roadmap through `createRoadmapGenerator()` and does not call this client. Plan, quiz, and tutor generation are not implemented.
 
 ## Role in the product
 
@@ -70,7 +70,7 @@ AI-generated content must be validated before it is stored or displayed as a roa
 
 ## Not in this phase
 
-Roadmap generation, study plans, quizzes, tutoring, and storing model output are not implemented. Do not treat the connectivity check as a study result.
+The Future Planner roadmap is a local development generator. It is not model output. Study plans, quizzes, tutoring, and storing model output are not implemented. Do not treat the connectivity check as a study result. Replace `createRoadmapGenerator()` when a later task connects roadmap generation to OpenAI.
 
 ## Related documents
 

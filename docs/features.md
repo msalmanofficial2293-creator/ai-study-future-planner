@@ -47,11 +47,20 @@ Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Perfor
 ### Future Planner
 
 - Purpose: the place a student sees and revises the Goal collected during onboarding.
-- User value: the student can confirm the destination before any roadmap exists.
-- Expected behavior: `/app/future-planner` is available only to a signed-in student who has finished onboarding. It shows the current career goal, target outcome, education level, field of study, skill level, weekly study time, and learning style. The student can update the career goal and target outcome. The save writes that student's earliest `goals` row, or inserts one if none exists. Profile context is read from `profiles` and is not edited here. "Generate My AI Future Roadmap" explains that generation is not available and does not call an AI provider or create a roadmap.
+- User value: the student can confirm the destination and generate a roadmap from it.
+- Expected behavior: `/app/future-planner` is available only to a signed-in student who has finished onboarding. It shows the current career goal, target outcome, education level, field of study, skill level, weekly study time, and learning style. The student can update the career goal and target outcome. The save writes that student's earliest `goals` row, or inserts one if none exists. Profile context is read from `profiles` and is not edited here. "Generate My AI Future Roadmap" asks the server for a development roadmap and saves it for that student.
 - Important states: loading, no goal yet, saved, validation error, save failure, and a failure to load the student's records. The submit control stays disabled while the save is in progress, and a second submit is ignored.
 - Dependencies: Authentication, completed onboarding, and the existing row level security policies. No service-role key is used.
-- Future implementation notes: keep the object name Goal. Do not rename it to a roadmap or a plan. AI generation stays a later step.
+- Future implementation notes: keep the object name Goal. Do not rename it to a roadmap or a plan.
+
+### AI Future Roadmap
+
+- Purpose: turn a Goal into an ordered path of skills and milestones.
+- User value: the student can see how the goal breaks into stages.
+- Expected behavior: on Future Planner, "Generate My AI Future Roadmap" runs a server-side development generator. It reads the student's career goal, target outcome, education level, field of study, skill level, weekly study time, and learning style. It does not call OpenAI or any other paid provider. The result is validated, then stored in the existing `roadmaps` and `roadmap_milestones` tables for that student. The page shows the title, overview, timeline, stages, skills, milestones, and next steps. Refreshing the page shows the saved current roadmap. A later model can replace `createRoadmapGenerator()` without changing the page or the tables.
+- Important states: no roadmap yet, generating, saved, empty, load failure, and save failure. The button stays disabled while generation is in progress, and a second submit is ignored. The button is also disabled when there is no career goal.
+- Dependencies: a saved Goal, completed onboarding, and the existing row level security policies. No new table and no API key are used.
+- Future implementation notes: the browser must not call a provider. The OpenAI connectivity check is not this generator. Do not store a roadmap when validation fails.
 
 ### AI integration foundation
 
@@ -72,15 +81,6 @@ Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Perfor
 - Future implementation notes: password recovery, account deletion, and photo upload are not implemented. The delete control is a placeholder.
 
 ## Planned
-
-### AI Future Roadmap
-
-- Purpose: turn a Goal into an ordered path of skills and milestones.
-- User value: the student can see how the goal breaks into stages.
-- Expected behavior: a server-side AI request proposes a roadmap. The student can read the milestones in order. The result is stored only after validation.
-- Important states: no roadmap yet, generating, ready, provider failure, and invalid model output.
-- Dependencies: a saved Goal, the server AI boundary in [ai-system.md](ai-system.md), and the database.
-- Future implementation notes: the browser must not call the AI provider. Do not invent a roadmap when generation fails.
 
 ### Study Plan
 

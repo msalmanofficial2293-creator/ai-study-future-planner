@@ -164,7 +164,7 @@ export const faqs = [
   {
     question: "How does the AI roadmap work?",
     answer:
-      "The AI Future Roadmap is designed to turn one goal into an ordered set of skills and milestones. No AI provider is connected on this site, so a roadmap cannot be generated yet.",
+      "The AI Future Roadmap turns one goal into an ordered set of skills and milestones. A signed-in student can generate a development roadmap from Future Planner. It does not call a paid AI provider.",
   },
   {
     question: "Can I create a personalized study plan?",

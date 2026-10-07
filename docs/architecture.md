@@ -9,7 +9,7 @@ Intended production shape for AI Study Future Planner, and the structure that ex
 | Frontend | Next.js 16 App Router, React 19, TypeScript, Tailwind CSS 4 |
 | Server | Next.js server rendering now. Route handlers in this repository when a feature needs an API. |
 | Authentication | Supabase Auth through `@supabase/ssr`. Email and password only. |
-| Database | Supabase PostgreSQL. Onboarding and the Future Planner read `profiles` and the student's first `goals` row with the signed-in session. |
+| Database | Supabase PostgreSQL. Onboarding and the Future Planner read `profiles` and the student's first `goals` row with the signed-in session. Future Planner also writes that student's `roadmaps` and `roadmap_milestones` rows. |
 | AI | OpenAI Responses API through `src/services/ai.ts`. The key stays server-only. Roadmap generation is not implemented. |
 | Deployment | Intended path is GitHub, then a cloud deployment, then a custom domain. Only GitHub is in place. |
 
@@ -48,12 +48,15 @@ src/components/layout/    Header, footer, skip link
 src/components/ui/        Shared primitives
 src/components/home/      Landing page sections
 src/features/profile/      Profile view, edit form, account controls, and avatar initials
-src/features/future-planner/  Goal update form and roadmap call to action
+src/features/future-planner/  Goal update form and roadmap generate button
+src/features/roadmap/     Roadmap draft, development generator, and saved roadmap panel
 src/features/ai/          Connectivity-check validation and allowance
 src/features/onboarding/  Onboarding validation, action, and form
 src/features/auth/        Auth actions, validation, and forms
 src/services/profile.ts     Read and update the signed-in profile and first goal
 src/services/future-planner.ts  Read profile context and update the first goal
+src/services/roadmap.ts   Load and save the current roadmap for the signed-in student
+src/services/roadmap-generator.ts  Replaceable server generator. The current one is local.
 src/services/ai.ts        Server-only OpenAI Responses client
 src/services/onboarding.ts  Profile and first-goal reads and writes for onboarding
 src/services/onboarding-status.ts  Shared onboarding completion check
@@ -111,9 +114,9 @@ Details: [api.md](api.md).
 
 ## Explicitly deferred
 
-- Queries against roadmaps, study plans, tasks, quizzes, performance, and adaptive plans
+- Queries against study plans, tasks, quizzes, performance, and adaptive plans
 - Password recovery and account deletion
-- Roadmap, plan, quiz, and tutor generation
+- Paid-model roadmap generation, plus plan, quiz, and tutor generation
 - A separate backend service
 - Cloud hosting, staging, production, and a custom domain
 

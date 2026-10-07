@@ -1,6 +1,6 @@
 # Database
 
-Supabase PostgreSQL schema for AI Study Future Planner. The SQL lives in [supabase/migrations/20261006125000_database_foundation.sql](../supabase/migrations/20261006125000_database_foundation.sql). The Next.js app reads and writes `profiles` and the student's first `goals` row during onboarding, in the Future Planner, and on the profile page. It does not query the other study tables yet. Do not store student records in Markdown.
+Supabase PostgreSQL schema for AI Study Future Planner. The SQL lives in [supabase/migrations/20261006125000_database_foundation.sql](../supabase/migrations/20261006125000_database_foundation.sql). The Next.js app reads and writes `profiles` and the student's first `goals` row during onboarding, in the Future Planner, and on the profile page. Future Planner also reads and writes that student's `roadmaps` and `roadmap_milestones` rows. It does not query the other study tables yet. Do not store student records in Markdown.
 
 ## Current decision
 
@@ -17,7 +17,7 @@ The profile page also stores username, bio, interests, and notification preferen
 - Every student table has row level security. A signed-in student can read and change only rows they own.
 - `profiles.id` is the Auth user id. Every other student table has `user_id` referencing `auth.users`.
 - Child rows also store `user_id`. A composite foreign key keeps that id the same as the parent row, so a student cannot attach their row to someone else's goal, roadmap, plan, or quiz.
-- Queries for onboarding run in `src/services/onboarding.ts`. The Future Planner and the profile page read the same profile and first goal. The Future Planner updates the goal. The profile page updates that profile and the goal. Email stays on the Auth user and is not written to `profiles`. The browser must not open a database connection or receive a database password.
+- Queries for onboarding run in `src/services/onboarding.ts`. The Future Planner and the profile page read the same profile and first goal. The Future Planner updates the goal and can save a roadmap for it. The profile page updates that profile and the goal. Email stays on the Auth user and is not written to `profiles`. The browser must not open a database connection or receive a database password.
 - Do not commit credentials, dumps, or real student data.
 - Deleting the Auth user deletes the profile and owned rows through `ON DELETE CASCADE`.
 
@@ -123,7 +123,7 @@ Every other table allows `authenticated` to select, insert, update, and delete o
 
 ## Not built in this phase
 
-No goal editor, roadmap generator, study plan, task list, quiz, performance view, adaptive planner, or tutor. Study sessions and tutor conversations are not tables yet.
+The Future Planner saves a development roadmap into `roadmaps` and `roadmap_milestones`. Study plans, task lists, quizzes, performance views, adaptive planning, and tutoring are not built. Study sessions and tutor conversations are not tables yet. No new roadmap table was added.
 
 ## Related documents
 

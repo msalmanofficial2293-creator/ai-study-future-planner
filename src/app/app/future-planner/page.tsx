@@ -6,7 +6,9 @@ import { Container } from "@/components/ui/container";
 import { EmptyState } from "@/components/ui/feedback";
 import { GoalForm } from "@/features/future-planner/goal-form";
 import { RoadmapCta } from "@/features/future-planner/roadmap-cta";
+import { RoadmapPanel } from "@/features/roadmap/roadmap-panel";
 import { loadFuturePlanner } from "@/services/future-planner";
+import { loadCurrentRoadmap } from "@/services/roadmap";
 
 export const metadata: Metadata = {
   title: "Future Planner",
@@ -41,6 +43,11 @@ export default async function FuturePlannerPage() {
   }
 
   const { planner } = loaded;
+  const roadmap = await loadCurrentRoadmap();
+
+  if (roadmap.status === "unauthenticated") {
+    redirect("/login");
+  }
 
   return (
     <Container className="py-12 sm:py-16">
@@ -50,11 +57,11 @@ export default async function FuturePlannerPage() {
             <p className="eyebrow">Future Planner</p>
             <h1 className="page-heading mt-3">Your goal</h1>
             <p className="body-secondary mt-3">
-              This is the destination the rest of your study will follow. Roadmaps, plans, and
-              quizzes are not generated yet.
+              This is the destination the rest of your study will follow. Generate a roadmap from
+              this goal. Study plans and quizzes are not created yet.
             </p>
           </div>
-          <RoadmapCta />
+          <RoadmapCta hasGoal={planner.hasGoal} />
         </div>
         <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1.4fr)_minmax(18rem,0.8fr)]">
           <div className="flex flex-col gap-5">
@@ -66,7 +73,7 @@ export default async function FuturePlannerPage() {
             ) : (
               <EmptyState
                 title="No goal yet"
-                description="Add a career goal and a target outcome. That goal stays yours and is ready for a roadmap later."
+                description="Add a career goal and a target outcome. A roadmap can be generated after the goal is saved."
               />
             )}
             <Card variant="raised">
@@ -93,6 +100,10 @@ export default async function FuturePlannerPage() {
             </Card>
           </div>
         </div>
+        <RoadmapPanel
+          roadmap={roadmap.status === "ready" ? roadmap.roadmap : null}
+          unavailable={roadmap.status === "unavailable"}
+        />
       </div>
     </Container>
   );

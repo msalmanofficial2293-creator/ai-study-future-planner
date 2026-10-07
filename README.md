@@ -31,11 +31,12 @@ Implemented:
 - Environment variable structure for the public site URL and public Supabase Auth values
 - Email and password authentication with server-side sessions
 - Project documentation
+- Development AI Future Roadmap on Future Planner, stored in the existing roadmap tables. It does not call a paid AI provider.
 
 Not implemented:
 
 - Onboarding, profile, settings, and password recovery
-- Future Planner, AI Future Roadmap, Study Plan, and Daily Tasks
+- Study Plan and Daily Tasks
 - AI Quiz, Performance Tracking, Adaptive Study Plan, and AI Tutor
 - Database, application API routes, and AI provider integration
 - Payments, cloud hosting, staging, production, and a custom domain
@@ -66,7 +67,7 @@ Node.js 20 or newer and npm are required locally.
 | [UI design](docs/ui-design.md) | Visual identity, accessibility, and interface states. |
 | [Database](docs/database.md) | PostgreSQL schema and row level security. The app reads and writes `profiles` and the first `goals` row. |
 | [API](docs/api.md) | Server API strategy. `POST /api/ai/test` is the connectivity route. |
-| [AI system](docs/ai-system.md) | Server-side OpenAI boundary. Roadmap generation is not connected to the UI. |
+| [AI system](docs/ai-system.md) | Server-side OpenAI boundary. The Future Planner roadmap uses a local generator, not this client. |
 | [Security](docs/security.md) | Current baseline and production security principles. |
 | [Testing](docs/testing.md) | Current checks and the intended QA path. |
 | [Deployment](docs/deployment.md) | Local run steps and the intended release path. |

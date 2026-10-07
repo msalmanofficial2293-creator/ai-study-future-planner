@@ -81,7 +81,7 @@ If a separate backend replaces these routes, the UI should keep calling one serv
 
 ## Not in this phase
 
-Do not add roadmap, plan, quiz, or tutor routes until those features are requested. Do not add a mock generator that pretends those results exist.
+Do not add plan, quiz, or tutor routes until those features are requested. The Future Planner development roadmap is a server action, not a provider route, and it does not pretend to be model output.
 
 ## Related documents
 
