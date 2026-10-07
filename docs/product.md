@@ -41,7 +41,7 @@ A student should be able to say what future they are studying for, see the path,
 7. An Adaptive Study Plan changes later work from those results.
 8. An AI Tutor answers in the context of the goal and the work already done.
 
-Onboarding can save a first Goal, and the Future Planner can show and update it. A signed-in student can generate a development roadmap from that goal. Study Plan turns that roadmap into tasks the student adds and completes. Neither step calls a paid AI provider. Quizzes are not created.
+Onboarding can save a first Goal, and the Future Planner can show and update it. A signed-in student can generate a development roadmap from that goal. Study Plan turns that roadmap into tasks the student adds and completes. Daily Tasks shows the work for a day. AI Quiz checks that work with a development quiz. None of these steps calls a paid AI provider.
 
 ## Main product areas
 
@@ -54,7 +54,7 @@ Onboarding can save a first Goal, and the Future Planner can show and update it.
 | AI Future Roadmap | Ordered skills and milestones for that goal. A development generator writes the existing roadmap tables. It does not call a paid model. | Implemented |
 | Study Plan | Tasks the student adds from the current roadmap, with weekly progress. It does not call a paid model or adapt itself. | Implemented |
 | Daily Tasks | Today's work from the current study plan, with a daily completion count. It does not call a paid model. | Implemented |
-| AI Quiz | Practice tied to recent study. | Planned |
+| AI Quiz | Practice from the current roadmap and study plan. A development generator writes the existing quiz tables and a performance snapshot. It does not call a paid model or change the study plan. | Implemented |
 | Performance Tracking | Progress, gaps, and consistency. | Planned |
 | Adaptive Study Plan | A revised plan based on performance. | Planned |
 | AI Tutor | Guidance tied to the goal and recent work. | Planned |
@@ -80,9 +80,9 @@ A later business decision may consider a free student journey and optional paid 
 
 Foundation phase.
 
-Implemented: the public landing page, application shell, visual system, environment structure, authentication, onboarding, the Future Planner, a development AI Future Roadmap, a Study Plan of tasks on that roadmap, Daily Tasks for that plan, profile editing, a server-only OpenAI connectivity check, documentation, and the PostgreSQL schema in `supabase/migrations`. Onboarding, the Future Planner, and the profile page use `profiles` and the first `goals` row. Future Planner also writes `roadmaps` and `roadmap_milestones`. Study Plan and Daily Tasks use `study_plans` and `study_tasks`.
+Implemented: the public landing page, application shell, visual system, environment structure, authentication, onboarding, the Future Planner, a development AI Future Roadmap, a Study Plan of tasks on that roadmap, Daily Tasks for that plan, a development AI Quiz, profile editing, a server-only OpenAI connectivity check, documentation, and the PostgreSQL schema in `supabase/migrations`. Onboarding, the Future Planner, and the profile page use `profiles` and the first `goals` row. Future Planner also writes `roadmaps` and `roadmap_milestones`. Study Plan and Daily Tasks use `study_plans` and `study_tasks`. AI Quiz uses `quizzes`, `quiz_questions`, `quiz_attempts`, `quiz_answers`, and `performance_records`.
 
-Not started: quizzes, tracking, adaptive planning, tutoring, account deletion, and replacing the development roadmap generator with a paid model.
+Not started: the performance tracking view, adaptive planning, tutoring, account deletion, and replacing the development roadmap or quiz generators with a paid model.
 
 ## Related documents
 

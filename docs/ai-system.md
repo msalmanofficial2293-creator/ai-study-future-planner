@@ -1,6 +1,6 @@
 # AI system
 
-Server-side OpenAI boundary for AI Study Future Planner. The client and a connectivity check exist. Future Planner generates a development roadmap through `createRoadmapGenerator()` and does not call this client. Study Plan and Daily Tasks save tasks without a model. Quiz and tutor generation are not implemented.
+Server-side OpenAI boundary for AI Study Future Planner. The client and a connectivity check exist. Future Planner generates a development roadmap through `createRoadmapGenerator()` and does not call this client. Study Plan and Daily Tasks save tasks without a model. AI Quiz generates development questions through `createQuizGenerator()` and does not call this client. Tutor generation is not implemented.
 
 ## Role in the product
 
@@ -18,7 +18,7 @@ Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Perfor
 | Career and learning roadmap generation | Produce the AI Future Roadmap and its milestones. |
 | Study plan generation | Turn the roadmap into a Study Plan. |
 | Daily task generation | Propose Daily Tasks from the current plan. |
-| Quiz generation | Produce an AI Quiz from recent study. |
+| Quiz generation | A development generator already writes local questions from the study plan. A paid model is not connected. |
 | Performance analysis | Explain gaps and consistency from stored results. |
 | Adaptive planning | Revise the Study Plan from performance evidence. |
 | AI tutoring | Answer inside an AI Tutor conversation tied to the Goal. |
@@ -70,7 +70,7 @@ AI-generated content must be validated before it is stored or displayed as a roa
 
 ## Not in this phase
 
-The Future Planner roadmap is a local development generator. It is not model output. Study plans, quizzes, tutoring, and storing model output are not implemented. Do not treat the connectivity check as a study result. Replace `createRoadmapGenerator()` when a later task connects roadmap generation to OpenAI.
+The Future Planner roadmap and the AI Quiz are local development generators. They are not model output. Tutoring and storing model output are not implemented. Do not treat the connectivity check as a study result. Replace `createRoadmapGenerator()` or `createQuizGenerator()` when a later task connects that step to OpenAI.
 
 ## Related documents
 

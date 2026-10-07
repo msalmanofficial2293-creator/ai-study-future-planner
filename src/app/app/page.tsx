@@ -53,6 +53,9 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
         <Button href="/app/daily-tasks" variant="secondary">
           Open Daily Tasks
         </Button>
+        <Button href="/app/quiz" variant="secondary">
+          Open AI Quiz
+        </Button>
         <LogoutButton />
       </div>
     </AuthPanel>

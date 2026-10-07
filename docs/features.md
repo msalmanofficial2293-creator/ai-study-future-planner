@@ -98,16 +98,16 @@ Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Perfor
 - Dependencies: the current study plan data, completed onboarding, and the existing row level security policies. No new table and no API key are used.
 - Future implementation notes: Performance Tracking and an Adaptive Study Plan are later steps. Do not create a second task table.
 
-## Planned
-
 ### AI Quiz
 
-- Purpose: check understanding of what the student just studied.
-- User value: practice is tied to recent work instead of an unrelated question bank.
-- Expected behavior: the server generates questions from the relevant study context, the student answers, and the attempt is stored after validation.
-- Important states: no quiz yet, generating, in progress, submitted, provider failure, and invalid quiz payload.
-- Dependencies: study context from the plan or tasks, the AI boundary, and stored attempts.
-- Future implementation notes: reject quizzes that do not match the requested schema. Do not show raw provider errors.
+- Purpose: check understanding of the current roadmap and study plan.
+- User value: the student can practice a skill, see the score, and review each answer.
+- Expected behavior: `/app/quiz` is available only to a signed-in student who has finished onboarding. It lists that student's ready quizzes and submitted attempts. Creating a quiz runs a server-side development generator from the current roadmap skills and study tasks. It does not call a paid AI provider. Each quiz is stored in `quizzes` and `quiz_questions` on the current study plan. Starting a quiz creates a `quiz_attempts` row. The student answers one question at a time, then submits. The server scores the answers, stores each one in `quiz_answers`, saves the percentage on the attempt, and writes a `performance_records` snapshot for the goal. The result shows the score, percentage, correct count, incorrect count, total, and a review with explanations. Refreshing keeps the attempt in quiz history. The page does not revise the study plan.
+- Important states: loading, no roadmap yet, no study plan yet, no quizzes yet, creating, in progress, submitting, saved result, validation error, save failure, and a failure to load the student's records.
+- Dependencies: a current study plan, completed onboarding, and the existing row level security policies. No new table and no API key are used.
+- Future implementation notes: model quiz generation can replace `createQuizGenerator()` later. Performance Tracking as a page, and an Adaptive Study Plan, are later steps.
+
+## Planned
 
 ### Performance Tracking
 
