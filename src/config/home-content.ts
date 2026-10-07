@@ -169,7 +169,7 @@ export const faqs = [
   {
     question: "Can I create a personalized study plan?",
     answer:
-      "A personalized study plan is part of the product design. It is meant to follow the roadmap for the goal you name. You cannot create or save a plan yet.",
+      "A signed-in student can save study tasks from the current roadmap on the Study Plan page. The plan does not adapt itself yet.",
   },
   {
     question: "Will the plan adapt to my progress?",

@@ -80,16 +80,16 @@ Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Perfor
 - Dependencies: Authentication, the profile account migration, and the existing row level security policies. No service-role key and no storage bucket are used.
 - Future implementation notes: password recovery, account deletion, and photo upload are not implemented. The delete control is a placeholder.
 
-## Planned
-
 ### Study Plan
 
-- Purpose: turn the AI Future Roadmap into a plan the student can follow.
-- User value: milestones become a sequence of study, not only a list of ambitions.
-- Expected behavior: the plan is derived from the current roadmap and remains tied to the same Goal. The student can see what comes next.
-- Important states: no plan yet, generating or saving, ready, empty roadmap, and failure.
-- Dependencies: AI Future Roadmap, server-side generation or mapping, and persistence.
-- Future implementation notes: a later Adaptive Study Plan updates this plan. It does not create a second, disconnected plan.
+- Purpose: turn the current roadmap into tasks the student can follow.
+- User value: the student can see the current stage, weekly target, and the tasks for this week.
+- Expected behavior: `/app/study-plan` is available only to a signed-in student who has finished onboarding. It loads that student's current roadmap and milestones. It shows the roadmap, current learning stage, weekly study target, subjects, planned study time, the related milestone, and weekly progress. The student can add, edit, complete, reopen, and delete tasks. The first task creates the current `study_plans` row for that roadmap. Tasks are stored in `study_tasks`. Skill and estimated duration are kept in `details` because the table has no separate columns for them. The page does not call a paid AI provider and does not adapt the plan.
+- Important states: loading, no roadmap yet, no tasks yet, saving, saved, validation error, save failure, and a failure to load the student's records. Submit controls stay disabled while a request is in progress.
+- Dependencies: a saved current roadmap, completed onboarding, and the existing row level security policies. No new table and no API key are used.
+- Future implementation notes: an Adaptive Study Plan is a later revision. Do not create a second plan table.
+
+## Planned
 
 ### Daily Tasks
 

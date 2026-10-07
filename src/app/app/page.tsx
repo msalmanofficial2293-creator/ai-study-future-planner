@@ -32,7 +32,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
     <AuthPanel
       title={siteConfig.name}
       description={fullName ? `Welcome, ${fullName}.` : "Welcome."}
-      footer="This page confirms you are signed in. Study plans are not available yet."
+      footer="This page confirms you are signed in."
     >
       {signOutError ? (
         <p className="field-error" role="alert">
@@ -47,6 +47,9 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
           Profile
         </Button>
         <Button href="/app/future-planner">Open Future Planner</Button>
+        <Button href="/app/study-plan" variant="secondary">
+          Open Study Plan
+        </Button>
         <LogoutButton />
       </div>
     </AuthPanel>

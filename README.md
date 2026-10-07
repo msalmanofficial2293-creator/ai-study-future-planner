@@ -32,11 +32,12 @@ Implemented:
 - Email and password authentication with server-side sessions
 - Project documentation
 - Development AI Future Roadmap on Future Planner, stored in the existing roadmap tables. It does not call a paid AI provider.
+- Study Plan tasks for the current roadmap, stored in the existing study plan tables. They do not call a paid AI provider.
 
 Not implemented:
 
 - Onboarding, profile, settings, and password recovery
-- Study Plan and Daily Tasks
+- Daily Tasks as a separate day view
 - AI Quiz, Performance Tracking, Adaptive Study Plan, and AI Tutor
 - Database, application API routes, and AI provider integration
 - Payments, cloud hosting, staging, production, and a custom domain

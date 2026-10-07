@@ -1,6 +1,6 @@
 # Database
 
-Supabase PostgreSQL schema for AI Study Future Planner. The SQL lives in [supabase/migrations/20261006125000_database_foundation.sql](../supabase/migrations/20261006125000_database_foundation.sql). The Next.js app reads and writes `profiles` and the student's first `goals` row during onboarding, in the Future Planner, and on the profile page. Future Planner also reads and writes that student's `roadmaps` and `roadmap_milestones` rows. It does not query the other study tables yet. Do not store student records in Markdown.
+Supabase PostgreSQL schema for AI Study Future Planner. The SQL lives in [supabase/migrations/20261006125000_database_foundation.sql](../supabase/migrations/20261006125000_database_foundation.sql). The Next.js app reads and writes `profiles` and the student's first `goals` row during onboarding, in the Future Planner, and on the profile page. Future Planner also reads and writes that student's `roadmaps` and `roadmap_milestones` rows. Study Plan reads that roadmap and writes `study_plans` and `study_tasks`. It does not query the other study tables yet. Do not store student records in Markdown.
 
 ## Current decision
 
@@ -123,7 +123,7 @@ Every other table allows `authenticated` to select, insert, update, and delete o
 
 ## Not built in this phase
 
-The Future Planner saves a development roadmap into `roadmaps` and `roadmap_milestones`. Study plans, task lists, quizzes, performance views, adaptive planning, and tutoring are not built. Study sessions and tutor conversations are not tables yet. No new roadmap table was added.
+The Future Planner saves a development roadmap into `roadmaps` and `roadmap_milestones`. Study Plan saves the current plan and its tasks into `study_plans` and `study_tasks`. Skill and estimated duration are stored in `study_tasks.details`. Quizzes, performance views, adaptive planning, and tutoring are not built. Study sessions and tutor conversations are not tables yet. No new table was added.
 
 ## Related documents
 

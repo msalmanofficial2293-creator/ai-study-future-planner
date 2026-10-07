@@ -11,7 +11,7 @@ Production security principles for AI Study Future Planner, plus the baseline th
 - The Next.js `X-Powered-By` header is disabled.
 - The route error view may show a digest reference. It does not show an internal error message.
 - `OPENAI_API_KEY` is a server-only secret. `.env.example` lists the name with an empty value. The real key stays in `.env.local` or the host environment.
-- The study schema is defined in SQL. Onboarding, the Future Planner, and the profile page query `profiles` and the first `goals` row. Future Planner also writes that student's `roadmaps` and `roadmap_milestones` rows. The AI connectivity check does not query the database.
+- The study schema is defined in SQL. Onboarding, the Future Planner, and the profile page query `profiles` and the first `goals` row. Future Planner also writes that student's `roadmaps` and `roadmap_milestones` rows. Study Plan writes that student's `study_plans` and `study_tasks` rows. The AI connectivity check does not query the database.
 
 ## Secrets and environment variables
 
@@ -31,7 +31,7 @@ Supabase Auth provides email and password accounts. The application does not sto
 - Auth cookies are written by `@supabase/ssr`. Do not copy access tokens or refresh tokens into page HTML, logs, or query strings.
 - Signup, login, and logout run as server actions. Validation runs again on the server. Friendly errors replace provider messages. Passwords and tokens are not logged.
 - Email confirmation depends on the Supabase project. If it is enabled, signup does not create a local session until the student confirms.
-- Protected `/app`, `/app/future-planner`, `/app/profile`, and `/onboarding` require a signed-in student. Onboarding, the Future Planner, and the profile page read and write only that student's `profiles` row and first `goals` row. Future Planner roadmap writes use the same session and the existing roadmap policies. Row level security enforces that boundary. See [database.md](database.md).
+- Protected `/app`, `/app/future-planner`, `/app/study-plan`, `/app/profile`, and `/onboarding` require a signed-in student. Onboarding, the Future Planner, and the profile page read and write only that student's `profiles` row and first `goals` row. Future Planner roadmap writes and Study Plan task writes use the same session and the existing policies. Row level security enforces that boundary. See [database.md](database.md).
 - A signed-in student can change the password from `/app/profile`. The server checks the current password with that student's session, then updates Auth. The new password is not written to `profiles` and is not logged.
 - Password recovery and account deletion are not implemented. The profile page includes a delete control that does not delete the account.
 
@@ -47,7 +47,7 @@ Supabase Auth provides email and password accounts. The application does not sto
 
 ## Database access
 
-The study schema is in `supabase/migrations`. Onboarding, the Future Planner, and the profile page query `profiles` and the first `goals` row. Future Planner also writes `roadmaps` and `roadmap_milestones` for that student. The AI connectivity check does not.
+The study schema is in `supabase/migrations`. Onboarding, the Future Planner, and the profile page query `profiles` and the first `goals` row. Future Planner also writes `roadmaps` and `roadmap_milestones` for that student. Study Plan writes `study_plans` and `study_tasks` for that student. The AI connectivity check does not.
 
 - Apply the migration in Supabase. Do not create or alter these tables from Next.js route handlers.
 - The browser uses the publishable key only. Do not add a service-role or secret key to the app, the client, or a `NEXT_PUBLIC_` variable.

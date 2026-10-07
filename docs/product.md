@@ -41,7 +41,7 @@ A student should be able to say what future they are studying for, see the path,
 7. An Adaptive Study Plan changes later work from those results.
 8. An AI Tutor answers in the context of the goal and the work already done.
 
-Onboarding can save a first Goal, and the Future Planner can show and update it. A signed-in student can generate a development roadmap from that goal. It is stored in the existing roadmap tables and does not call a paid AI provider. A server-side OpenAI connectivity check also exists. Study plans and quizzes are not created.
+Onboarding can save a first Goal, and the Future Planner can show and update it. A signed-in student can generate a development roadmap from that goal. Study Plan turns that roadmap into tasks the student adds and completes. Neither step calls a paid AI provider. Quizzes are not created.
 
 ## Main product areas
 
@@ -52,7 +52,7 @@ Onboarding can save a first Goal, and the Future Planner can show and update it.
 | User Onboarding | Collect the minimum context needed to start a goal. | Implemented |
 | Future Planner | Where the student defines and revises a Goal. | Implemented |
 | AI Future Roadmap | Ordered skills and milestones for that goal. A development generator writes the existing roadmap tables. It does not call a paid model. | Implemented |
-| Study Plan | A followable plan derived from the roadmap. | Planned |
+| Study Plan | Tasks the student adds from the current roadmap, with weekly progress. It does not call a paid model or adapt itself. | Implemented |
 | Daily Tasks | Focused work for a day. | Planned |
 | AI Quiz | Practice tied to recent study. | Planned |
 | Performance Tracking | Progress, gaps, and consistency. | Planned |
@@ -80,9 +80,9 @@ A later business decision may consider a free student journey and optional paid 
 
 Foundation phase.
 
-Implemented: the public landing page, application shell, visual system, environment structure, authentication, onboarding, the Future Planner, a development AI Future Roadmap, profile editing, a server-only OpenAI connectivity check, documentation, and the PostgreSQL schema in `supabase/migrations`. Onboarding, the Future Planner, and the profile page use `profiles` and the first `goals` row. Future Planner also writes `roadmaps` and `roadmap_milestones`.
+Implemented: the public landing page, application shell, visual system, environment structure, authentication, onboarding, the Future Planner, a development AI Future Roadmap, a Study Plan of tasks on that roadmap, profile editing, a server-only OpenAI connectivity check, documentation, and the PostgreSQL schema in `supabase/migrations`. Onboarding, the Future Planner, and the profile page use `profiles` and the first `goals` row. Future Planner also writes `roadmaps` and `roadmap_milestones`. Study Plan reads that roadmap and writes `study_plans` and `study_tasks`.
 
-Not started: study plans, tasks, quizzes, tracking, adaptive planning, tutoring, account deletion, and replacing the development roadmap generator with a paid model.
+Not started: quizzes, tracking, adaptive planning, tutoring, account deletion, and replacing the development roadmap generator with a paid model.
 
 ## Related documents
 

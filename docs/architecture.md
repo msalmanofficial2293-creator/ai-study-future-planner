@@ -41,6 +41,7 @@ src/app/auth/callback/    Auth code exchange route
 src/app/onboarding/       Protected first-goal onboarding
 src/app/app/              Temporary signed-in verification page
 src/app/app/future-planner/  Protected goal view and goal update
+src/app/app/study-plan/   Protected study plan and tasks for the current roadmap
 src/app/app/profile/      Protected profile view and update
 src/components/auth/      Shared auth panel
 src/components/brand/     Product mark
@@ -50,12 +51,14 @@ src/components/home/      Landing page sections
 src/features/profile/      Profile view, edit form, account controls, and avatar initials
 src/features/future-planner/  Goal update form and roadmap generate button
 src/features/roadmap/     Roadmap draft, development generator, and saved roadmap panel
+src/features/study-plan/  Study task forms and the task board
 src/features/ai/          Connectivity-check validation and allowance
 src/features/onboarding/  Onboarding validation, action, and form
 src/features/auth/        Auth actions, validation, and forms
 src/services/profile.ts     Read and update the signed-in profile and first goal
 src/services/future-planner.ts  Read profile context and update the first goal
 src/services/roadmap.ts   Load and save the current roadmap for the signed-in student
+src/services/study-plan.ts  Load the current roadmap and save that student's study plan and tasks
 src/services/roadmap-generator.ts  Replaceable server generator. The current one is local.
 src/services/ai.ts        Server-only OpenAI Responses client
 src/services/onboarding.ts  Profile and first-goal reads and writes for onboarding
@@ -114,7 +117,7 @@ Details: [api.md](api.md).
 
 ## Explicitly deferred
 
-- Queries against study plans, tasks, quizzes, performance, and adaptive plans
+- Queries against quizzes, performance, and adaptive plans
 - Password recovery and account deletion
 - Paid-model roadmap generation, plus plan, quiz, and tutor generation
 - A separate backend service
