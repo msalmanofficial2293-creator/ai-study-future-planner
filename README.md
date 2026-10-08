@@ -39,6 +39,7 @@ Implemented:
 - Adaptive Study Plan rules that can add tasks to the current study plan from saved quiz scores. They do not call a paid AI provider.
 - AI Tutor on `/app/ai-tutor`, stored in `tutor_conversations` and `tutor_messages`. Replies come from a local generator and do not call a paid AI provider.
 - AI Personalization on `/app/personalization`, computed from saved study rows with apply/dismiss decisions in `personalization_decisions`. It does not call a paid AI provider.
+- Profile photo upload on `/app/profile` using the Supabase Storage `avatars` bucket and `profiles.avatar_path`. Upload, replace, and remove are user-scoped. No service-role key.
 
 Not implemented:
 
@@ -55,7 +56,7 @@ Do not describe a planned area as implemented.
 | UI | Next.js 16 (App Router), React 19, TypeScript (strict), Tailwind CSS 4 |
 | Server | Next.js server rendering and, later, route handlers in this repository |
 | Authentication | Supabase Auth. Email and password, server-side sessions. |
-| Database | Supabase Postgres with RLS. Study rows are read and written server-side. |
+| Database | Supabase Postgres with RLS. Study rows are read and written server-side. Profile photos use Storage (`avatars`) plus `profiles.avatar_path`. |
 | AI | Optional server-side OpenAI. Product features use local mock generators by default. |
 | Quality | ESLint and `tsc`. Manual QA is documented in [docs/testing.md](docs/testing.md). No automated test runner yet. |
 | Source | Git and GitHub |

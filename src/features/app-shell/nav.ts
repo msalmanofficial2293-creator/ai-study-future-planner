@@ -49,4 +49,5 @@ export type AppShellUser = {
   firstName: string;
   email: string;
   initials: string;
+  avatarUrl: string | null;
 };

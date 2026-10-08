@@ -10,6 +10,7 @@ import {
   type SkillLevel,
   type WeeklyStudyTime,
 } from "@/features/onboarding/options";
+import { publicAvatarUrl } from "@/lib/avatars/url";
 import { logServerDiagnostic } from "@/lib/security/log";
 import { createSupabaseServerClient, getAuthenticatedUser } from "@/lib/supabase/server";
 
@@ -29,6 +30,8 @@ export type ProfileRecord = {
   notifyStudyReminders: boolean;
   notifyProductUpdates: boolean;
   createdAt: string | null;
+  avatarPath: string | null;
+  avatarUrl: string | null;
 };
 
 export type ProfileLoad =
@@ -71,7 +74,7 @@ export async function loadProfile(): Promise<ProfileLoad> {
   const profileResult = await supabase
     .from("profiles")
     .select(
-      "full_name, username, bio, education_level, field_of_study, skill_level, weekly_study_time, learning_style, interests, notify_study_reminders, notify_product_updates, created_at",
+      "full_name, username, bio, education_level, field_of_study, skill_level, weekly_study_time, learning_style, interests, notify_study_reminders, notify_product_updates, created_at, updated_at, avatar_path",
     )
     .eq("id", user.id)
     .maybeSingle();
@@ -119,6 +122,11 @@ export async function loadProfile(): Promise<ProfileLoad> {
       notifyStudyReminders: readBoolean(profile, "notify_study_reminders", true),
       notifyProductUpdates: readBoolean(profile, "notify_product_updates", false),
       createdAt: readString(profile, "created_at") || null,
+      avatarPath: readString(profile, "avatar_path") || null,
+      avatarUrl: publicAvatarUrl(
+        readString(profile, "avatar_path") || null,
+        readString(profile, "updated_at") || null,
+      ),
     },
   };
 }

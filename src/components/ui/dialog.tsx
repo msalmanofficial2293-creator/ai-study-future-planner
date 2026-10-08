@@ -8,6 +8,7 @@ type DialogProps = {
   title: string;
   description?: string;
   children?: ReactNode;
+  actions?: ReactNode;
   onClose: () => void;
 };
 
@@ -16,6 +17,7 @@ export function Dialog({
   title,
   description,
   children,
+  actions,
   onClose,
 }: DialogProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -53,9 +55,11 @@ export function Dialog({
       ) : null}
       {children ? <div className="mt-4">{children}</div> : null}
       <div className="mt-6">
-        <Button type="button" variant="secondary" onClick={onClose}>
-          Close
-        </Button>
+        {actions ?? (
+          <Button type="button" variant="secondary" onClick={onClose}>
+            Close
+          </Button>
+        )}
       </div>
     </dialog>
   );

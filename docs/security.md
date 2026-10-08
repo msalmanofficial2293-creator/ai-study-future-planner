@@ -50,7 +50,7 @@ Supabase Auth provides email and password accounts. The application does not sto
 - Signup, login, and logout run as server actions. Validation runs again on the server. Friendly errors replace provider messages. Passwords and tokens are not logged.
 - Login and signup are limited to 10 attempts per email per minute on a single server instance.
 - Email confirmation depends on the Supabase project. If it is enabled, signup does not create a local session until the student confirms.
-- Protected routes: `/app`, `/app/future-planner`, `/app/study-plan`, `/app/daily-tasks`, `/app/quiz`, `/app/performance`, `/app/adaptive-plan`, `/app/ai-tutor`, `/app/personalization`, `/app/profile`, and `/onboarding`. Each page also checks authentication server-side.
+- Protected routes: `/app`, `/app/future-planner`, `/app/study-plan`, `/app/daily-tasks`, `/app/quiz`, `/app/performance`, `/app/adaptive-plan`, `/app/ai-tutor`, `/app/personalization`, `/app/profile`, `/app/settings`, and `/onboarding`. Each page also checks authentication server-side.
 - Public routes: `/`, `/login`, `/signup`, `/auth/callback`, plus static assets and metadata routes.
 - Every study mutation verifies the authenticated user and scopes writes to that user's rows. Resource ids (task, conversation, quiz attempt, recommendation fingerprint) are checked for ownership before update or delete. Row level security is the second line of defense.
 - A signed-in student can change the password from `/app/profile`. The server checks the current password with that student's session, then updates Auth. The new password is not written to `profiles` and is not logged.
@@ -85,6 +85,17 @@ The study schema is in `supabase/migrations`. Queries run in server-side service
 ### User data isolation
 
 A student must not read or change another student's profile, goals, roadmap, study plan, tasks, quizzes, attempts, performance, adaptive plans, tutor conversations or messages, or personalization decisions. Application queries filter by the authenticated user id. RLS rejects rows that fail `auth.uid()` checks even if a query is wrong.
+
+### Profile avatar storage
+
+Profile photos use the Supabase Storage bucket `avatars` and `profiles.avatar_path`.
+
+- Uploads and removals run as server actions with the authenticated publishable-key client. There is no service-role key.
+- The object path is always `{auth.uid()}/avatar.{jpg|png|webp}`. Client-supplied user ids are not trusted for authorization.
+- Storage policies allow insert, update, and delete only when the first folder of the object name equals `auth.uid()`.
+- The bucket allows public read so avatars can render with a public URL. The bucket is not publicly writable.
+- Server validation rejects files over 5 MB, non-image MIME types, SVG, and payloads whose magic bytes do not match JPEG, PNG, or WebP.
+- Friendly errors are returned to the browser. Storage and database messages are not exposed.
 
 ## AI security
 

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useId, useRef, useState } from "react";
+import { UserAvatar } from "@/components/ui/user-avatar";
 import { LogoutButton } from "@/features/auth/logout-button";
 import { IconChevron } from "@/features/app-shell/icons";
 import type { AppShellUser } from "@/features/app-shell/nav";
@@ -50,13 +51,12 @@ export function UserMenu({ user }: UserMenuProps) {
         aria-controls={menuId}
         onClick={() => setOpen((value) => !value)}
       >
-        <span
-          className="flex size-8 shrink-0 items-center justify-center rounded-full bg-ink text-xs font-medium"
-          style={{ color: "var(--paper)" }}
-          aria-hidden="true"
-        >
-          {user.initials}
-        </span>
+        <UserAvatar
+          name={user.fullName}
+          initials={user.initials}
+          imageUrl={user.avatarUrl}
+          size="sm"
+        />
         <span className="min-w-0 flex-1">
           <span className="block truncate text-sm font-medium text-ink">{user.fullName || "Learner"}</span>
           <span className="block truncate text-xs text-foreground-muted">{user.email}</span>

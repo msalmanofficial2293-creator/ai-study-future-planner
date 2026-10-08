@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Field, Input, Select, Textarea } from "@/components/ui/form-controls";
 import { AccountPanel } from "@/features/profile/account-panel";
 import { saveProfileAction } from "@/features/profile/actions";
+import { ProfileAvatarEditor } from "@/features/profile/profile-avatar-editor";
 import {
   BIO_MAX_LENGTH,
   CAREER_GOAL_MAX_LENGTH,
@@ -16,7 +17,6 @@ import {
   USERNAME_MAX_LENGTH,
   optionLabel,
   profileCompletionPercent,
-  profileInitials,
   type ProfileFormState,
 } from "@/features/profile/validation";
 import {
@@ -369,17 +369,11 @@ function ProfileHeader({
     <section id="profile-header" className="card card-elevated scroll-mt-24">
       <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
         <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-start">
-          <div
-            className="flex size-20 shrink-0 items-center justify-center rounded-2xl bg-ink sm:size-24"
-            aria-hidden="true"
-          >
-            <span
-              className="text-2xl font-medium"
-              style={{ color: "var(--paper)", fontFamily: "var(--font-display), Georgia, serif" }}
-            >
-              {profileInitials(profile.fullName || profile.email)}
-            </span>
-          </div>
+          <ProfileAvatarEditor
+            fullName={profile.fullName}
+            email={profile.email}
+            avatarUrl={profile.avatarUrl}
+          />
           <div className="min-w-0">
             <h2 className="card-heading">{profile.fullName || "Your profile"}</h2>
             <p className="body-secondary mt-1 truncate">{profile.email}</p>
@@ -415,9 +409,6 @@ function ProfileHeader({
         <div className="h-2 overflow-hidden rounded-full bg-line" aria-hidden="true">
           <div className="h-full rounded-full bg-tide" style={{ width: `${completion}%` }} />
         </div>
-        <p className="caption mt-2">
-          Initials avatar for now—photo upload can be added later without changing this layout.
-        </p>
       </div>
     </section>
   );

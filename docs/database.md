@@ -16,6 +16,8 @@ AI Tutor stores conversations in `tutor_conversations` and messages in `tutor_me
 
 AI Personalization computes recommendations from existing study rows. Apply and dismiss decisions are stored in `personalization_decisions`. Apply [supabase/migrations/20261008120000_personalization_decisions.sql](../supabase/migrations/20261008120000_personalization_decisions.sql) after the tutor migration. The analysis itself is not duplicated into this table.
 
+Profile photos store only a Storage object path on `profiles.avatar_path`. Image bytes live in the `avatars` Storage bucket. Apply [supabase/migrations/20261008180000_profile_avatars.sql](../supabase/migrations/20261008180000_profile_avatars.sql) after the personalization migration.
+
 ## Access rules
 
 - Every student table has row level security. A signed-in student can read and change only rows they own.
@@ -29,7 +31,7 @@ AI Personalization computes recommendations from existing study rows. Apply and 
 
 | Table | Owns | Purpose |
 | --- | --- | --- |
-| `profiles` | One row per Auth user | Display name, username, bio, learner context, interests, notification preferences, and whether onboarding is complete. |
+| `profiles` | One row per Auth user | Display name, username, bio, learner context, interests, notification preferences, optional `avatar_path`, and whether onboarding is complete. |
 | `goals` | The student | The future outcome being studied. Onboarding stores the career goal in `title` and the target outcome in `description`. |
 | `roadmaps` | One goal | An ordered path for that goal. One row per goal may be `is_current`. |
 | `roadmap_milestones` | One roadmap | Ordered steps on a roadmap. |
@@ -104,6 +106,21 @@ Apply `20261007120000_profile_account_fields.sql` after the onboarding migration
 | `notify_product_updates` | Product updates | Boolean. Defaults to false. |
 
 Email is not a profile column. Password changes use the signed-in Auth session and are not stored in `profiles`.
+
+## Profile avatar storage
+
+Apply `20261008180000_profile_avatars.sql` after the personalization migration.
+
+| Piece | Detail |
+| --- | --- |
+| `profiles.avatar_path` | Optional text. Format `{auth.uid()}/avatar.{jpg\|jpeg\|png\|webp}`. Null means show initials. Image bytes are never stored in Postgres. |
+| Bucket | `avatars` (public read for display URLs). File size limit 5 MB. Allowed MIME types: `image/jpeg`, `image/png`, `image/webp`. |
+| Object path | Always `{authenticated user id}/avatar.{ext}`. The server derives the user id from the session. |
+| Upload / replace / delete | Storage policies allow `authenticated` insert, update, and delete only when the first path folder equals `auth.uid()`. |
+| Public select | Objects in `avatars` may be read so the app can render a stable public URL. Writes remain user-scoped. |
+| App code | `src/services/avatar.ts` uploads and removes with the authenticated server client. `src/features/profile/avatar-actions.ts` exposes server actions. No service-role key. |
+
+Removing a photo clears `avatar_path` and deletes that student's object. Replacing a photo uploads the new object first, updates `avatar_path`, then deletes a previous object when the extension changed.
 
 ## Indexes
 

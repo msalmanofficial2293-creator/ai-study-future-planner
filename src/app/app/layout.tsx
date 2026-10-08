@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { AppShell } from "@/features/app-shell/app-shell";
 import type { AppShellUser } from "@/features/app-shell/nav";
 import { profileInitials } from "@/features/profile/validation";
+import { publicAvatarUrl } from "@/lib/avatars/url";
 import { createSupabaseServerClient, getAuthenticatedUser } from "@/lib/supabase/server";
 import { hasCompletedOnboarding } from "@/services/onboarding-status";
 
@@ -24,7 +25,7 @@ export default async function AuthenticatedAppLayout({
 
   const profileResult = await supabase
     .from("profiles")
-    .select("full_name")
+    .select("full_name, avatar_path, updated_at")
     .eq("id", user.id)
     .maybeSingle();
 
@@ -33,11 +34,22 @@ export default async function AuthenticatedAppLayout({
       ? profileResult.data.full_name.trim()
       : readFullName(user.user_metadata) ?? "";
 
+  const avatarPath =
+    typeof profileResult.data?.avatar_path === "string" && profileResult.data.avatar_path.trim()
+      ? profileResult.data.avatar_path.trim()
+      : null;
+
+  const updatedAt =
+    typeof profileResult.data?.updated_at === "string" && profileResult.data.updated_at.trim()
+      ? profileResult.data.updated_at.trim()
+      : null;
+
   const shellUser: AppShellUser = {
     fullName: fullName || "Learner",
     firstName: firstName(fullName),
     email: user.email,
     initials: profileInitials(fullName || user.email),
+    avatarUrl: publicAvatarUrl(avatarPath, updatedAt),
   };
 
   return <AppShell user={shellUser}>{children}</AppShell>;
