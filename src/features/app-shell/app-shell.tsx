@@ -57,7 +57,7 @@ export function AppShell({ user, children }: AppShellProps) {
     <div className="app-shell min-h-[100dvh] bg-transparent">
       <div className="mx-auto flex min-h-[100dvh] w-full max-w-[90rem]">
         <aside
-          className="sticky top-0 hidden h-[100dvh] w-64 shrink-0 flex-col border-r border-border bg-elevated/90 backdrop-blur-sm lg:flex"
+          className="sticky top-0 hidden h-[100dvh] w-56 shrink-0 flex-col border-r border-border bg-elevated/90 backdrop-blur-sm lg:flex"
           aria-label="Application"
         >
           <SidebarBrand />
@@ -140,9 +140,9 @@ export function AppShell({ user, children }: AppShellProps) {
 
 function SidebarBrand({ compact = false }: { compact?: boolean }) {
   return (
-    <div className={cn("border-b border-border px-4", compact ? "py-0" : "py-5")}>
-      <Link href="/app" className="flex items-center gap-3 rounded-xl">
-        <Mark className="size-9 shrink-0" />
+    <div className={cn("border-b border-border px-3", compact ? "py-0" : "py-4")}>
+      <Link href="/app" className="flex items-center gap-2.5 rounded-xl">
+        <Mark className="size-8 shrink-0" />
         <span className="min-w-0">
           <span className="nav-brand block truncate text-sm leading-tight">{siteConfig.name}</span>
           {!compact ? <span className="caption">Learning workspace</span> : null}
@@ -160,8 +160,8 @@ function SidebarNav({
   onNavigate?: () => void;
 }) {
   return (
-    <nav aria-label="Primary" className="flex-1 overflow-y-auto px-3 py-4">
-      <ul className="flex flex-col gap-1">
+    <nav aria-label="Primary" className="flex-1 overflow-y-auto px-2.5 py-3">
+      <ul className="flex flex-col gap-0.5">
         {primaryAppNav.map((item) => {
           const active = isNavItemActive(pathname, item);
           return (
@@ -171,9 +171,9 @@ function SidebarNav({
                 aria-current={active ? "page" : undefined}
                 onClick={onNavigate}
                 className={cn(
-                  "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition",
+                  "flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm font-medium transition",
                   active
-                    ? "bg-ink text-[var(--paper)]"
+                    ? "bg-ink text-[var(--paper)] shadow-sm"
                     : "text-ink-soft hover:bg-paper-raised",
                 )}
               >
@@ -196,8 +196,8 @@ function SidebarFooter({
   onNavigate?: () => void;
 }) {
   return (
-    <div className="mt-auto border-t border-border px-3 py-4">
-      <ul className="flex flex-col gap-1">
+    <div className="mt-auto border-t border-border px-2.5 py-3">
+      <ul className="flex flex-col gap-0.5">
         {utilityAppNav.map((item) => {
           const active = isNavItemActive(pathname, item);
           return (
@@ -207,9 +207,9 @@ function SidebarFooter({
                 aria-current={active ? "page" : undefined}
                 onClick={onNavigate}
                 className={cn(
-                  "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition",
+                  "flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm font-medium transition",
                   active
-                    ? "bg-ink text-[var(--paper)]"
+                    ? "bg-ink text-[var(--paper)] shadow-sm"
                     : "text-ink-soft hover:bg-paper-raised",
                 )}
               >
