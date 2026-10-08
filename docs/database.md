@@ -14,6 +14,8 @@ The profile page also stores username, bio, interests, and notification preferen
 
 AI Tutor stores conversations in `tutor_conversations` and messages in `tutor_messages`. Apply [supabase/migrations/20261007213000_tutor_conversations.sql](../supabase/migrations/20261007213000_tutor_conversations.sql) after the profile migration. A message can only reference a conversation owned by the same student. Roles are `user` and `assistant`.
 
+AI Personalization computes recommendations from existing study rows. Apply and dismiss decisions are stored in `personalization_decisions`. Apply [supabase/migrations/20261008120000_personalization_decisions.sql](../supabase/migrations/20261008120000_personalization_decisions.sql) after the tutor migration. The analysis itself is not duplicated into this table.
+
 ## Access rules
 
 - Every student table has row level security. A signed-in student can read and change only rows they own.
@@ -41,6 +43,7 @@ AI Tutor stores conversations in `tutor_conversations` and messages in `tutor_me
 | `adaptive_plans` | One study plan | A proposed revision of that plan, optionally tied to a performance snapshot. |
 | `tutor_conversations` | The student | One tutor chat, with a title. |
 | `tutor_messages` | One tutor conversation | A `user` or `assistant` message. The content is the message only. |
+| `personalization_decisions` | The student | An applied or dismissed recommendation fingerprint. Analysis stays computed. |
 
 `quiz_answers` and `tutor_messages` store `created_at` only. The other tables store `created_at` and `updated_at`. `updated_at` is maintained by `set_updated_at`.
 
@@ -66,6 +69,7 @@ Primary keys are UUIDs. `profiles.id` is the Auth user id. Other primary keys de
 - `performance_records` 1 — many optional `adaptive_plans`. Deleting a snapshot clears only `performance_record_id`.
 - `auth.users` 1 — many `tutor_conversations`. Deleting the user deletes those conversations.
 - `tutor_conversations` 1 — many `tutor_messages`. Deleting a conversation deletes its messages. The message must use the same `user_id` as the conversation.
+- `auth.users` 1 — many `personalization_decisions`. Deleting the user deletes those decisions. Each fingerprint is unique per student.
 
 Saving a roadmap or study plan with `is_current = true` clears that flag on the student's other current row for the same goal or roadmap. A task milestone must sit on the same roadmap as the task's plan. A quiz task must sit on the same plan as the quiz. An answer's question must belong to the attempt's quiz.
 
@@ -121,7 +125,7 @@ Each child table also has a unique `(id, user_id)` key so composite foreign keys
 
 ## Row level security
 
-Row level security is enabled and forced on all fourteen tables. The `anon` role has no privileges on them. There is no policy that selects every row.
+Row level security is enabled and forced on all fifteen tables. The `anon` role has no privileges on them. There is no policy that selects every row.
 
 `profiles` allows `authenticated` to select and update the row whose `id` is `auth.uid()`. Students cannot insert or delete profiles. The signup trigger inserts the row, and deleting the Auth user removes it.
 
@@ -129,7 +133,7 @@ Every other table allows `authenticated` to select, insert, update, and delete o
 
 ## Not built in this phase
 
-The Future Planner saves a development roadmap into `roadmaps` and `roadmap_milestones`. Study Plan and Daily Tasks save the current plan and its tasks into `study_plans` and `study_tasks`. Skill and estimated duration are stored in `study_tasks.details`. AI Quiz saves development quizzes into `quizzes` and `quiz_questions`, attempts into `quiz_attempts`, answers into `quiz_answers`, and a snapshot into `performance_records`. Topic and difficulty are stored in `quizzes.title` because that table has no separate columns for them. Performance Tracking reads those saved rows. Marking a task complete or incomplete also inserts a `performance_records` snapshot. Adaptive Study Plan stores a draft or applied recommendation in `adaptive_plans` and, when the student applies it, adds tasks to the current `study_tasks` rows. AI Tutor stores each conversation in `tutor_conversations` and each message in `tutor_messages`. The message row stores role and content only. It does not copy the profile, goal, or quiz. Study sessions are not a table.
+The Future Planner saves a development roadmap into `roadmaps` and `roadmap_milestones`. Study Plan and Daily Tasks save the current plan and its tasks into `study_plans` and `study_tasks`. Skill and estimated duration are stored in `study_tasks.details`. AI Quiz saves development quizzes into `quizzes` and `quiz_questions`, attempts into `quiz_attempts`, answers into `quiz_answers`, and a snapshot into `performance_records`. Topic and difficulty are stored in `quizzes.title` because that table has no separate columns for them. Performance Tracking reads those saved rows. Marking a task complete or incomplete also inserts a `performance_records` snapshot. Adaptive Study Plan stores a draft or applied recommendation in `adaptive_plans` and, when the student applies it, adds tasks to the current `study_tasks` rows. AI Tutor stores each conversation in `tutor_conversations` and each message in `tutor_messages`. The message row stores role and content only. It does not copy the profile, goal, or quiz. AI Personalization stores only apply and dismiss decisions in `personalization_decisions`. Study sessions are not a table.
 
 ## Related documents
 

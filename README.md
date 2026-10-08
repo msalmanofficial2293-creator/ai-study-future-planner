@@ -8,7 +8,7 @@ This file is the master project index. Detailed specifications live in [`docs/`]
 
 A student names the future they are studying toward. The product then keeps roadmap, study, practice, and review on one path:
 
-Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Performance Tracking → Adaptive Study Plan → AI Tutor
+Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Performance Tracking → Adaptive Study Plan → AI Tutor → AI Personalization
 
 The public home page introduces that journey. It does not create a goal, generate a plan, or call an AI provider.
 
@@ -38,12 +38,13 @@ Implemented:
 - Performance Tracking from saved tasks, quiz attempts, and performance snapshots. It does not call a paid AI provider.
 - Adaptive Study Plan rules that can add tasks to the current study plan from saved quiz scores. They do not call a paid AI provider.
 - AI Tutor on `/app/ai-tutor`, stored in `tutor_conversations` and `tutor_messages`. Replies come from a local generator and do not call a paid AI provider.
+- AI Personalization on `/app/personalization`, computed from saved study rows with apply/dismiss decisions in `personalization_decisions`. It does not call a paid AI provider.
 
 Not implemented:
 
-- Onboarding, profile, settings, and password recovery
-- Database, application API routes, and AI provider integration
-- Payments, cloud hosting, staging, production, and a custom domain
+- Password recovery and account deletion
+- Paid AI provider calls for roadmap, quiz, adaptive, tutor, or personalization
+- Payments and a custom production domain
 
 Do not describe a planned area as implemented.
 

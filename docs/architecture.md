@@ -47,6 +47,7 @@ src/app/app/quiz/         Protected development quiz for the current study plan
 src/app/app/performance/  Protected performance view of saved tasks, quizzes, and snapshots
 src/app/app/adaptive-plan/  Protected rule-based update of the current study plan
 src/app/app/ai-tutor/     Protected development tutor for the signed-in student
+src/app/app/personalization/  Protected rule-based personalization overview
 src/app/app/profile/      Protected profile view and update
 src/components/auth/      Shared auth panel
 src/components/brand/     Product mark
@@ -62,6 +63,7 @@ src/features/quiz/        Development quiz questions, attempt flow, and result r
 src/features/performance/ Performance metrics and dashboard from saved study rows
 src/features/adaptive-plan/  Rule-based recommendations and apply action for the current study plan
 src/features/tutor/       Tutor chat, development replies, and conversation actions
+src/features/personalization/  Rule-based personalization engine, panel, and actions
 src/features/ai/          Connectivity-check validation and allowance
 src/features/onboarding/  Onboarding validation, action, and form
 src/features/auth/        Auth actions, validation, and forms
@@ -76,6 +78,7 @@ src/services/adaptive-plan.ts  Load quiz evidence and save or apply an adaptive 
 src/services/tutor.ts     Load and save the signed-in student's tutor conversations and messages
 src/services/tutor-context.ts  Build a short study context for the tutor from that student's rows
 src/services/tutor-generator.ts  Replaceable server tutor generator. The current one is local.
+src/services/personalization.ts  Load personalization analysis and apply or dismiss recommendations
 src/services/quiz-generator.ts  Replaceable server quiz generator. The current one is local.
 src/services/roadmap-generator.ts  Replaceable server generator. The current one is local.
 src/services/ai.ts        Server-only OpenAI Responses client

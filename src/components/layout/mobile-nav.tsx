@@ -65,6 +65,11 @@ export function MobileNav({ isAuthenticated }: MobileNavProps) {
                     </Link>
                   </li>
                   <li>
+                    <Link href="/app/personalization" className="nav-link w-full" onClick={() => setOpen(false)}>
+                      Personalization
+                    </Link>
+                  </li>
+                  <li>
                     <Link href="/app/profile" className="nav-link w-full" onClick={() => setOpen(false)}>
                       Profile
                     </Link>

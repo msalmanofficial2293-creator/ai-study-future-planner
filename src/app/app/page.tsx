@@ -65,6 +65,9 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
         <Button href="/app/ai-tutor" variant="secondary">
           Open AI Tutor
         </Button>
+        <Button href="/app/personalization" variant="secondary">
+          Open Personalization
+        </Button>
         <LogoutButton />
       </div>
     </AuthPanel>

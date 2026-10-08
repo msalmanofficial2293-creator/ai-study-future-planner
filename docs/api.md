@@ -81,7 +81,7 @@ If a separate backend replaces these routes, the UI should keep calling one serv
 
 ## Not in this phase
 
-Study Plan, AI Quiz, Adaptive Study Plan, and AI Tutor use server actions, not provider routes. The tutor action does not call OpenAI. The Future Planner development roadmap is also a server action, and it does not pretend to be model output.
+Study Plan, AI Quiz, Adaptive Study Plan, AI Tutor, and AI Personalization use server actions, not provider routes. The tutor and personalization actions do not call OpenAI. The Future Planner development roadmap is also a server action, and it does not pretend to be model output.
 
 ## Related documents
 

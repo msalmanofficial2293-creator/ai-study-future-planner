@@ -36,6 +36,15 @@ export type TutorLearningStyle = "reading" | "practice" | "video" | "mixed";
 
 export type TutorSkillLevel = "beginner" | "intermediate" | "advanced";
 
+export type TutorPersonalization = {
+  currentFocus: string;
+  recommendedPriority: string;
+  recommendedDifficulty: string;
+  recommendedNextStep: string;
+  strongAreas: string[];
+  weakAreas: string[];
+};
+
 export type TutorContext = {
   educationLabel: string | null;
   field: string | null;
@@ -55,6 +64,7 @@ export type TutorContext = {
   latestQuiz: { title: string; skill: string; percent: number } | null;
   adaptiveNote: string | null;
   performanceNote: string | null;
+  personalization: TutorPersonalization | null;
 };
 
 export type TutorFocus = {

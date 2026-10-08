@@ -1,6 +1,6 @@
 # AI system
 
-Server-side OpenAI boundary for AI Study Future Planner. The client and a connectivity check exist. Future Planner generates a development roadmap through `createRoadmapGenerator()` and does not call this client. Study Plan and Daily Tasks save tasks without a model. AI Quiz generates development questions through `createQuizGenerator()` and does not call this client. Performance Tracking reads saved tasks, attempts, and snapshots and does not call this client. Adaptive Study Plan applies server-side rules to those saved results and does not call this client. AI Tutor replies through `createTutorGenerator()` and does not call this client.
+Server-side OpenAI boundary for AI Study Future Planner. The client and a connectivity check exist. Future Planner generates a development roadmap through `createRoadmapGenerator()` and does not call this client. Study Plan and Daily Tasks save tasks without a model. AI Quiz generates development questions through `createQuizGenerator()` and does not call this client. Performance Tracking reads saved tasks, attempts, and snapshots and does not call this client. Adaptive Study Plan applies server-side rules to those saved results and does not call this client. AI Tutor replies through `createTutorGenerator()` and does not call this client. AI Personalization uses `buildPersonalization()` rules on saved study rows and does not call this client.
 
 ## Role in the product
 
@@ -8,7 +8,7 @@ AI supports the learning journey. It does not replace the journey with an open-e
 
 The journey remains:
 
-Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Performance Tracking → Adaptive Study Plan → AI Tutor
+Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Performance Tracking → Adaptive Study Plan → AI Tutor → AI Personalization
 
 ## Planned capabilities
 
@@ -22,6 +22,7 @@ Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Perfor
 | Performance analysis | The performance page reads stored tasks, attempts, and snapshots. It does not call a model. |
 | Adaptive planning | The adaptive page revises later tasks from saved scores with server-side rules. A paid model is not connected. |
 | AI tutoring | The tutor page answers from saved study context with a local generator. A paid model is not connected. |
+| Personalization | The personalization page builds structured recommendations from saved profile, plan, and quiz evidence with local rules. A paid model is not connected. |
 
 Performance Tracking displays stored history without a model call. Adaptive planning uses saved scores and local rules. It does not call this client.
 
@@ -70,7 +71,7 @@ AI-generated content must be validated before it is stored or displayed as a roa
 
 ## Not in this phase
 
-The Future Planner roadmap, the AI Quiz, and the AI Tutor are local development generators. They are not model output. Tutor replies are stored in `tutor_messages`. Storing model output is not implemented. Do not treat the connectivity check as a study result. Replace `createRoadmapGenerator()`, `createQuizGenerator()`, or `createTutorGenerator()` when a later task connects that step to OpenAI. The tutor generator is the only piece that should change. Context loading, conversation storage, and the page stay as they are.
+The Future Planner roadmap, the AI Quiz, and the AI Tutor are local development generators. They are not model output. Personalization is rule-based and returns a typed structure from `buildPersonalization()`. Tutor replies are stored in `tutor_messages`. Apply and dismiss decisions are stored in `personalization_decisions`. Storing model output is not implemented. Do not treat the connectivity check as a study result. Replace `createRoadmapGenerator()`, `createQuizGenerator()`, or `createTutorGenerator()` when a later task connects that step to OpenAI. A later paid model can consume the personalization structure without changing its fields.
 
 ## Related documents
 

@@ -132,7 +132,16 @@ Goal → AI Future Roadmap → Study Plan → Daily Tasks → AI Quiz → Perfor
 - Expected behavior: `/app/ai-tutor` is available only to a signed-in student who has finished onboarding. The page shows the career goal, current roadmap stage, and current study focus. The student can start a chat, reopen it, rename it, clear its messages, or delete it. A question is saved as a `user` message. The server builds a short context from that student's profile, goal, roadmap, study plan, tasks, quizzes, and performance, then `createTutorGenerator()` writes a local reply and saves it as an `assistant` message. The reply uses short explanation, key points, example, practice, and next step. If a fact is not saved, the tutor says so and does not invent a score. Refresh keeps the conversation. This page does not call a paid AI provider and does not read `OPENAI_API_KEY`.
 - Important states: loading, empty conversation, waiting for a reply, reply shown, renamed, cleared, deleted, missing conversation, and a failure to load or save.
 - Dependencies: Authentication, the student's saved study rows, `tutor_conversations`, `tutor_messages`, and row level security. No API key is used.
-- Future implementation notes: replace `createTutorGenerator()` with a call through `src/services/ai.ts` when a later task turns on a paid model. Keep context building, storage, and the page separate from that generator.
+- Future implementation notes: replace `createTutorGenerator()` with a call through `src/services/ai.ts` when a later task turns on a paid model. Keep context building, storage, and the page separate from that generator. Tutor context also reads the rule-based personalization summary when quiz evidence exists.
+
+### AI Personalization
+
+- Purpose: turn the student's saved profile, roadmap, plan, tasks, and quiz results into structured study recommendations.
+- User value: the student sees why a focus, difficulty, or next step was chosen, and stays in control before anything is added to the plan.
+- Expected behavior: `/app/personalization` is available only to a signed-in student who has finished onboarding. The server loads that student's profile, goal, roadmap, milestones, study plan, tasks, submitted quiz answers, and saved personalization decisions. Rules that match Adaptive Study Plan bands (below 50%, 50% to 79%, 80% or above) build a structured result: current focus, strong areas, weak areas, priority, difficulty, learning approach, next step, career alignment, reasoning, and actionable recommendations. Applying a recommendation can add a matching `study_tasks` row when the recommendation includes a task. Dismissing stores a decision so that fingerprint stays dismissed. Refresh reloads the analysis. If no submitted quiz answers exist, the page shows an empty state and does not invent scores. This page does not call a paid AI provider.
+- Important states: loading, no roadmap, no study plan, insufficient quiz evidence, recommendation ready, applied, dismissed, refreshed, and a failure to load or save.
+- Dependencies: Authentication, existing study tables, `personalization_decisions` for apply/dismiss only, and row level security. No API key is used.
+- Future implementation notes: keep `buildPersonalization()` structured so a later paid model can consume the same result. Do not silently rewrite the study plan.
 
 ## Planned
 

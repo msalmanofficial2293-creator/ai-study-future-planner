@@ -100,6 +100,7 @@ function intent(question: string): string {
 function weakReply(context: TutorContext): string {
   const weak = weakest(context.scores);
   const strong = strongest(context.scores);
+  const personalWeak = context.personalization?.weakAreas[0] ?? null;
 
   if (context.scores.length === 0) {
     const note = context.performanceNote
@@ -141,14 +142,21 @@ function weakReply(context: TutorContext): string {
     points: [
       "Below 50% means revise the idea before new work.",
       "From 50% to 79%, practice the same skill in a shorter task.",
-      "I am not adding other weak topics, because those scores are not saved.",
+      personalWeak
+        ? `Personalization also lists "${personalWeak}" among areas needing improvement.`
+        : "I am not adding other weak topics, because those scores are not saved.",
+      context.personalization
+        ? `Current personalization focus: ${context.personalization.currentFocus}.`
+        : "Open Personalization after more quizzes if you want a full priority summary.",
     ],
     example: `Take "${weak.skill}" and write what you can explain today, then mark the part you still mix up.`,
     practice: [
       `Define "${weak.skill}" without looking at notes.`,
       "Check that definition against your study task or quiz explanation.",
     ],
-    next: `${styleStep(context)} The adaptive plan page can turn this score into a task if you want it on the plan.`,
+    next:
+      context.personalization?.recommendedNextStep ??
+      `${styleStep(context)} The adaptive plan page can turn this score into a task if you want it on the plan.`,
   });
 }
 
@@ -228,6 +236,7 @@ function todayReply(context: TutorContext): string {
 function nextReply(context: TutorContext): string {
   const today = context.todayTasks[0];
   const weak = weakest(context.scores);
+  const personal = context.personalization;
 
   if (today) {
     return reply({
@@ -236,13 +245,16 @@ function nextReply(context: TutorContext): string {
         weak
           ? `A saved weak skill is "${weak.skill}" at ${weak.percent}% (${weak.correct} of ${weak.total}). Use it only if it is the same skill as this task.`
           : "No saved quiz skill is below 80%.",
-        context.adaptiveNote
-          ? `Your latest adaptive note says: ${context.adaptiveNote}`
-          : "There is no saved adaptive recommendation to add.",
-      ],
+        personal
+          ? `Personalization priority: ${personal.recommendedPriority}`
+          : context.adaptiveNote
+            ? `Your latest adaptive note says: ${context.adaptiveNote}`
+            : "There is no saved adaptive recommendation to add.",
+        personal ? `Recommended difficulty: ${personal.recommendedDifficulty}.` : "No personalization summary is saved yet.",
+      ].filter((point) => point.length > 0),
       example: "Stay on this task until it is done. Do not skip to a later roadmap stage.",
       practice: [`Work on "${today.skill}" once.`, "Check the task off when the work is actually finished."],
-      next: styleStep(context),
+      next: personal?.recommendedNextStep ?? styleStep(context),
     });
   }
 

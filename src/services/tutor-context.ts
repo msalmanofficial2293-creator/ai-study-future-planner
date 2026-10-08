@@ -4,7 +4,13 @@ import {
   EDUCATION_LEVELS,
   LEARNING_STYLES,
   SKILL_LEVELS,
+  WEEKLY_STUDY_TIMES,
+  isLearningStyle,
+  isSkillLevel,
+  isWeeklyStudyTime,
+  type WeeklyStudyTime,
 } from "@/features/onboarding/options";
+import { buildPersonalization } from "@/features/personalization/engine";
 import { decodeQuizTitle } from "@/features/quiz/record";
 import { decodeMilestoneDescription } from "@/features/roadmap/record";
 import { decodeTaskDetails } from "@/features/study-plan/record";
@@ -14,6 +20,7 @@ import type {
   TutorContext,
   TutorLearningStyle,
   TutorMiss,
+  TutorPersonalization,
   TutorSkillLevel,
   TutorSkillScore,
   TutorTaskBrief,
@@ -42,12 +49,14 @@ export async function loadTutorContext(
     await Promise.all([
       supabase
         .from("profiles")
-        .select("education_level, field_of_study, skill_level, learning_style, onboarding_completed_at")
+        .select(
+          "education_level, field_of_study, skill_level, learning_style, weekly_study_time, onboarding_completed_at",
+        )
         .eq("id", userId)
         .maybeSingle(),
       supabase
         .from("goals")
-        .select("title")
+        .select("title, description")
         .eq("user_id", userId)
         .order("created_at", { ascending: true })
         .limit(1)
@@ -133,13 +142,13 @@ export async function loadTutorContext(
   const plan = asRecord(planResult?.data);
   const planId = readString(plan, "id");
   const taskResult = planId
-    ? await supabase
+    ? await     supabase
         .from("study_tasks")
         .select("title, details, scheduled_on, status, milestone_id")
         .eq("user_id", userId)
         .eq("study_plan_id", planId)
         .order("scheduled_on", { ascending: true })
-        .limit(40)
+        .limit(60)
     : null;
 
   if (taskResult?.error) {
@@ -171,6 +180,32 @@ export async function loadTutorContext(
   const pending = tasks.filter((task) => task.status === "pending");
   const skillLevel = readSkillLevel(readString(profile, "skill_level"));
   const learningStyle = readLearningStyle(readString(profile, "learning_style"));
+  const weeklyRaw = readString(profile, "weekly_study_time");
+  const goalTitle = readString(asRecord(goalResult.data), "title");
+  const planTitle = readString(plan, "title");
+  const roadmapTitle = readString(roadmap, "title");
+  const personalization = buildTutorPersonalization({
+    today,
+    educationLabel: labelFor(EDUCATION_LEVELS, readString(profile, "education_level")),
+    field: readString(profile, "field_of_study"),
+    skillLevel,
+    skillLabel: labelFor(SKILL_LEVELS, skillLevel),
+    learningStyle,
+    learningLabel: labelFor(LEARNING_STYLES, learningStyle),
+    weeklyStudyTime: weeklyRaw && isWeeklyStudyTime(weeklyRaw) ? weeklyRaw : null,
+    weeklyLabel:
+      weeklyRaw && isWeeklyStudyTime(weeklyRaw)
+        ? (WEEKLY_STUDY_TIMES.find((option) => option.value === weeklyRaw)?.label ?? null)
+        : null,
+    goalTitle,
+    targetOutcome: readString(asRecord(goalResult.data), "description"),
+    planTitle,
+    roadmapTitle,
+    stageTitle: stage?.title ?? null,
+    milestones,
+    tasks,
+    scores: answerBundle.scores,
+  });
 
   return {
     educationLabel: labelFor(EDUCATION_LEVELS, readString(profile, "education_level")),
@@ -179,11 +214,11 @@ export async function loadTutorContext(
     skillLabel: labelFor(SKILL_LEVELS, skillLevel),
     learningStyle,
     learningLabel: labelFor(LEARNING_STYLES, learningStyle),
-    goalTitle: readString(asRecord(goalResult.data), "title"),
-    roadmapTitle: readString(roadmap, "title"),
+    goalTitle,
+    roadmapTitle,
     stageTitle: stage?.title ?? null,
     stageSkills: stageRow?.skills.slice(0, 4) ?? [],
-    planTitle: readString(plan, "title"),
+    planTitle,
     todayTasks: pending.filter((task) => task.scheduledOn <= today).slice(0, 4),
     upcomingTasks: pending.filter((task) => task.scheduledOn > today).slice(0, 2),
     scores: answerBundle.scores,
@@ -191,6 +226,76 @@ export async function loadTutorContext(
     latestQuiz: answerBundle.latestQuiz,
     adaptiveNote: clip(readString(asRecord(adaptiveResult.data), "rationale"), 180),
     performanceNote: clip(readString(asRecord(performanceResult.data), "summary"), 160),
+    personalization,
+  };
+}
+
+function buildTutorPersonalization(input: {
+  today: string;
+  educationLabel: string | null;
+  field: string | null;
+  skillLevel: TutorSkillLevel | null;
+  skillLabel: string | null;
+  learningStyle: TutorLearningStyle | null;
+  learningLabel: string | null;
+  weeklyStudyTime: WeeklyStudyTime | null;
+  weeklyLabel: string | null;
+  goalTitle: string | null;
+  targetOutcome: string | null;
+  planTitle: string | null;
+  roadmapTitle: string | null;
+  stageTitle: string | null;
+  milestones: MilestoneRow[];
+  tasks: Array<TutorTaskBrief & { status: string; milestoneId: string | null; durationMinutes?: number }>;
+  scores: TutorSkillScore[];
+}): TutorPersonalization | null {
+  if (input.scores.length === 0 || !input.planTitle || !input.roadmapTitle) {
+    return null;
+  }
+
+  const skillLevel = input.skillLevel && isSkillLevel(input.skillLevel) ? input.skillLevel : null;
+  const learningStyle =
+    input.learningStyle && isLearningStyle(input.learningStyle) ? input.learningStyle : null;
+  const result = buildPersonalization({
+    today: input.today,
+    profile: {
+      educationLabel: input.educationLabel,
+      field: input.field,
+      skillLevel,
+      skillLabel: input.skillLabel,
+      learningStyle,
+      learningLabel: input.learningLabel,
+      weeklyStudyTime: input.weeklyStudyTime,
+      weeklyLabel: input.weeklyLabel,
+      goalTitle: input.goalTitle,
+      targetOutcome: input.targetOutcome,
+    },
+    planTitle: input.planTitle,
+    roadmapTitle: input.roadmapTitle,
+    stageTitle: input.stageTitle,
+    milestones: input.milestones,
+    tasks: input.tasks.map((task) => ({
+      title: task.title,
+      skill: task.skill,
+      status: task.status,
+      scheduledOn: task.scheduledOn,
+      durationMinutes: task.durationMinutes ?? 30,
+    })),
+    skills: input.scores.map((score) => ({
+      skill: score.skill,
+      correct: score.correct,
+      total: score.total,
+    })),
+    decisions: new Map(),
+  });
+
+  return {
+    currentFocus: result.currentFocus,
+    recommendedPriority: result.recommendedPriority,
+    recommendedDifficulty: result.recommendedDifficulty,
+    recommendedNextStep: result.recommendedNextStep,
+    strongAreas: result.strongAreas.map((area) => area.skill).slice(0, 4),
+    weakAreas: result.weakAreas.map((area) => area.skill).slice(0, 4),
   };
 }
 
@@ -360,11 +465,14 @@ function readMilestone(row: unknown): MilestoneRow[] {
   ];
 }
 
-function readTask(row: unknown): Array<TutorTaskBrief & { status: string; milestoneId: string | null }> {
+function readTask(
+  row: unknown,
+): Array<TutorTaskBrief & { status: string; milestoneId: string | null; durationMinutes: number }> {
   const record = asRecord(row);
   const title = readString(record, "title");
   const scheduledOn = readString(record, "scheduled_on");
   const status = readString(record, "status");
+  const details = decodeTaskDetails(readString(record, "details") ?? "");
 
   if (!title || !scheduledOn || !status) {
     return [];
@@ -373,10 +481,11 @@ function readTask(row: unknown): Array<TutorTaskBrief & { status: string; milest
   return [
     {
       title,
-      skill: decodeTaskDetails(readString(record, "details") ?? "").skill,
+      skill: details.skill,
       scheduledOn,
       status,
       milestoneId: readString(record, "milestone_id"),
+      durationMinutes: details.durationMinutes,
     },
   ];
 }

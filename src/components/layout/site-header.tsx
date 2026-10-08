@@ -41,6 +41,9 @@ export async function SiteHeader() {
               <Button href="/app/ai-tutor" variant="ghost">
                 AI Tutor
               </Button>
+              <Button href="/app/personalization" variant="ghost">
+                Personalization
+              </Button>
               <Button href="/app/profile" variant="ghost">
                 Profile
               </Button>
