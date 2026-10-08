@@ -94,8 +94,9 @@ Profile photos use the Supabase Storage bucket `avatars` and `profiles.avatar_pa
 - The object path is always `{auth.uid()}/avatar.{jpg|png|webp}`. Client-supplied user ids are not trusted for authorization.
 - Storage policies allow insert, update, and delete only when the first folder of the object name equals `auth.uid()`.
 - The bucket allows public read so avatars can render with a public URL. The bucket is not publicly writable.
+- Signed-out requests cannot insert into `avatars` (Storage RLS rejects them). Another authenticated user cannot write under someone else's `{user_id}/` path.
 - Server validation rejects files over 5 MB, non-image MIME types, SVG, and payloads whose magic bytes do not match JPEG, PNG, or WebP.
-- Friendly errors are returned to the browser. Storage and database messages are not exposed.
+- Failures classify missing bucket/column separately from RLS denials. Full provider messages stay server-side; development may append a short diagnostic code.
 
 ## AI security
 

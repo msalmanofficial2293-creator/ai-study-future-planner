@@ -109,7 +109,7 @@ Email is not a profile column. Password changes use the signed-in Auth session a
 
 ## Profile avatar storage
 
-Apply `20261008180000_profile_avatars.sql` after the personalization migration.
+Apply `20261008180000_profile_avatars.sql` after the personalization migration, then `20261008183000_ensure_avatars_bucket.sql` (idempotent bucket and Storage policy repair).
 
 | Piece | Detail |
 | --- | --- |

@@ -32,7 +32,7 @@ Each environment gets its own variables. Do not point staging at the production 
 1. Install dependencies with `npm install`.
 2. Copy `.env.example` to `.env.local`.
 3. Set `NEXT_PUBLIC_APP_URL` to the local origin, usually `http://localhost:3000`.
-4. Apply Supabase SQL migrations in order, including `20261008180000_profile_avatars.sql` for the `avatars` bucket and `profiles.avatar_path`.
+4. Apply Supabase SQL migrations in order, including `20261008180000_profile_avatars.sql` and `20261008183000_ensure_avatars_bucket.sql` for the `avatars` bucket, Storage RLS policies, and `profiles.avatar_path`. Use `npx supabase db push --linked` against the linked project, or run those SQL files in the Supabase SQL editor. Profile photo upload fails until both are applied.
 5. Start the app with `npm run dev`.
 
 Production-mode check on the same machine:

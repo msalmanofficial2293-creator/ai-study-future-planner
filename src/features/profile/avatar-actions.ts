@@ -79,7 +79,7 @@ async function runUpload(formData: FormData): Promise<AvatarActionState> {
       redirect("/login");
     }
 
-    return { error: friendlyUploadError(result.reason) };
+    return { error: friendlyUploadError(result.reason, result.diagnosticCode) };
   }
 
   return {
@@ -97,7 +97,7 @@ async function runRemove(): Promise<AvatarActionState> {
       redirect("/login");
     }
 
-    return { error: "Could not remove your photo. Please try again." };
+    return { error: friendlyRemoveError(result.reason, result.diagnosticCode) };
   }
 
   return {
@@ -108,7 +108,15 @@ async function runRemove(): Promise<AvatarActionState> {
 }
 
 function friendlyUploadError(
-  reason: "too-large" | "invalid-type" | "invalid-content" | "failed",
+  reason:
+    | "too-large"
+    | "invalid-type"
+    | "invalid-content"
+    | "storage-not-configured"
+    | "schema-missing"
+    | "storage-denied"
+    | "failed",
+  diagnosticCode?: string,
 ): string {
   switch (reason) {
     case "too-large":
@@ -116,7 +124,55 @@ function friendlyUploadError(
     case "invalid-type":
     case "invalid-content":
       return "Use a JPG, PNG, or WebP image.";
+    case "storage-not-configured":
+      return withDiagnostic(
+        "Photo storage is not set up yet. Apply the avatars Storage migration, then try again.",
+        diagnosticCode,
+      );
+    case "schema-missing":
+      return withDiagnostic(
+        "Profile photo storage is missing a required database column. Apply the avatars migration, then try again.",
+        diagnosticCode,
+      );
+    case "storage-denied":
+      return withDiagnostic(
+        "You do not have permission to update this photo. Sign in again and try once more.",
+        diagnosticCode,
+      );
     default:
-      return "Could not update your photo. Please try again.";
+      return withDiagnostic("Could not update your photo. Please try again.", diagnosticCode);
   }
+}
+
+function friendlyRemoveError(
+  reason: "storage-not-configured" | "schema-missing" | "storage-denied" | "failed",
+  diagnosticCode?: string,
+): string {
+  switch (reason) {
+    case "storage-not-configured":
+      return withDiagnostic(
+        "Photo storage is not set up yet. Apply the avatars Storage migration, then try again.",
+        diagnosticCode,
+      );
+    case "schema-missing":
+      return withDiagnostic(
+        "Profile photo storage is missing a required database column. Apply the avatars migration, then try again.",
+        diagnosticCode,
+      );
+    case "storage-denied":
+      return withDiagnostic(
+        "You do not have permission to remove this photo. Sign in again and try once more.",
+        diagnosticCode,
+      );
+    default:
+      return withDiagnostic("Could not remove your photo. Please try again.", diagnosticCode);
+  }
+}
+
+function withDiagnostic(message: string, diagnosticCode?: string): string {
+  if (!diagnosticCode || process.env.NODE_ENV === "production") {
+    return message;
+  }
+
+  return `${message} (${diagnosticCode})`;
 }
