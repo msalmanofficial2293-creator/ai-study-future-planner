@@ -48,13 +48,13 @@ export function MobileNav({ isAuthenticated }: MobileNavProps) {
             <ul className="flex flex-col px-5 py-2 sm:px-8">
               {primaryNav.map((item) => (
                 <li key={item.href}>
-                  <a
+                  <Link
                     href={item.href}
                     className="nav-link w-full"
                     onClick={() => setOpen(false)}
                   >
                     {item.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
               {isAuthenticated ? (

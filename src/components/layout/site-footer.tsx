@@ -18,7 +18,7 @@ export function SiteFooter() {
           </Link>
           <p className="caption mt-4">
             A study platform designed to turn one future goal into a clear
-            learning path. Study tools are not open yet.
+            learning path of roadmap, plan, practice, and progress.
           </p>
         </div>
         <div className="grid gap-8 sm:grid-cols-2">
@@ -27,9 +27,9 @@ export function SiteFooter() {
             <ul className="mt-3 flex flex-col">
               {footerNav.product.map((item) => (
                 <li key={item.href}>
-                  <a href={item.href} className="nav-link nav-link-flush">
+                  <Link href={item.href} className="nav-link nav-link-flush">
                     {item.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -39,9 +39,9 @@ export function SiteFooter() {
             <ul className="mt-3 flex flex-col">
               {footerNav.resources.map((item) => (
                 <li key={item.href}>
-                  <a href={item.href} className="nav-link nav-link-flush">
+                  <Link href={item.href} className="nav-link nav-link-flush">
                     {item.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -49,8 +49,8 @@ export function SiteFooter() {
         </div>
         <div className="flex flex-col gap-3 border-t border-border pt-6 sm:flex-row sm:items-end sm:justify-between lg:col-span-2">
           <p className="caption max-w-md">
-            Privacy and terms will be published before study data is stored. This
-            site does not collect a study plan.
+            Study data stays on the signed-in student account. Privacy and terms
+            will be published before a public production launch.
           </p>
           <p className="caption">
             © {siteConfig.copyrightYear} {siteConfig.name}

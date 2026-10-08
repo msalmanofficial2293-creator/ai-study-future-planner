@@ -115,6 +115,7 @@ Login, signup, logout, and study mutations are Next.js server actions. Next.js c
   - `Content-Security-Policy: frame-ancestors 'none'` (clickjacking control only; does not restrict scripts)
 - Staging and production must use HTTPS once those environments exist.
 - A fuller script CSP should wait until the deployment host and asset domains are fixed so Supabase Auth and Next.js are not broken.
+- `robots.txt` allows the public home page and disallows `/app/`, `/onboarding`, `/auth/`, `/api/`, `/login`, and `/signup`. Private app pages also set `robots: { index: false }`.
 
 ## Logging and errors
 

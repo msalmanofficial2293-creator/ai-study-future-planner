@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/config/site";
 import { authMessages } from "@/features/auth/messages";
 import { LogoutButton } from "@/features/auth/logout-button";
-import { getAuthenticatedUser } from "@/lib/supabase/server";
+import { createSupabaseServerClient, getAuthenticatedUser } from "@/lib/supabase/server";
+import { hasCompletedOnboarding } from "@/services/onboarding-status";
 
 export const metadata: Metadata = {
   title: "Your account",
@@ -21,6 +22,12 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
 
   if (!user?.email) {
     redirect("/login");
+  }
+
+  const supabase = await createSupabaseServerClient();
+
+  if (!(await hasCompletedOnboarding(supabase, user.id))) {
+    redirect("/onboarding");
   }
 
   const params = await searchParams;

@@ -1,5 +1,6 @@
 import "server-only";
 
+import { taskGroup } from "@/features/study-plan/schedule";
 import type { StudyPlanDashboard } from "@/features/study-plan/types";
 import { logServerDiagnostic } from "@/lib/security/log";
 import { createSupabaseServerClient, getAuthenticatedUser } from "@/lib/supabase/server";
@@ -38,15 +39,21 @@ export async function loadDailyTasks(): Promise<DailyTasksLoad> {
     return { status: "unavailable" };
   }
 
-  const scheduledToday = loaded.plan.tasks.filter((task) => task.scheduledOn === loaded.plan.today);
+  // Match the Daily Board: pending/overdue tasks in the "today" group, plus
+  // tasks completed on today's calendar date (shown under Completed).
+  const today = loaded.plan.today;
+  const dueNow = loaded.plan.tasks.filter((task) => taskGroup(task, today) === "today");
+  const completedToday = loaded.plan.tasks.filter(
+    (task) => task.status === "completed" && task.scheduledOn === today,
+  );
 
   return {
     status: "ready",
     day: {
       ...loaded.plan,
       planTitle,
-      dayCompleted: scheduledToday.filter((task) => task.status === "completed").length,
-      dayTotal: scheduledToday.length,
+      dayCompleted: completedToday.length,
+      dayTotal: dueNow.length + completedToday.length,
     },
   };
 }

@@ -3,6 +3,8 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Container } from "@/components/ui/container";
 import { ProfileEditor } from "@/features/profile/profile-editor";
+import { createSupabaseServerClient, getAuthenticatedUser } from "@/lib/supabase/server";
+import { hasCompletedOnboarding } from "@/services/onboarding-status";
 import { loadProfile, type ProfileLoad } from "@/services/profile";
 
 export const metadata: Metadata = {
@@ -11,6 +13,18 @@ export const metadata: Metadata = {
 };
 
 export default async function ProfilePage() {
+  const user = await getAuthenticatedUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  const supabase = await createSupabaseServerClient();
+
+  if (!(await hasCompletedOnboarding(supabase, user.id))) {
+    redirect("/onboarding");
+  }
+
   const loaded = await loadProfile();
 
   if (loaded.status === "unauthenticated") {

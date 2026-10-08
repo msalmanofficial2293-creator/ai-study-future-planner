@@ -57,8 +57,8 @@ src/components/home/      Landing page sections
 src/features/profile/      Profile view, edit form, account controls, and avatar initials
 src/features/future-planner/  Goal update form and roadmap generate button
 src/features/roadmap/     Roadmap draft, development generator, and saved roadmap panel
-src/features/study-plan/  Study task forms and the task board
-src/features/daily-tasks/ Day-focused task list
+src/features/study-plan/  Study task forms, the task board, and schedule helpers (`todayIso` uses the runtime local calendar date)
+src/features/daily-tasks/ Day-focused task list (progress includes overdue and due-today work)
 src/features/quiz/        Development quiz questions, attempt flow, and result review
 src/features/performance/ Performance metrics and dashboard from saved study rows
 src/features/adaptive-plan/  Rule-based recommendations and apply action for the current study plan

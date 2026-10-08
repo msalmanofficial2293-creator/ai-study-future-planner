@@ -170,7 +170,9 @@ export async function loadPerformancePage(): Promise<PerformanceLoad> {
   const submittedIds = new Set(attemptRows.map((attempt) => attempt.id));
   const snapshots = (records.data ?? []).flatMap((row) => readSnapshot(row));
 
-  if (taskRows.filter((task) => task.status === "completed").length === 0 && attemptRows.length === 0) {
+  // Empty only when there is no study activity at all (no tasks and no quizzes).
+  // Pending tasks alone still produce a ready dashboard with 0% completion.
+  if (taskRows.length === 0 && attemptRows.length === 0) {
     return {
       status: "empty",
       hasRoadmap: roadmapRows.length > 0,

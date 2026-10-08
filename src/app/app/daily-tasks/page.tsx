@@ -81,7 +81,9 @@ function DailyProgress({
       <h2 className="section-heading mt-2">
         {day.dayCompleted} / {day.dayTotal} tasks
       </h2>
-      <p className="body-secondary">Completed tasks planned for today, out of every task planned for today.</p>
+      <p className="body-secondary">
+        Completed on today&apos;s date, out of overdue or due-today work still open plus what you finished today.
+      </p>
       <div
         className="mt-4 h-2 overflow-hidden rounded-full bg-border"
         role="progressbar"

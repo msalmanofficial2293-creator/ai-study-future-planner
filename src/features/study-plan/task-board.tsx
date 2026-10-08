@@ -399,7 +399,7 @@ function guardSubmit(event: FormEvent<HTMLFormElement>, busy: boolean) {
 
 function formatDay(iso: string): string {
   const [year, month, day] = iso.split("-").map((part) => Number(part));
-  return new Intl.DateTimeFormat("en", {
+  return new Intl.DateTimeFormat("en-US", {
     month: "short",
     day: "numeric",
     year: "numeric",

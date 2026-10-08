@@ -55,9 +55,9 @@ Do not describe a planned area as implemented.
 | UI | Next.js 16 (App Router), React 19, TypeScript (strict), Tailwind CSS 4 |
 | Server | Next.js server rendering and, later, route handlers in this repository |
 | Authentication | Supabase Auth. Email and password, server-side sessions. |
-| Database | Not connected. Supabase is used for Auth only. |
-| AI | Not connected. Requests must go through a server-side boundary. |
-| Quality | ESLint and `tsc`. No test runner is installed yet. |
+| Database | Supabase Postgres with RLS. Study rows are read and written server-side. |
+| AI | Optional server-side OpenAI. Product features use local mock generators by default. |
+| Quality | ESLint and `tsc`. Manual QA is documented in [docs/testing.md](docs/testing.md). No automated test runner yet. |
 | Source | Git and GitHub |
 
 Node.js 20 or newer and npm are required locally.

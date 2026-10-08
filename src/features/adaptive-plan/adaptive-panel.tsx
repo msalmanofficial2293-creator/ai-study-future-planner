@@ -122,7 +122,7 @@ function formatWhen(iso: string): string {
     return "Saved";
   }
 
-  return new Intl.DateTimeFormat("en", {
+  return new Intl.DateTimeFormat("en-US", {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -137,7 +137,7 @@ function formatDay(iso: string): string {
     return "Scheduled";
   }
 
-  return new Intl.DateTimeFormat("en", {
+  return new Intl.DateTimeFormat("en-US", {
     month: "short",
     day: "numeric",
     year: "numeric",

@@ -108,7 +108,10 @@ export default async function AiTutorPage({ searchParams }: TutorPageProps) {
                       >
                         {conversation.title}
                       </Link>
-                      <DeleteConversationButton id={conversation.id} />
+                      <DeleteConversationButton
+                        id={conversation.id}
+                        title={conversation.title}
+                      />
                     </li>
                   );
                 })}
