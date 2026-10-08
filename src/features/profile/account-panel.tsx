@@ -26,8 +26,8 @@ export function AccountPanel({ profile }: AccountPanelProps) {
 
   return (
     <section id="account" className="card card-raised scroll-mt-24">
-      <h2 className="card-heading">Account</h2>
-      <p className="caption">Password, notifications, and sign-in.</p>
+      <h2 className="card-heading">Account & security</h2>
+      <p className="caption">Password, notifications, sign-out, and account controls.</p>
       <PasswordForm />
       <NotificationForm profile={profile} />
       <div className="flex flex-col gap-3 border-t border-border pt-4 sm:flex-row sm:items-center">

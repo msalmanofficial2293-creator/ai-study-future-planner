@@ -28,6 +28,7 @@ export type ProfileRecord = {
   interests: string;
   notifyStudyReminders: boolean;
   notifyProductUpdates: boolean;
+  createdAt: string | null;
 };
 
 export type ProfileLoad =
@@ -70,7 +71,7 @@ export async function loadProfile(): Promise<ProfileLoad> {
   const profileResult = await supabase
     .from("profiles")
     .select(
-      "full_name, username, bio, education_level, field_of_study, skill_level, weekly_study_time, learning_style, interests, notify_study_reminders, notify_product_updates",
+      "full_name, username, bio, education_level, field_of_study, skill_level, weekly_study_time, learning_style, interests, notify_study_reminders, notify_product_updates, created_at",
     )
     .eq("id", user.id)
     .maybeSingle();
@@ -117,6 +118,7 @@ export async function loadProfile(): Promise<ProfileLoad> {
       interests: readString(profile, "interests"),
       notifyStudyReminders: readBoolean(profile, "notify_study_reminders", true),
       notifyProductUpdates: readBoolean(profile, "notify_product_updates", false),
+      createdAt: readString(profile, "created_at") || null,
     },
   };
 }

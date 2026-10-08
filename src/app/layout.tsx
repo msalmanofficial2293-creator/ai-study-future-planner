@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Fraunces, Outfit } from "next/font/google";
-import { SiteFooter } from "@/components/layout/site-footer";
-import { SiteHeader } from "@/components/layout/site-header";
+import { MarketingFooter, MarketingHeader } from "@/components/layout/marketing-chrome";
 import { SkipLink } from "@/components/layout/skip-link";
 import { siteConfig } from "@/config/site";
 import "./globals.css";
@@ -59,11 +58,11 @@ export default function RootLayout({
     >
       <body className="flex min-h-full flex-col font-sans text-ink">
         <SkipLink />
-        <SiteHeader />
+        <MarketingHeader />
         <main id="main" tabIndex={-1} className="flex-1 outline-none">
           {children}
         </main>
-        <SiteFooter />
+        <MarketingFooter />
       </body>
     </html>
   );

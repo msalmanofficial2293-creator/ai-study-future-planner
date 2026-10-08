@@ -10,7 +10,7 @@ import { authDestination, hasCompletedOnboarding } from "@/services/onboarding-s
 const AUTH_ROUTES = new Set(["/login", "/signup"]);
 
 export async function updateSession(request: NextRequest) {
-  let response = NextResponse.next({ request });
+  let response = passthroughWithPath(request);
 
   if (!hasSupabasePublicConfig()) {
     return response;
@@ -47,7 +47,7 @@ export async function updateSession(request: NextRequest) {
         cookiesToSet.forEach(({ name, value }) => {
           request.cookies.set(name, value);
         });
-        response = NextResponse.next({ request });
+        response = passthroughWithPath(request);
         cookiesToSet.forEach(({ name, value, options }) => {
           response.cookies.set(name, value, options);
         });
@@ -69,6 +69,14 @@ export async function updateSession(request: NextRequest) {
   }
 
   return response;
+}
+
+function passthroughWithPath(request: NextRequest) {
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-pathname", request.nextUrl.pathname);
+  return NextResponse.next({
+    request: { headers: requestHeaders },
+  });
 }
 
 function redirectWithSession(

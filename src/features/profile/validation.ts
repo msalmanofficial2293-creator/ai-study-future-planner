@@ -154,6 +154,32 @@ export function profileInitials(name: string): string {
   return `${parts[0][0] ?? ""}${parts[parts.length - 1][0] ?? ""}`.toUpperCase();
 }
 
+export function profileCompletionPercent(profile: {
+  fullName: string;
+  username: string;
+  educationLevel: string;
+  fieldOfStudy: string;
+  skillLevel: string;
+  weeklyStudyTime: string;
+  learningStyle: string;
+  careerGoal: string;
+  targetOutcome: string;
+}): number {
+  const fields = [
+    profile.fullName,
+    profile.username,
+    profile.educationLevel,
+    profile.fieldOfStudy,
+    profile.skillLevel,
+    profile.weeklyStudyTime,
+    profile.learningStyle,
+    profile.careerGoal,
+    profile.targetOutcome,
+  ];
+  const filled = fields.filter((value) => value.trim().length > 0).length;
+  return Math.round((filled / fields.length) * 100);
+}
+
 export { FULL_NAME_MAX_LENGTH, FIELD_OF_STUDY_MAX_LENGTH, CAREER_GOAL_MAX_LENGTH, TARGET_OUTCOME_MAX_LENGTH, PASSWORD_MIN_LENGTH };
 
 function validateUsername(value: string): string | undefined {

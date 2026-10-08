@@ -15,6 +15,7 @@ import {
   TARGET_OUTCOME_MAX_LENGTH,
   USERNAME_MAX_LENGTH,
   optionLabel,
+  profileCompletionPercent,
   profileInitials,
   type ProfileFormState,
 } from "@/features/profile/validation";
@@ -84,10 +85,10 @@ export function ProfileEditor({ profile }: ProfileEditorProps) {
   }
 
   return (
-    <div className="grid items-start gap-6 lg:grid-cols-[12.5rem_minmax(0,1fr)] lg:gap-8">
-      <nav aria-label="Profile sections" className="flex gap-2 overflow-x-auto lg:sticky lg:top-24 lg:flex-col">
+    <div className="flex min-w-0 flex-col gap-6">
+      <nav aria-label="Profile sections" className="flex gap-2 overflow-x-auto pb-1">
         {sections.map((section) => (
-          <a key={section.href} href={section.href} className="nav-link whitespace-nowrap lg:w-full">
+          <a key={section.href} href={section.href} className="nav-link whitespace-nowrap">
             {section.label}
           </a>
         ))}
@@ -338,6 +339,11 @@ export function ProfileEditor({ profile }: ProfileEditorProps) {
                 <Detail label="Target outcome" value={profile.targetOutcome || "Not set yet"} />
                 <Detail label="Interests" value={profile.interests || "Not set yet"} />
               </dl>
+              <div className="mt-5">
+                <Button href="/app/future-planner" variant="secondary">
+                  Manage Goals
+                </Button>
+              </div>
             </Section>
           </div>
         )}
@@ -356,26 +362,47 @@ function ProfileHeader({
   editing: boolean;
   onEdit: () => void;
 }) {
+  const completion = profileCompletionPercent(profile);
+  const joined = formatJoinedDate(profile.createdAt);
+
   return (
     <section id="profile-header" className="card card-elevated scroll-mt-24">
-      <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-center">
+      <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+        <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-start">
           <div
-            className="flex size-20 shrink-0 items-center justify-center rounded-full bg-ink sm:size-24"
+            className="flex size-20 shrink-0 items-center justify-center rounded-2xl bg-ink sm:size-24"
             aria-hidden="true"
           >
             <span
               className="text-2xl font-medium"
               style={{ color: "var(--paper)", fontFamily: "var(--font-display), Georgia, serif" }}
             >
-              {profileInitials(profile.fullName)}
+              {profileInitials(profile.fullName || profile.email)}
             </span>
           </div>
           <div className="min-w-0">
             <h2 className="card-heading">{profile.fullName || "Your profile"}</h2>
-            <p className="body-secondary">{profile.username ? `@${profile.username}` : "Username not set yet"}</p>
-            <p className="body-secondary truncate">{profile.email}</p>
-            <p className="body mt-2">{profile.bio || "No bio yet."}</p>
+            <p className="body-secondary mt-1 truncate">{profile.email}</p>
+            <dl className="mt-4 grid gap-3 sm:grid-cols-2">
+              <div>
+                <dt className="caption">Education level</dt>
+                <dd className="body mt-1">{optionLabel(EDUCATION_LEVELS, profile.educationLevel)}</dd>
+              </div>
+              <div>
+                <dt className="caption">Career goal</dt>
+                <dd className="body mt-1">{profile.careerGoal || "Not set yet"}</dd>
+              </div>
+              {joined ? (
+                <div>
+                  <dt className="caption">Member since</dt>
+                  <dd className="body mt-1">{joined}</dd>
+                </div>
+              ) : null}
+              <div>
+                <dt className="caption">Profile completion</dt>
+                <dd className="body mt-1">{completion}%</dd>
+              </div>
+            </dl>
           </div>
         </div>
         {editing ? null : (
@@ -384,9 +411,29 @@ function ProfileHeader({
           </Button>
         )}
       </div>
-      <p className="caption">A photo can be added later. This mark uses your initials, and no image is stored.</p>
+      <div className="mt-5">
+        <div className="h-2 overflow-hidden rounded-full bg-line" aria-hidden="true">
+          <div className="h-full rounded-full bg-tide" style={{ width: `${completion}%` }} />
+        </div>
+        <p className="caption mt-2">
+          Initials avatar for now—photo upload can be added later without changing this layout.
+        </p>
+      </div>
     </section>
   );
+}
+
+function formatJoinedDate(value: string | null): string | null {
+  if (!value) {
+    return null;
+  }
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return null;
+  }
+
+  return new Intl.DateTimeFormat("en", { month: "long", year: "numeric", day: "numeric" }).format(date);
 }
 
 function Section({
