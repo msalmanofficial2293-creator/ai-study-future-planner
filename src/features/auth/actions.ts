@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { env } from "@/config/env";
+import { allowAuthAttempt } from "@/features/auth/allowance";
 import { authMessages, mapAuthError, type AuthErrorInfo } from "@/features/auth/messages";
 import {
   readPassword,
@@ -29,13 +30,13 @@ function authErrorInfo(error: {
 
 function logAuthDiagnostic(action: "login" | "signup", error: AuthErrorInfo) {
   if (process.env.NODE_ENV === "production") {
+    console.error(`[auth:${action}] ${error.code ?? "none"}`);
     return;
   }
 
   console.error(`[auth:${action}]`, {
     code: error.code ?? null,
     status: error.status ?? null,
-    message: error.message,
   });
 }
 
@@ -49,6 +50,10 @@ export async function loginAction(
 
   if (Object.keys(fieldErrors).length > 0) {
     return { fieldErrors };
+  }
+
+  if (!allowAuthAttempt(email)) {
+    return { formError: "Too many attempts. Please wait a minute and try again." };
   }
 
   try {
@@ -87,6 +92,10 @@ export async function signupAction(
 
   if (Object.keys(fieldErrors).length > 0) {
     return { fieldErrors };
+  }
+
+  if (!allowAuthAttempt(email)) {
+    return { formError: "Too many attempts. Please wait a minute and try again." };
   }
 
   const key = email.toLowerCase();

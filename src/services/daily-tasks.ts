@@ -1,6 +1,7 @@
 import "server-only";
 
 import type { StudyPlanDashboard } from "@/features/study-plan/types";
+import { logServerDiagnostic } from "@/lib/security/log";
 import { createSupabaseServerClient, getAuthenticatedUser } from "@/lib/supabase/server";
 import { loadStudyPlan } from "@/services/study-plan";
 
@@ -104,9 +105,5 @@ function readString(record: Record<string, unknown> | null, key: string): string
 }
 
 function logDailyDiagnostic(step: string, error: { message: string; code?: string }) {
-  if (process.env.NODE_ENV === "production") {
-    return;
-  }
-
-  console.error(`[daily-tasks:${step}] ${error.code ?? "none"}: ${error.message}`);
+  logServerDiagnostic("daily-tasks", step, error);
 }

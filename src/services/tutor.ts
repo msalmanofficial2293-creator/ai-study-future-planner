@@ -9,6 +9,7 @@ import type {
   TutorRole,
   TutorSendResult,
 } from "@/features/tutor/types";
+import { logServerDiagnostic } from "@/lib/security/log";
 import { createTutorGenerator } from "@/services/tutor-generator";
 import { loadTutorContext } from "@/services/tutor-context";
 import { createSupabaseServerClient, getAuthenticatedUser } from "@/lib/supabase/server";
@@ -370,9 +371,5 @@ function asRecord(value: unknown): Record<string, unknown> | null {
 }
 
 function logTutor(step: string, error: { message: string; code?: string } | null): void {
-  if (process.env.NODE_ENV === "production" || !error) {
-    return;
-  }
-
-  console.error(`[tutor:${step}] ${error.code ?? "none"}`);
+  logServerDiagnostic("tutor", step, error);
 }

@@ -1,5 +1,6 @@
 import "server-only";
 
+import { logServerDiagnostic } from "@/lib/security/log";
 import { decodeQuizTitle } from "@/features/quiz/record";
 import type {
   ActivityItem,
@@ -679,14 +680,5 @@ function readInteger(record: Record<string, unknown> | null, key: string): numbe
 }
 
 function logPerformanceDiagnostic(step: string, error: { message: string; code?: string } | null): void {
-  if (process.env.NODE_ENV === "production") {
-    return;
-  }
-
-  if (!error) {
-    console.error(`[performance:${step}] failed`);
-    return;
-  }
-
-  console.error(`[performance:${step}] ${error.code ?? "none"}: ${error.message}`);
+  logServerDiagnostic("performance", step, error);
 }

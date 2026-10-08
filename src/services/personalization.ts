@@ -22,6 +22,7 @@ import { decodeMilestoneDescription } from "@/features/roadmap/record";
 import { decodeTaskDetails } from "@/features/study-plan/record";
 import { currentStage, todayIso } from "@/features/study-plan/schedule";
 import type { StudyTaskStatus } from "@/features/study-plan/types";
+import { logServerDiagnostic } from "@/lib/security/log";
 import { profileIsComplete } from "@/services/onboarding-status";
 import { createStudyTask } from "@/services/study-plan";
 import { createSupabaseServerClient, getAuthenticatedUser } from "@/lib/supabase/server";
@@ -630,9 +631,5 @@ function asRecord(value: unknown): Record<string, unknown> {
 }
 
 function logPersonalization(step: string, error: { message: string; code?: string } | null): void {
-  if (process.env.NODE_ENV === "production" || !error) {
-    return;
-  }
-
-  console.error(`[personalization:${step}] ${error.code ?? "none"}`);
+  logServerDiagnostic("personalization", step, error);
 }

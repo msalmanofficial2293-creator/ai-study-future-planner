@@ -1,5 +1,6 @@
 import "server-only";
 
+import { logServerDiagnostic } from "@/lib/security/log";
 import { isSkillLevel, type SkillLevel } from "@/features/onboarding/options";
 import { decodeQuizTitle, encodeQuizTitle } from "@/features/quiz/record";
 import type {
@@ -1041,9 +1042,5 @@ function readNumber(record: Record<string, unknown> | null, key: string): number
 }
 
 function logQuizDiagnostic(step: string, error: { message: string; code?: string } | null) {
-  if (process.env.NODE_ENV === "production" || !error) {
-    return;
-  }
-
-  console.error(`[quiz:${step}] ${error.code ?? "none"}: ${error.message}`);
+  logServerDiagnostic("quiz", step, error);
 }

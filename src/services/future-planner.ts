@@ -1,9 +1,12 @@
+import "server-only";
+
 import {
   EDUCATION_LEVELS,
   LEARNING_STYLES,
   SKILL_LEVELS,
   WEEKLY_STUDY_TIMES,
 } from "@/features/onboarding/options";
+import { logServerDiagnostic } from "@/lib/security/log";
 import { profileIsComplete } from "@/services/onboarding-status";
 import { createSupabaseServerClient, getAuthenticatedUser } from "@/lib/supabase/server";
 
@@ -167,12 +170,5 @@ function logPlannerDiagnostic(
   step: string,
   error: { message: string; code?: string } | null,
 ) {
-  if (process.env.NODE_ENV === "production" || !error) {
-    return;
-  }
-
-  console.error(`[future-planner:${step}]`, {
-    code: error.code ?? null,
-    message: error.message,
-  });
+  logServerDiagnostic("future-planner", step, error);
 }

@@ -1,5 +1,6 @@
 import "server-only";
 
+import { logServerDiagnostic } from "@/lib/security/log";
 import { buildRecommendation } from "@/features/adaptive-plan/rules";
 import type { AdaptiveLoad, AdaptiveMutation, SavedAdaptivePlan } from "@/features/adaptive-plan/types";
 import { decodeQuizTitle } from "@/features/quiz/record";
@@ -465,9 +466,5 @@ function readInteger(record: Record<string, unknown> | null, key: string): numbe
 }
 
 function logAdaptiveDiagnostic(step: string, error: { message: string; code?: string } | null): void {
-  if (process.env.NODE_ENV === "production" || !error) {
-    return;
-  }
-
-  console.error(`[adaptive:${step}] ${error.code ?? "none"}: ${error.message}`);
+  logServerDiagnostic("adaptive", step, error);
 }

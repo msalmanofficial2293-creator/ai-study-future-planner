@@ -87,6 +87,7 @@ src/services/onboarding-status.ts  Shared onboarding completion check
 src/config/               Site config, public env parsing, page content
 src/lib/supabase/         Browser client, server client, session refresh
 src/lib/ai/               Server-only OpenAI key and model config
+src/lib/security/         Server diagnostics and in-process rate limiting
 src/app/api/ai/test/      Authenticated connectivity route
 src/proxy.ts              Request session refresh and auth redirects
 supabase/migrations/      PostgreSQL schema. Not executed by the Next.js app.
@@ -103,6 +104,8 @@ There is no `src/types` directory yet. `src/app/api/ai/test/route.ts` is the con
 - Do not put provider logic or database queries in a route file or a client component.
 - `src/config/env.ts` exposes the public site URL and Node environment. Do not add secrets to that module.
 - Public Supabase values are read in `src/lib/supabase/config.ts`: `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. Do not add a secret or service-role key.
+- `src/lib/security/` holds shared server diagnostics and in-process rate limiting. See [security.md](security.md).
+- `next.config.ts` sets clickjacking and content-type security headers. Do not add a restrictive script CSP until deployment domains are fixed.
 - Add `"use client"` only when a component needs browser state, events beyond simple links, or browser APIs. The route error boundary is a client component because Next.js requires it.
 
 ## Rendering and SEO

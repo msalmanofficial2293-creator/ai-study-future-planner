@@ -65,7 +65,7 @@ Authorization is distinct from authentication. Signing in is not enough. The ser
 
 ## Rate limiting
 
-`POST /api/ai/test` allows 10 calls per signed-in user per 60 seconds. The count is kept in server memory and resets when the process restarts. A blocked call returns HTTP 429 and `error.code` `rate-limited`. An OpenAI 429 uses the same public code and does not include the provider payload. Sign-in limits are still not implemented.
+`POST /api/ai/test` allows 10 calls per signed-in user per 60 seconds. Login and signup allow 10 attempts per email per 60 seconds. AI Tutor send allows 20 messages per signed-in user per 60 seconds. Counts are kept in server memory and reset when the process restarts. A blocked AI check returns HTTP 429 and `error.code` `rate-limited`. Auth and tutor limits return a safe user message instead. An OpenAI 429 uses the same public code and does not include the provider payload. Multi-instance production still needs a shared limiter.
 
 ## AI request flow
 

@@ -140,13 +140,15 @@ function isRateLimit(error: AuthErrorInfo): boolean {
 }
 
 function logAccountDiagnostic(step: string, error: AuthErrorInfo) {
+  const code = error.code ?? "none";
+
   if (process.env.NODE_ENV === "production") {
+    console.error(`[profile:${step}] ${code}`);
     return;
   }
 
   console.error(`[profile:${step}]`, {
     code: error.code ?? null,
     status: error.status ?? null,
-    message: error.message,
   });
 }

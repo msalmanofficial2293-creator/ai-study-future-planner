@@ -11,6 +11,7 @@ import {
   type WeeklyStudyTime,
 } from "@/features/onboarding/options";
 import { buildPersonalization } from "@/features/personalization/engine";
+import { logServerDiagnostic } from "@/lib/security/log";
 import { decodeQuizTitle } from "@/features/quiz/record";
 import { decodeMilestoneDescription } from "@/features/roadmap/record";
 import { decodeTaskDetails } from "@/features/study-plan/record";
@@ -563,9 +564,5 @@ function asRecord(value: unknown): Record<string, unknown> {
 }
 
 function logTutor(step: string, error: { message: string; code?: string } | null): void {
-  if (process.env.NODE_ENV === "production" || !error) {
-    return;
-  }
-
-  console.error(`[tutor:${step}] ${error.code ?? "none"}`);
+  logServerDiagnostic("tutor", step, error);
 }

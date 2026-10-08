@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { allowTutorSend } from "@/features/tutor/allowance";
 import type { TutorSendResult } from "@/features/tutor/types";
 import {
   clearTutorConversation,
@@ -20,6 +21,10 @@ export async function sendTutorMessageAction(
 
   if (!user) {
     return { ok: false, message: "Sign in to use the tutor." };
+  }
+
+  if (!allowTutorSend(user.id)) {
+    return { ok: false, message: "Too many tutor messages. Please wait a minute and try again." };
   }
 
   if (sendInFlight.has(user.id)) {

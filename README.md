@@ -128,8 +128,8 @@ Details: [docs/security.md](docs/security.md).
 - `NEXT_PUBLIC_` values are visible to the browser. Public names are `NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_SUPABASE_URL`, and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
 - Do not put AI provider API keys, database URLs, service-role keys, or session secrets in client code.
 - AI requests run on the server. `POST /api/ai/test` checks the Supabase session before it calls OpenAI. The API key is `OPENAI_API_KEY` and is not a `NEXT_PUBLIC_` variable.
-- Do not store or return personal study data. Accounts exist. Study records do not.
-- Error pages may show a safe reference. They must not reveal internal details.
+- Study data is scoped to the authenticated student with server checks and row level security. Never expose another student's rows.
+- Responses include clickjacking and content-type headers. Error pages may show a safe reference. They must not reveal internal details.
 
 ## 9. Testing
 

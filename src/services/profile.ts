@@ -1,3 +1,5 @@
+import "server-only";
+
 import {
   isEducationLevel,
   isLearningStyle,
@@ -8,6 +10,7 @@ import {
   type SkillLevel,
   type WeeklyStudyTime,
 } from "@/features/onboarding/options";
+import { logServerDiagnostic } from "@/lib/security/log";
 import { createSupabaseServerClient, getAuthenticatedUser } from "@/lib/supabase/server";
 
 export type ProfileRecord = {
@@ -74,7 +77,7 @@ export async function loadProfile(): Promise<ProfileLoad> {
 
   if (profileResult.error) {
     logProfileDiagnostic("load-profile", profileResult.error);
-    return { status: "unavailable", detail: readQueryError(profileResult.error) };
+    return { status: "unavailable", detail: "profile-load-failed" };
   }
 
   if (!profileResult.data) {
@@ -91,7 +94,7 @@ export async function loadProfile(): Promise<ProfileLoad> {
 
   if (goalResult.error) {
     logProfileDiagnostic("load-goal", goalResult.error);
-    return { status: "unavailable", detail: readQueryError(goalResult.error) };
+    return { status: "unavailable", detail: "goal-load-failed" };
   }
 
   const profile = asRecord(profileResult.data);
@@ -261,15 +264,6 @@ function readChoice(
   return matches(value) ? value : "";
 }
 
-function readQueryError(error: { message?: string; code?: string }): string {
-  const code = error.code ? `${error.code}: ` : "";
-  return `${code}${error.message || "The profile request failed."}`;
-}
-
 function logProfileDiagnostic(step: string, error: { message?: string; code?: string } | null) {
-  if (process.env.NODE_ENV === "production" || !error) {
-    return;
-  }
-
-  console.error(`[profile:${step}] ${readQueryError(error)}`);
+  logServerDiagnostic("profile", step, error);
 }

@@ -1,5 +1,6 @@
 import "server-only";
 
+import { logServerDiagnostic } from "@/lib/security/log";
 import { WEEKLY_STUDY_TIMES } from "@/features/onboarding/options";
 import { decodeMilestoneDescription, decodeRoadmapSummary } from "@/features/roadmap/record";
 import { decodeTaskDetails, encodeTaskDetails } from "@/features/study-plan/record";
@@ -616,9 +617,5 @@ function readNumber(record: Record<string, unknown> | null, key: string): number
 }
 
 function logStudyPlanDiagnostic(step: string, error: { message: string; code?: string } | null) {
-  if (process.env.NODE_ENV === "production" || !error) {
-    return;
-  }
-
-  console.error(`[study-plan:${step}] ${error.code ?? "none"}: ${error.message}`);
+  logServerDiagnostic("study-plan", step, error);
 }

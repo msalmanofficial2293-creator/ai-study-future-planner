@@ -1,3 +1,5 @@
+import "server-only";
+
 import {
   isEducationLevel,
   isLearningStyle,
@@ -9,6 +11,7 @@ import {
   type WeeklyStudyTime,
 } from "@/features/onboarding/options";
 import type { OnboardingInput } from "@/features/onboarding/validation";
+import { logServerDiagnostic } from "@/lib/security/log";
 import { profileIsComplete } from "@/services/onboarding-status";
 import { createSupabaseServerClient, getAuthenticatedUser } from "@/lib/supabase/server";
 
@@ -221,12 +224,5 @@ function logOnboardingDiagnostic(
   step: string,
   error: { message: string; code?: string } | null,
 ) {
-  if (process.env.NODE_ENV === "production" || !error) {
-    return;
-  }
-
-  console.error(`[onboarding:${step}]`, {
-    code: error.code ?? null,
-    message: error.message,
-  });
+  logServerDiagnostic("onboarding", step, error);
 }

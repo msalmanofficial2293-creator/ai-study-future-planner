@@ -1,5 +1,6 @@
 import "server-only";
 
+import { logServerDiagnostic } from "@/lib/security/log";
 import {
   isLearningStyle,
   isSkillLevel,
@@ -243,9 +244,5 @@ function readString(record: Record<string, unknown> | null, key: string): string
 }
 
 function logRoadmapDiagnostic(step: string, error: { message: string; code?: string } | null) {
-  if (process.env.NODE_ENV === "production" || !error) {
-    return;
-  }
-
-  console.error(`[roadmap:${step}] ${error.code ?? "none"}: ${error.message}`);
+  logServerDiagnostic("roadmap", step, error);
 }

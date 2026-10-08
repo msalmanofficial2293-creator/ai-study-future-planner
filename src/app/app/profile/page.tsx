@@ -49,9 +49,6 @@ function profileErrorMessage(loaded: Exclude<ProfileLoad, { status: "unauthentic
     return "Your profile is not ready yet. Please try again in a moment.";
   }
 
-  if (process.env.NODE_ENV !== "production") {
-    return loaded.detail;
-  }
-
+  void loaded.detail;
   return "Something went wrong. Please try again.";
 }

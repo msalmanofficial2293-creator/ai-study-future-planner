@@ -162,10 +162,17 @@ function failure(code: AiErrorCode, message?: string): AiTextResult {
 }
 
 function logAiDiagnostic(step: string, detail: string | number | null) {
+  // Never log prompts, keys, or provider bodies. Short status or provider codes only.
   if (process.env.NODE_ENV === "production") {
     console.error(`[ai:${step}]`);
     return;
   }
 
-  console.error(`[ai:${step}] ${detail ?? "none"}`);
+  const safe =
+    typeof detail === "number"
+      ? String(detail)
+      : typeof detail === "string" && /^[A-Za-z0-9._:-]{1,64}$/.test(detail)
+        ? detail
+        : "none";
+  console.error(`[ai:${step}] ${safe}`);
 }

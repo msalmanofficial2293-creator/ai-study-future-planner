@@ -51,12 +51,7 @@ function asRecord(value: unknown): Record<string, unknown> | null {
 }
 
 function logCompletionDiagnostic(error: { message: string; code?: string }) {
-  if (process.env.NODE_ENV === "production") {
-    return;
-  }
-
-  console.error("[onboarding:read-completion]", {
-    code: error.code ?? null,
-    message: error.message,
-  });
+  // Used from the session proxy; keep this free of server-only imports.
+  const code = typeof error.code === "string" && error.code.trim() ? error.code.trim() : "none";
+  console.error(`[onboarding:read-completion] ${code}`);
 }
