@@ -10,8 +10,8 @@ export function HowItWorksSection() {
         <SectionHeading
           id="how-heading"
           eyebrow="How it works"
-          title="Five steps from a goal to a plan that can change."
-          description="This is the flow the product is designed around. These steps explain the path. They are not available to run on this site yet."
+          title="Five steps from your profile to guided improvement."
+          description="Create an account, complete onboarding, then move through each stage in the app. Recommendations and AI-assisted tools support you—they do not replace your decisions."
         />
         <ol className="mt-12 grid gap-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-5">
           {howItWorks.map((step, index) => (

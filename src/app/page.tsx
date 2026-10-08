@@ -10,7 +10,7 @@ import { ValueSection } from "@/components/home/value-section";
 import { WhySection } from "@/components/home/why-section";
 import { siteConfig } from "@/config/site";
 
-const pageTitle = `${siteConfig.name} — Turn a future goal into a clear learning path`;
+const pageTitle = "AI Study Future Planner | Personalized Learning & Career Planning";
 
 export const metadata: Metadata = {
   title: {
@@ -24,10 +24,17 @@ export const metadata: Metadata = {
     title: pageTitle,
     description: siteConfig.description,
     url: siteConfig.url,
+    siteName: siteConfig.name,
+    type: "website",
   },
   twitter: {
+    card: "summary",
     title: pageTitle,
     description: siteConfig.description,
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 

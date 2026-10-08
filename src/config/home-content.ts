@@ -1,97 +1,112 @@
 export const heroPath = [
-  { title: "Goal", detail: "Name the future you are studying for." },
-  { title: "Roadmap", detail: "Order the skills that lead there." },
-  { title: "Study Plan", detail: "Turn the roadmap into a plan you can follow." },
-  { title: "Daily Tasks", detail: "Give today a specific piece of work." },
-  { title: "Practice", detail: "Check what you just studied." },
-  { title: "Progress", detail: "See gaps, then adjust the path." },
+  { title: "Goal", detail: "Name the career outcome you are studying toward." },
+  { title: "Roadmap", detail: "Get an ordered path of skills and milestones." },
+  { title: "Study Plan", detail: "Turn the roadmap into tasks you can schedule." },
+  { title: "Daily Tasks", detail: "Focus on the work due today." },
+  { title: "Quiz", detail: "Practice what you just studied." },
+  { title: "Progress", detail: "See scores, completion, and gaps." },
+  { title: "Adapt", detail: "Adjust priorities from your results." },
+  { title: "Tutor", detail: "Ask questions tied to your saved plan." },
+  { title: "Personalize", detail: "Get focus and difficulty recommendations." },
 ] as const;
 
 export const howItWorks = [
   {
-    title: "Define Your Goal",
-    body: "Name the future outcome your studies are meant to reach. The goal comes before the task list.",
+    title: "Create Your Profile",
+    body: "Share your education, field, skills, study time, learning style, and career goal during onboarding.",
   },
   {
     title: "Build Your Roadmap",
-    body: "The roadmap is designed to turn that goal into skills and milestones, in an order you can follow.",
+    body: "Generate a structured learning roadmap from your goal and current context on Future Planner.",
   },
   {
-    title: "Follow Your Study Plan",
-    body: "The study plan is designed to shape the roadmap into work you can schedule and finish.",
+    title: "Plan Your Study",
+    body: "Organize milestones into a study plan and daily tasks you can schedule and complete.",
   },
   {
     title: "Practice & Measure",
-    body: "Practice is designed to check what you studied. Performance is designed to show progress, gaps, and consistency.",
+    body: "Use quizzes and performance tracking to see scores, completion, and where you are strong or weak.",
   },
   {
-    title: "Adapt & Improve",
-    body: "Later work is designed to change when results show what needs attention, without leaving the same goal.",
+    title: "Adapt & Learn",
+    body: "Apply adaptive recommendations, personalization insights, and tutor guidance that stay on your goal.",
   },
 ] as const;
 
 export const features = [
   {
+    title: "Personalized Future Planning",
+    body: "Capture your career goal and learning context so every later step stays tied to the same destination.",
+  },
+  {
     title: "AI Future Roadmap",
-    body: "Designed to turn one goal into an ordered path of skills and milestones.",
+    body: "Generate an ordered path of skills and milestones from your goal, education, and study preferences.",
   },
   {
     title: "Study Plan",
-    body: "Designed to shape that roadmap into a plan a student can actually follow.",
+    body: "Turn roadmap stages into scheduled tasks with subjects, duration, and linked milestones.",
   },
   {
     title: "Daily Tasks",
-    body: "Designed to turn the plan into focused sessions instead of an open-ended list.",
+    body: "See today’s work, upcoming sessions, and completed tasks in one focused list.",
   },
   {
     title: "AI Quiz",
-    body: "Designed to check understanding with practice tied to what was just studied.",
+    body: "Practice skills from your plan with scored attempts, explanations, and saved history.",
   },
   {
     title: "Performance Tracking",
-    body: "Designed to show progress, gaps, and consistency as the work accumulates.",
+    body: "Review task completion, quiz averages, trends, strong areas, and weak areas from saved activity.",
   },
   {
     title: "Adaptive Study Plan",
-    body: "Designed to revise later work when results show what needs attention.",
+    body: "Get rule-based next steps from quiz results and apply recommended tasks to your current plan.",
   },
   {
     title: "AI Tutor",
-    body: "Designed to give guidance that stays connected to the goal and the work already done.",
+    body: "Ask study questions in the context of your goal, stage, tasks, and recent results.",
+  },
+  {
+    title: "AI Personalization",
+    body: "See recommended focus, difficulty, learning style cues, and next steps based on your saved data.",
+  },
+  {
+    title: "User Profile",
+    body: "View and update identity, education, goals, password, and notification preferences in one place.",
   },
 ] as const;
 
 export const reasons = [
   {
     title: "Goal-first learning",
-    body: "Daily work should exist because it moves a chosen future forward.",
+    body: "Daily work exists because it moves a chosen career future forward.",
   },
   {
     title: "One connected journey",
-    body: "Roadmap, plan, tasks, practice, and review are meant to belong to the same path.",
+    body: "Roadmap, plan, tasks, practice, and review belong to the same path.",
   },
   {
     title: "Personalized planning",
-    body: "The path is designed around the goal a student names, not a generic course list.",
+    body: "The path is shaped around the goal and context you save, not a generic course list.",
   },
   {
     title: "Daily execution",
-    body: "A plan should become a clear next session, not another pile of intentions.",
+    body: "A plan becomes a clear next session instead of another pile of intentions.",
   },
   {
     title: "Performance-based adaptation",
-    body: "What a student learns, and where they struggle, should shape what they study next.",
+    body: "What you learn—and where you struggle—shapes what you study next.",
   },
   {
-    title: "AI guidance",
-    body: "Help is designed to stay on the goal and the work already done, rather than become a separate chat.",
+    title: "Guided study support",
+    body: "Tutor and personalization stay on your goal and saved work, rather than open-ended chat.",
   },
 ] as const;
 
 export const journeySteps = [
   {
     title: "Goal",
-    summary: "Name the future outcome your studies are meant to reach.",
+    summary: "Name the career outcome your studies are meant to reach.",
   },
   {
     title: "AI Future Roadmap",
@@ -99,15 +114,15 @@ export const journeySteps = [
   },
   {
     title: "Study Plan",
-    summary: "Shape the roadmap into a plan you can actually follow.",
+    summary: "Shape the roadmap into scheduled tasks you can follow.",
   },
   {
     title: "Daily Tasks",
-    summary: "Work in focused sessions instead of an open-ended list.",
+    summary: "Work in focused sessions for today, upcoming days, and completed work.",
   },
   {
     title: "AI Quiz",
-    summary: "Check understanding with practice tied to what you studied.",
+    summary: "Check understanding with practice tied to skills on your plan.",
   },
   {
     title: "Performance Tracking",
@@ -115,38 +130,42 @@ export const journeySteps = [
   },
   {
     title: "Adaptive Study Plan",
-    summary: "Adjust the plan when results show what needs attention.",
+    summary: "Review recommended changes and apply them to your current plan.",
   },
   {
     title: "AI Tutor",
     summary: "Get guidance that stays connected to your goal and your work.",
+  },
+  {
+    title: "AI Personalization",
+    summary: "See focus, difficulty, and next-step recommendations from your results.",
   },
 ] as const;
 
 export const benefits = [
   {
     title: "Know what to study",
-    body: "The roadmap is designed to order skills instead of leaving the subject open.",
+    body: "Your roadmap orders skills and milestones instead of leaving the subject open-ended.",
   },
   {
     title: "Know what to do next",
-    body: "Daily tasks are designed to name the next session, not a vague intention to study.",
+    body: "Daily tasks name the next session, not a vague intention to study.",
   },
   {
     title: "Connect daily work to a bigger goal",
-    body: "Each session is meant to belong to the future the student chose.",
+    body: "Each session stays linked to the career future you chose.",
   },
   {
     title: "Identify learning gaps",
-    body: "Practice and performance are designed to show what is still unsteady.",
+    body: "Quizzes and performance show which skills are still unsteady.",
   },
   {
     title: "Build consistency",
-    body: "A visible next step is meant to make the following day easier to start.",
+    body: "A visible next step makes the following day easier to start.",
   },
   {
     title: "Adjust the plan based on progress",
-    body: "The adaptive plan is designed to revise later work when results change.",
+    body: "Adaptive recommendations and personalization revise priorities when results change.",
   },
 ] as const;
 
@@ -154,7 +173,7 @@ export const faqs = [
   {
     question: "What is AI Study Future Planner?",
     answer:
-      "It is a study platform designed to turn one future goal into a connected learning journey: a roadmap, a study plan, daily tasks, practice, progress, and guidance. A signed-in student can save a development roadmap, study tasks, daily tasks, a development quiz, a performance view, a rule-based adaptive update of the current study plan, a development tutor conversation, and a rule-based personalization overview. Those AI-assisted steps do not call a paid AI provider.",
+      "It is a personalized learning platform that helps you turn a career goal into a connected journey: profile and goal setup, a future roadmap, study plan, daily tasks, quizzes, performance insights, adaptive recommendations, AI tutoring, and personalization.",
   },
   {
     question: "Who is it for?",
@@ -162,33 +181,33 @@ export const faqs = [
       "Individual students who know a future they want and need a path from that outcome to daily study. It is not a school administration system, grade book, or classroom manager.",
   },
   {
-    question: "How does the AI roadmap work?",
+    question: "How does the learning journey work?",
     answer:
-      "The AI Future Roadmap turns one goal into an ordered set of skills and milestones. A signed-in student can generate a development roadmap from Future Planner. It does not call a paid AI provider.",
+      "After you create an account and complete onboarding, you set a goal, generate a roadmap, build study and daily tasks, practice with quizzes, review performance, apply adaptive updates, talk with the tutor, and use personalization insights. You take each step in the app; the product does not run the whole journey automatically.",
   },
   {
-    question: "Can I create a personalized study plan?",
+    question: "How does the AI functionality work?",
     answer:
-      "A signed-in student can save study tasks from the current roadmap on the Study Plan page. A separate adaptive page can add tasks from saved quiz scores. It does not call a paid AI provider.",
+      "The current development version uses structured, rule-based and mock AI features so the product can be tested and refined without requiring a paid AI API. Roadmap, quiz, tutor, adaptive, and personalization flows are designed so a secure live AI provider can be connected later.",
   },
   {
-    question: "Will the plan adapt to my progress?",
+    question: "Does the planner save my progress?",
     answer:
-      "A signed-in student can open Adaptive Study Plan, review rule-based changes from saved quiz scores, and apply those tasks to the current study plan. It does not call a paid AI provider.",
-  },
-  {
-    question: "Is the platform free?",
-    answer:
-      "Pricing has not been decided. Nothing on this site is for sale. You can read this explanation without signing in. Creating an account does not start a paid plan.",
-  },
-  {
-    question: "Will there be an AI tutor?",
-    answer:
-      "An AI tutor is planned. It is meant to answer in the context of your goal and the work already done, not as a separate general chat. It is not available yet.",
+      "Yes. Your profile, goals, roadmap, study plan, tasks, quiz activity, performance records, adaptive recommendations, tutor conversations, and personalization decisions are stored on your signed-in account so you can continue across sessions.",
   },
   {
     question: "Is my data secure?",
     answer:
-      "You can create an account and sign in. This site does not store a goal, plan, quiz result, or other study record. Passwords are handled by the authentication service. Study data will require sign-in before it is stored.",
+      "Your account data is protected using authenticated access and database-level access controls. Passwords are handled by the authentication service. Only your signed-in session can reach your study records through the app.",
+  },
+  {
+    question: "Is the platform free?",
+    answer:
+      "You can create an account and use the current product without a payment flow on this site. Pricing for a future public launch has not been decided, and nothing here is for sale today.",
+  },
+  {
+    question: "Do I need a paid AI API key?",
+    answer:
+      "No. The study features you use after sign-in work in free development mode with local generators and rules. A paid provider key is optional for separate connectivity checks and is never required in the browser.",
   },
 ] as const;

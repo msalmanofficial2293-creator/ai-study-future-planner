@@ -82,18 +82,29 @@ export function MobileNav({ isAuthenticated }: MobileNavProps) {
                   className="nav-link w-full"
                   onClick={() => setOpen(false)}
                 >
-                  {isAuthenticated ? "Account" : "Log in"}
+                  {isAuthenticated ? "Account" : "Sign In"}
                 </Link>
               </li>
+              {!isAuthenticated ? (
+                <li>
+                  <Link
+                    href="/signup"
+                    className="nav-link w-full"
+                    onClick={() => setOpen(false)}
+                  >
+                    Get Started
+                  </Link>
+                </li>
+              ) : null}
             </ul>
           </nav>
           <div className="px-5 pb-4 sm:hidden sm:px-8">
             <Button
-              href={planningCta.href}
+              href={isAuthenticated ? "/app" : planningCta.href}
               className="w-full"
               onClick={() => setOpen(false)}
             >
-              {planningCta.label}
+              {isAuthenticated ? "Open Account" : planningCta.label}
             </Button>
           </div>
         </div>

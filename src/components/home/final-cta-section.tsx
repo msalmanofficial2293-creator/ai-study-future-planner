@@ -10,20 +10,24 @@ export function FinalCtaSection() {
         <Card variant="elevated" className="card-band">
           <p className="eyebrow">Next step</p>
           <h2 id="start-heading" className="section-heading mt-3 max-w-xl">
-            Your future needs a plan.
+            Ready to turn your goal into a real study plan?
           </h2>
           <p className="body-secondary mt-4 max-w-xl">
-            Study plans are not available yet. You can create an account from Log
-            in. This section does not save a goal or generate a study plan.
+            Create your account and start building a structured learning path
+            around your goals—roadmap, daily work, practice, progress, and
+            guidance in one place.
           </p>
-          <div className="mt-8 w-full sm:w-auto">
-            <Button href="#how-it-works" className="w-full sm:w-auto">
-              Start Planning Your Future
+          <div className="mt-8 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+            <Button href="/signup" className="w-full sm:w-auto">
+              Start Planning
+            </Button>
+            <Button href="/login" variant="secondary" className="w-full sm:w-auto">
+              Sign In
             </Button>
           </div>
           <p className="caption mt-4 max-w-xl">
-            Creating an account does not generate a study plan. This button shows
-            the path a plan is designed to follow.
+            No payment is required on this site today. After signup you complete
+            a short onboarding profile, then open your account tools.
           </p>
         </Card>
       </Container>

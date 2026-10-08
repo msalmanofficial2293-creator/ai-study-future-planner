@@ -12,8 +12,8 @@ export function JourneySection() {
         <SectionHeading
           id="journey-heading"
           eyebrow="Learning journey"
-          title="From a goal to guided practice."
-          description="Eight stages, in this order. Each one is meant to use the same goal. You cannot walk this path in the product yet."
+          title="From a goal to personalized guidance."
+          description="Nine stages, in this order. Each one uses the same signed-in account and the goal you save."
         />
         <ol className="relative mx-auto mt-12 max-w-3xl">
           <span

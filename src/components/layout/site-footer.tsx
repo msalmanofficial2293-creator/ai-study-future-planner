@@ -17,8 +17,8 @@ export function SiteFooter() {
             <span className="nav-brand">{siteConfig.name}</span>
           </Link>
           <p className="caption mt-4">
-            A study platform designed to turn one future goal into a clear
-            learning path of roadmap, plan, practice, and progress.
+            A personalized learning platform that turns a career goal into
+            roadmap, study plan, daily work, practice, progress, and guidance.
           </p>
         </div>
         <div className="grid gap-8 sm:grid-cols-2">

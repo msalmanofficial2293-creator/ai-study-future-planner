@@ -51,11 +51,13 @@ export async function SiteHeader() {
           ) : null}
           <div className="hidden sm:block">
             <Button href={isAuthenticated ? "/app" : "/login"} variant="ghost">
-              {isAuthenticated ? "Account" : "Log in"}
+              {isAuthenticated ? "Account" : "Sign In"}
             </Button>
           </div>
           <div className="hidden sm:block">
-            <Button href={planningCta.href}>{planningCta.label}</Button>
+            <Button href={isAuthenticated ? "/app" : planningCta.href}>
+              {isAuthenticated ? "Open Account" : planningCta.label}
+            </Button>
           </div>
           <MobileNav isAuthenticated={isAuthenticated} />
         </div>

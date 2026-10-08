@@ -10,44 +10,46 @@ export function HeroSection() {
     <Section labelledBy="hero-heading">
       <Container className="grid items-center gap-12 lg:grid-cols-[minmax(0,1.12fr)_minmax(18rem,0.88fr)] lg:gap-16">
         <div>
-          <p className="eyebrow">For students with a destination</p>
+          <p className="eyebrow">AI Study Future Planner</p>
           <div aria-hidden="true" className="mt-5 h-px w-16 bg-accent" />
           <h1 id="hero-heading" className="display-heading mt-5 max-w-xl">
-            Turn your future goal into a clear learning path.
+            Turn Your Career Goal Into a Personalized Study Journey
           </h1>
           <p className="lede mt-6 max-w-xl">
-            AI Study Future Planner helps students turn one future goal into a
-            learning journey. The path is designed to connect a goal, a roadmap,
-            a study plan, daily tasks, practice, and progress.
+            AI Study Future Planner helps you plan what to learn, organize your
+            study time, practice with quizzes, track your progress, and get
+            personalized guidance along the way.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Button href="#start" className="w-full sm:w-auto">
-              Build My Study Plan
+            <Button href="/signup" className="w-full sm:w-auto">
+              Get Started
             </Button>
             <Button
-              href="#how-it-works"
+              href="/login"
               variant="secondary"
               className="w-full sm:w-auto"
             >
-              See How It Works
+              Sign In
             </Button>
           </div>
           <p className="caption mt-4 max-w-xl">
-            Study plans are not available yet. You can create an account and sign
-            in. An account does not generate a study plan.
+            Create a free account, complete onboarding, and continue your
+            learning path across sessions. AI-assisted steps currently use
+            development-mode generators and rules—not a paid live model.
           </p>
         </div>
         <aside aria-labelledby="path-heading" className="min-w-0">
           <Card variant="elevated">
             <div>
               <p id="path-heading" className="principle-heading">
-                The path
+                The learning journey
               </p>
               <p className="caption mt-2">
-                One journey, from the goal you name to the work that follows.
+                One connected path from the goal you name to guided practice and
+                review.
               </p>
             </div>
-            <ol className="border-l border-border">
+            <ol className="max-h-[28rem] overflow-y-auto border-l border-border pr-1">
               {heroPath.map((step, index) => (
                 <li key={step.title} className="relative py-2 pl-5">
                   <span

@@ -10,8 +10,8 @@ export function BenefitsSection() {
         <SectionHeading
           id="benefits-heading"
           eyebrow="For students"
-          title="What a clear path is meant to change."
-          description="These are the outcomes the journey is designed to support. They describe intent, not measured results from people using the product."
+          title="What a clear path helps you do."
+          description="These outcomes describe how the current product is meant to support study. They are not claims about measured results from other users."
         />
         <ol className="mt-12 divide-y divide-border border-y border-border">
           {benefits.map((benefit, index) => (

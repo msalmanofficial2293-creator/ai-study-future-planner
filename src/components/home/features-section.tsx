@@ -12,8 +12,8 @@ export function FeaturesSection() {
         <SectionHeading
           id="features-heading"
           eyebrow="Features"
-          title="What the journey is designed to include."
-          description="These are product capabilities on the roadmap. They are not switched on, and this page cannot generate a plan, quiz, or tutor reply."
+          title="What you can use after you sign in."
+          description="These capabilities are available in the current product. After onboarding, you move through each step yourself—the app does not run the full journey automatically."
         />
         <ul className="mt-12 grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
           {features.map((feature) => (
@@ -22,7 +22,7 @@ export function FeaturesSection() {
               as="li"
               variant="elevated"
               title={feature.title}
-              footer={<Badge tone="neutral">Planned</Badge>}
+              footer={<Badge tone="accent">Available</Badge>}
             >
               <p className="body-secondary">{feature.body}</p>
             </Card>
