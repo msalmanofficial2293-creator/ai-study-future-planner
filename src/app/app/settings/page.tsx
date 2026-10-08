@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { SettingsPanel } from "@/features/profile/settings-panel";
 import { createSupabaseServerClient, getAuthenticatedUser } from "@/lib/supabase/server";
@@ -33,36 +34,44 @@ export default async function SettingsPage() {
 
   return (
     <Container className="py-8 sm:py-10">
-      <div className="flex w-full flex-col gap-6">
-        <div>
+      <div className="flex w-full flex-col gap-8">
+        <header className="max-w-3xl">
           <h1 className="page-heading">Settings</h1>
-          <p className="body-secondary mt-3 max-w-2xl">
-            Account, notifications, learning preferences, and security—only options backed by your
-            saved profile.
+          <p className="body-secondary mt-3">
+            Manage your account, preferences, security, and learning experience.
           </p>
-        </div>
+        </header>
         {loaded.status === "ready" ? (
           <SettingsPanel profile={loaded.profile} />
         ) : (
-          <div className="flex flex-col items-start gap-4">
-            <p className="field-error" role="alert">
-              Error: {settingsErrorMessage(loaded)}
-            </p>
-            <Link href="/app/settings" className="font-medium text-accent-deep underline underline-offset-4">
-              Try again
-            </Link>
-          </div>
+          <section className="card card-elevated max-w-xl" aria-labelledby="settings-error-heading">
+            <h2 id="settings-error-heading" className="card-heading">
+              Unable to load settings
+            </h2>
+            <p className="body-secondary mt-3">{settingsErrorMessage(loaded)}</p>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <Button href="/app/settings">Try Again</Button>
+              <Link
+                href="/app/profile"
+                className="inline-flex items-center text-sm font-medium text-accent-deep underline underline-offset-4"
+              >
+                Open profile
+              </Link>
+            </div>
+          </section>
         )}
       </div>
     </Container>
   );
 }
 
-function settingsErrorMessage(loaded: Exclude<ProfileLoad, { status: "unauthenticated" | "ready" }>): string {
+function settingsErrorMessage(
+  loaded: Exclude<ProfileLoad, { status: "unauthenticated" | "ready" }>,
+): string {
   if (loaded.status === "missing") {
     return "Your profile is not ready yet. Please try again in a moment.";
   }
 
   void loaded.detail;
-  return "Something went wrong. Please try again.";
+  return "Something went wrong while loading your account settings. Please try again.";
 }

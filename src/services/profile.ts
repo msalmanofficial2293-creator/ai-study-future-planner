@@ -63,6 +63,12 @@ export type NotificationPreferences = {
   notifyProductUpdates: boolean;
 };
 
+export type LearningPreferencesUpdate = {
+  skillLevel: SkillLevel;
+  learningStyle: LearningStyle;
+  weeklyStudyTime: WeeklyStudyTime;
+};
+
 const PROFILE_CORE_COLUMNS =
   "full_name, username, bio, education_level, field_of_study, skill_level, weekly_study_time, learning_style, interests, notify_study_reminders, notify_product_updates, created_at, updated_at";
 
@@ -253,6 +259,40 @@ export async function saveNotificationPreferences(
 
   if (write.error) {
     logProfileDiagnostic("write-notifications", write.error);
+    return { ok: false, reason: "failed" };
+  }
+
+  if (!write.data) {
+    return { ok: false, reason: "missing" };
+  }
+
+  return { ok: true };
+}
+
+export async function saveLearningPreferences(
+  userId: string,
+  input: LearningPreferencesUpdate,
+): Promise<ProfileSaveResult> {
+  const user = await getAuthenticatedUser();
+
+  if (!user || user.id !== userId) {
+    return { ok: false, reason: "unauthenticated" };
+  }
+
+  const supabase = await createSupabaseServerClient();
+  const write = await supabase
+    .from("profiles")
+    .update({
+      skill_level: input.skillLevel,
+      learning_style: input.learningStyle,
+      weekly_study_time: input.weeklyStudyTime,
+    })
+    .eq("id", userId)
+    .select("id")
+    .maybeSingle();
+
+  if (write.error) {
+    logProfileDiagnostic("write-learning-preferences", write.error);
     return { ok: false, reason: "failed" };
   }
 
