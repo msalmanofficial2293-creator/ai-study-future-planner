@@ -25,7 +25,7 @@ export default async function AuthenticatedAppLayout({
 
   const profileResult = await supabase
     .from("profiles")
-    .select("full_name, avatar_path, updated_at")
+    .select("full_name, updated_at")
     .eq("id", user.id)
     .maybeSingle();
 
@@ -34,14 +34,18 @@ export default async function AuthenticatedAppLayout({
       ? profileResult.data.full_name.trim()
       : readFullName(user.user_metadata) ?? "";
 
-  const avatarPath =
-    typeof profileResult.data?.avatar_path === "string" && profileResult.data.avatar_path.trim()
-      ? profileResult.data.avatar_path.trim()
-      : null;
-
   const updatedAt =
     typeof profileResult.data?.updated_at === "string" && profileResult.data.updated_at.trim()
       ? profileResult.data.updated_at.trim()
+      : null;
+
+  // Avatar path is optional until the avatars migration is applied; never block the shell.
+  const avatarResult = await supabase.from("profiles").select("avatar_path").eq("id", user.id).maybeSingle();
+  const avatarPath =
+    !avatarResult.error &&
+    typeof avatarResult.data?.avatar_path === "string" &&
+    avatarResult.data.avatar_path.trim()
+      ? avatarResult.data.avatar_path.trim()
       : null;
 
   const shellUser: AppShellUser = {

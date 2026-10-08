@@ -63,6 +63,9 @@ export type NotificationPreferences = {
   notifyProductUpdates: boolean;
 };
 
+const PROFILE_CORE_COLUMNS =
+  "full_name, username, bio, education_level, field_of_study, skill_level, weekly_study_time, learning_style, interests, notify_study_reminders, notify_product_updates, created_at, updated_at";
+
 export async function loadProfile(): Promise<ProfileLoad> {
   const user = await getAuthenticatedUser();
 
@@ -71,11 +74,12 @@ export async function loadProfile(): Promise<ProfileLoad> {
   }
 
   const supabase = await createSupabaseServerClient();
+
+  // Core profile fields must load even when the avatars migration is not applied yet.
+  // Selecting avatar_path in the same query used to fail the entire dashboard.
   const profileResult = await supabase
     .from("profiles")
-    .select(
-      "full_name, username, bio, education_level, field_of_study, skill_level, weekly_study_time, learning_style, interests, notify_study_reminders, notify_product_updates, created_at, updated_at, avatar_path",
-    )
+    .select(PROFILE_CORE_COLUMNS)
     .eq("id", user.id)
     .maybeSingle();
 
@@ -88,13 +92,16 @@ export async function loadProfile(): Promise<ProfileLoad> {
     return { status: "missing" };
   }
 
-  const goalResult = await supabase
-    .from("goals")
-    .select("title, description")
-    .eq("user_id", user.id)
-    .order("created_at", { ascending: true })
-    .limit(1)
-    .maybeSingle();
+  const [goalResult, avatarPath] = await Promise.all([
+    supabase
+      .from("goals")
+      .select("title, description")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: true })
+      .limit(1)
+      .maybeSingle(),
+    loadAvatarPath(supabase, user.id),
+  ]);
 
   if (goalResult.error) {
     logProfileDiagnostic("load-goal", goalResult.error);
@@ -103,6 +110,7 @@ export async function loadProfile(): Promise<ProfileLoad> {
 
   const profile = asRecord(profileResult.data);
   const goal = asRecord(goalResult.data);
+  const updatedAt = readString(profile, "updated_at") || null;
 
   return {
     status: "ready",
@@ -122,13 +130,25 @@ export async function loadProfile(): Promise<ProfileLoad> {
       notifyStudyReminders: readBoolean(profile, "notify_study_reminders", true),
       notifyProductUpdates: readBoolean(profile, "notify_product_updates", false),
       createdAt: readString(profile, "created_at") || null,
-      avatarPath: readString(profile, "avatar_path") || null,
-      avatarUrl: publicAvatarUrl(
-        readString(profile, "avatar_path") || null,
-        readString(profile, "updated_at") || null,
-      ),
+      avatarPath,
+      avatarUrl: publicAvatarUrl(avatarPath, updatedAt),
     },
   };
+}
+
+async function loadAvatarPath(
+  supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>,
+  userId: string,
+): Promise<string | null> {
+  const avatarResult = await supabase.from("profiles").select("avatar_path").eq("id", userId).maybeSingle();
+
+  if (avatarResult.error) {
+    // Missing column (migration not applied) or other avatar-only failure must not block the dashboard.
+    logProfileDiagnostic("load-avatar-path", avatarResult.error);
+    return null;
+  }
+
+  return readString(asRecord(avatarResult.data), "avatar_path") || null;
 }
 
 export async function saveProfile(userId: string, input: ProfileUpdate): Promise<ProfileSaveResult> {
