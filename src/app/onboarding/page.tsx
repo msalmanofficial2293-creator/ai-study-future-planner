@@ -38,7 +38,8 @@ export default async function OnboardingPage() {
           <Mark className="size-9 shrink-0" />
           <span className="nav-brand">{siteConfig.name}</span>
         </Link>
-        <h1 className="page-heading mt-6">Start with your goal</h1>
+        <p className="eyebrow mt-6">Onboarding</p>
+        <h1 className="page-heading mt-3">Start with your goal</h1>
         <p className="body-secondary mt-3">
           Tell us where you are studying from and the future you want to reach. This
           becomes your first Goal.
@@ -51,7 +52,7 @@ export default async function OnboardingPage() {
               </p>
               <Link
                 href="/onboarding"
-                className="font-medium text-accent-deep underline underline-offset-4"
+                className="text-link"
               >
                 Try again
               </Link>

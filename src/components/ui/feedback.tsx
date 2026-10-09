@@ -22,10 +22,10 @@ type EmptyStateProps = {
 
 export function EmptyState({ title, description, action }: EmptyStateProps) {
   return (
-    <div className="status-panel rounded-2xl border border-dashed border-border bg-surface px-6 py-10">
+    <div className="status-panel card card-raised border-dashed px-6 py-10">
       <h2 className="card-heading">{title}</h2>
       <p className="body-secondary">{description}</p>
-      {action ? <div className="pt-3">{action}</div> : null}
+      {action ? <div className="pt-1">{action}</div> : null}
     </div>
   );
 }

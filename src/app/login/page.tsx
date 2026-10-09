@@ -39,7 +39,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
       footer={
         <>
           New here?{" "}
-          <Link href="/signup" className="font-medium text-accent-deep underline underline-offset-4">
+          <Link href="/signup" className="text-link">
             Create an account
           </Link>
         </>

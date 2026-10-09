@@ -1,10 +1,10 @@
-import { Container } from "@/components/ui/container";
+import { AppPage } from "@/components/ui/app-page";
 import { LoadingState } from "@/components/ui/feedback";
 
 export default function PersonalizationLoading() {
   return (
-    <Container className="py-12 sm:py-16">
-      <LoadingState label="Loading your personalization" />
-    </Container>
+    <AppPage>
+      <LoadingState label="Loading personalization" />
+    </AppPage>
   );
 }

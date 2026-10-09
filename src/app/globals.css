@@ -31,6 +31,15 @@
   --accent-secondary: var(--tide);
   --shadow-soft: 0 1px 2px rgb(16 32 51 / 0.05), 0 16px 36px -28px rgb(16 32 51 / 0.45);
   --space-section: 4rem;
+  --space-app-page: 2rem;
+  --space-app-page-sm: 2.5rem;
+  --space-app-stack: 2rem;
+  --space-app-stack-dense: 1.5rem;
+  --radius-control: 0.75rem;
+  --radius-card: 1rem;
+  --radius-chip: 999px;
+  --control-size: 2.75rem;
+  --icon-button-size: 2.5rem;
   --header-offset: 5.5rem;
 }
 
@@ -244,13 +253,13 @@ body {
 .button {
   align-items: center;
   border: 1px solid transparent;
-  border-radius: 999px;
+  border-radius: var(--radius-chip);
   display: inline-flex;
   font-size: 0.9375rem;
   font-weight: 600;
   gap: 0.5rem;
   justify-content: center;
-  min-height: 2.75rem;
+  min-height: var(--control-size);
   padding: 0.625rem 1.25rem;
   text-align: center;
   transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
@@ -361,9 +370,145 @@ body {
   }
 }
 
+.app-page {
+  padding-block: var(--space-app-page);
+}
+
+@media (min-width: 40rem) {
+  .app-page {
+    padding-block: var(--space-app-page-sm);
+  }
+}
+
+.app-page-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-app-stack);
+  min-width: 0;
+  width: 100%;
+}
+
+.app-page-stack-dense {
+  gap: var(--space-app-stack-dense);
+}
+
+.page-header {
+  max-width: 42rem;
+  min-width: 0;
+}
+
+.page-header-copy {
+  min-width: 0;
+}
+
+.page-header-split {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: none;
+}
+
+.page-header-actions {
+  display: flex;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+@media (min-width: 64rem) {
+  .page-header-split {
+    align-items: flex-end;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.icon-button {
+  align-items: center;
+  background: var(--elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  color: var(--ink);
+  display: inline-flex;
+  height: var(--icon-button-size);
+  justify-content: center;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+  width: var(--icon-button-size);
+}
+
+.icon-button:hover {
+  background: var(--surface);
+  border-color: var(--accent-deep);
+}
+
+.app-nav-link {
+  align-items: center;
+  border-radius: 0.5rem;
+  color: var(--ink-soft);
+  display: flex;
+  font-size: 0.875rem;
+  font-weight: 500;
+  gap: 0.625rem;
+  min-height: 2.5rem;
+  padding: 0.5rem 0.625rem;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+
+.app-nav-link:hover {
+  background: var(--paper-raised);
+  color: var(--ink);
+}
+
+.app-nav-link-active {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.app-nav-link-active:hover {
+  background: var(--ink-soft);
+  color: var(--paper);
+}
+
+.shell-title {
+  color: var(--ink);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+@media (min-width: 40rem) {
+  .shell-title {
+    font-size: 1.125rem;
+  }
+}
+
+.text-link {
+  color: var(--accent-deep);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.text-link:hover {
+  color: var(--horizon-deep);
+}
+
+.status-banner {
+  border-radius: var(--radius-card);
+  padding: 0.75rem 1rem;
+}
+
+.status-banner-success {
+  background: var(--success-surface);
+  color: var(--success);
+}
+
 .card {
   border: 1px solid var(--border);
-  border-radius: 1rem;
+  border-radius: var(--radius-card);
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -451,10 +596,10 @@ body {
 .field-control {
   background: var(--elevated);
   border: 1px solid var(--border);
-  border-radius: 0.75rem;
+  border-radius: var(--radius-control);
   color: var(--foreground);
   font: inherit;
-  min-height: 2.75rem;
+  min-height: var(--control-size);
   padding: 0.625rem 0.875rem;
   width: 100%;
 }
@@ -519,7 +664,7 @@ select.field-control {
 .dialog-panel {
   background: var(--elevated);
   border: 1px solid var(--border);
-  border-radius: 1rem;
+  border-radius: var(--radius-card);
   color: var(--foreground);
   max-width: calc(100vw - 2rem);
   padding: 1.5rem;

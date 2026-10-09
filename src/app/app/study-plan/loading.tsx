@@ -1,10 +1,10 @@
-import { Container } from "@/components/ui/container";
+import { AppPage } from "@/components/ui/app-page";
 import { LoadingState } from "@/components/ui/feedback";
 
 export default function StudyPlanLoading() {
   return (
-    <Container className="py-12 sm:py-16">
+    <AppPage>
       <LoadingState label="Loading your Study Plan" />
-    </Container>
+    </AppPage>
   );
 }

@@ -51,31 +51,35 @@ type ControlProps = {
   describedBy?: string;
 };
 
-function controlProps({ invalid, describedBy }: ControlProps) {
+function controlProps({
+  invalid,
+  describedBy,
+  className,
+}: ControlProps & { className?: string }) {
   return {
     "aria-invalid": invalid || undefined,
     "aria-describedby": describedBy,
-    className: "field-control",
+    className: cn("field-control", className),
   };
 }
 
 type InputProps = ComponentPropsWithoutRef<"input"> & ControlProps;
 
-export function Input({ invalid, describedBy, ...props }: InputProps) {
-  return <input {...props} {...controlProps({ invalid, describedBy })} />;
+export function Input({ invalid, describedBy, className, ...props }: InputProps) {
+  return <input {...props} {...controlProps({ invalid, describedBy, className })} />;
 }
 
 type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & ControlProps;
 
-export function Textarea({ invalid, describedBy, ...props }: TextareaProps) {
-  return <textarea {...props} {...controlProps({ invalid, describedBy })} />;
+export function Textarea({ invalid, describedBy, className, ...props }: TextareaProps) {
+  return <textarea {...props} {...controlProps({ invalid, describedBy, className })} />;
 }
 
 type SelectProps = SelectHTMLAttributes<HTMLSelectElement> & ControlProps;
 
-export function Select({ invalid, describedBy, children, ...props }: SelectProps) {
+export function Select({ invalid, describedBy, className, children, ...props }: SelectProps) {
   return (
-    <select {...props} {...controlProps({ invalid, describedBy })}>
+    <select {...props} {...controlProps({ invalid, describedBy, className })}>
       {children}
     </select>
   );

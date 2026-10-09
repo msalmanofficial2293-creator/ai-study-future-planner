@@ -24,7 +24,8 @@ export function AuthPanel({ title, description, children, footer }: AuthPanelPro
           <Mark className="size-9 shrink-0" />
           <span className="nav-brand">{siteConfig.name}</span>
         </Link>
-        <h1 className="page-heading mt-6">{title}</h1>
+        <p className="eyebrow mt-6">Account</p>
+        <h1 className="page-heading mt-3">{title}</h1>
         <p className="body-secondary mt-3">{description}</p>
         <div className="mt-8">{children}</div>
         <p className="caption mt-6">{footer}</p>

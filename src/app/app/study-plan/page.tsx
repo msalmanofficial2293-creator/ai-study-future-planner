@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { AppPage } from "@/components/ui/app-page";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Container } from "@/components/ui/container";
 import { EmptyState } from "@/components/ui/feedback";
+import { PageHeader } from "@/components/ui/page-header";
 import { TaskBoard } from "@/features/study-plan/task-board";
 import { formatStudyHours } from "@/features/study-plan/schedule";
 import { loadStudyPlan } from "@/services/study-plan";
@@ -27,45 +28,38 @@ export default async function StudyPlanPage() {
 
   if (loaded.status === "unavailable") {
     return (
-      <Container className="py-12 sm:py-16">
-        <div className="mx-auto flex max-w-3xl flex-col items-start gap-4">
-          <h1 className="page-heading">Study Plan</h1>
-          <p className="field-error" role="alert">
-            Error: Something went wrong. Please try again.
-          </p>
-          <Link href="/app/study-plan" className="font-medium text-accent-deep underline underline-offset-4">
-            Try again
-          </Link>
-        </div>
-      </Container>
+      <AppPage>
+        <PageHeader title="Study Plan" />
+        <p className="field-error" role="alert">
+          Error: Something went wrong. Please try again.
+        </p>
+        <Link href="/app/study-plan" className="text-link">
+          Try again
+        </Link>
+      </AppPage>
     );
   }
 
   return (
-    <Container className="py-12 sm:py-16">
-      <div className="mx-auto flex w-full max-w-5xl flex-col gap-8">
-        <div className="max-w-2xl">
-          <p className="eyebrow">Study Plan</p>
-          <h1 className="page-heading mt-3">Your study plan</h1>
-          <p className="body-secondary mt-3">
-            Tasks follow your current roadmap. This page does not call a paid AI provider, and it
-            does not revise the plan from performance.
-          </p>
-        </div>
-        {loaded.status === "no-roadmap" ? (
-          <EmptyState
-            title="No roadmap yet"
-            description="Generate a roadmap in Future Planner. Your study plan is built from that roadmap."
-            action={<Button href="/app/future-planner">Open Future Planner</Button>}
-          />
-        ) : (
-          <>
-            <PlanSummary plan={loaded.plan} />
-            <TaskBoard plan={loaded.plan} />
-          </>
-        )}
-      </div>
-    </Container>
+    <AppPage>
+      <PageHeader
+        eyebrow="Study Plan"
+        title="Your study plan"
+        description="Tasks follow your current roadmap. This page does not call a paid AI provider, and it does not revise the plan from performance."
+      />
+      {loaded.status === "no-roadmap" ? (
+        <EmptyState
+          title="No roadmap yet"
+          description="Generate a roadmap in Future Planner. Your study plan is built from that roadmap."
+          action={<Button href="/app/future-planner">Open Future Planner</Button>}
+        />
+      ) : (
+        <>
+          <PlanSummary plan={loaded.plan} />
+          <TaskBoard plan={loaded.plan} />
+        </>
+      )}
+    </AppPage>
   );
 }
 

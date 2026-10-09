@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { AppPage } from "@/components/ui/app-page";
 import { Button } from "@/components/ui/button";
-import { Container } from "@/components/ui/container";
 import { EmptyState } from "@/components/ui/feedback";
+import { PageHeader } from "@/components/ui/page-header";
 import { PerformanceDashboardView } from "@/features/performance/performance-dashboard";
 import { loadPerformancePage } from "@/services/performance";
 
@@ -25,36 +26,30 @@ export default async function PerformancePage() {
 
   if (loaded.status === "unavailable") {
     return (
-      <Container className="py-12 sm:py-16">
-        <div className="mx-auto flex max-w-3xl flex-col items-start gap-4">
-          <h1 className="page-heading">Performance</h1>
-          <p className="field-error" role="alert">
-            Error: Something went wrong. Please try again.
-          </p>
-          <Link href="/app/performance" className="font-medium text-accent-deep underline underline-offset-4">
-            Try again
-          </Link>
-        </div>
-      </Container>
+      <AppPage>
+        <PageHeader title="Performance" />
+        <p className="field-error" role="alert">
+          Error: Something went wrong. Please try again.
+        </p>
+        <Link href="/app/performance" className="text-link">
+          Try again
+        </Link>
+      </AppPage>
     );
   }
 
   return (
-    <Container className="py-12 sm:py-16">
-      <div className="mx-auto flex w-full max-w-5xl flex-col gap-8">
-        <div className="max-w-2xl">
-          <p className="eyebrow">Performance</p>
-          <h1 className="page-heading mt-3">Progress from your saved work</h1>
-          <p className="body-secondary mt-3">
-            Scores and completion come from your study tasks, quiz attempts, and performance
-            snapshots. This page does not call a paid AI provider, and it does not change your
-            study plan.
-          </p>
-        </div>
-        {loaded.status === "empty" ? <PerformanceEmpty hasRoadmap={loaded.hasRoadmap} hasPlan={loaded.hasPlan} /> : null}
-        {loaded.status === "ready" ? <PerformanceDashboardView dashboard={loaded.dashboard} /> : null}
-      </div>
-    </Container>
+    <AppPage>
+      <PageHeader
+        eyebrow="Performance"
+        title="Progress from your saved work"
+        description="Scores and completion come from your study tasks, quiz attempts, and performance snapshots. This page does not call a paid AI provider, and it does not change your study plan."
+      />
+      {loaded.status === "empty" ? (
+        <PerformanceEmpty hasRoadmap={loaded.hasRoadmap} hasPlan={loaded.hasPlan} />
+      ) : null}
+      {loaded.status === "ready" ? <PerformanceDashboardView dashboard={loaded.dashboard} /> : null}
+    </AppPage>
   );
 }
 

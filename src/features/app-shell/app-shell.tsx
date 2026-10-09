@@ -71,7 +71,7 @@ export function AppShell({ user, children }: AppShellProps) {
               <div className="flex min-w-0 items-center gap-2">
                 <button
                   type="button"
-                  className="inline-flex size-10 items-center justify-center rounded-xl border border-border bg-elevated text-ink lg:hidden"
+                  className="icon-button lg:hidden"
                   aria-expanded={mobileOpen}
                   aria-controls={drawerId}
                   aria-label={mobileOpen ? "Close navigation" : "Open navigation"}
@@ -80,16 +80,14 @@ export function AppShell({ user, children }: AppShellProps) {
                   {mobileOpen ? <IconClose className="size-5" /> : <IconMenu className="size-5" />}
                 </button>
                 <div className="min-w-0">
-                  <p className="truncate text-xs text-foreground-muted">AI Study Future Planner</p>
-                  <p className="truncate text-base font-medium text-ink sm:text-lg" style={{ fontFamily: "var(--font-display), Georgia, serif" }}>
-                    {title}
-                  </p>
+                  <p className="truncate caption">AI Study Future Planner</p>
+                  <p className="shell-title truncate">{title}</p>
                 </div>
               </div>
               <div className="flex shrink-0 items-center gap-2">
                 <Link
                   href="/app/settings"
-                  className="inline-flex size-10 items-center justify-center rounded-xl border border-border bg-elevated text-ink"
+                  className="icon-button"
                   aria-label="Notification preferences"
                 >
                   <IconBell className="size-5" />
@@ -122,7 +120,7 @@ export function AppShell({ user, children }: AppShellProps) {
               <SidebarBrand compact />
               <button
                 type="button"
-                className="inline-flex size-10 items-center justify-center rounded-xl border border-border"
+                className="icon-button"
                 aria-label="Close navigation"
                 onClick={() => setMobileOpen(false)}
               >
@@ -170,12 +168,7 @@ function SidebarNav({
                 href={item.href}
                 aria-current={active ? "page" : undefined}
                 onClick={onNavigate}
-                className={cn(
-                  "flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm font-medium transition",
-                  active
-                    ? "bg-ink text-[var(--paper)] shadow-sm"
-                    : "text-ink-soft hover:bg-paper-raised",
-                )}
+                className={cn("app-nav-link", active && "app-nav-link-active")}
               >
                 <NavIcon href={item.href} className="size-4 shrink-0 opacity-90" />
                 <span className="truncate">{item.label}</span>
@@ -206,12 +199,7 @@ function SidebarFooter({
                 href={item.href}
                 aria-current={active ? "page" : undefined}
                 onClick={onNavigate}
-                className={cn(
-                  "flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm font-medium transition",
-                  active
-                    ? "bg-ink text-[var(--paper)] shadow-sm"
-                    : "text-ink-soft hover:bg-paper-raised",
-                )}
+                className={cn("app-nav-link", active && "app-nav-link-active")}
               >
                 <NavIcon href={item.href} className="size-4 shrink-0 opacity-90" />
                 <span className="truncate">{item.label}</span>

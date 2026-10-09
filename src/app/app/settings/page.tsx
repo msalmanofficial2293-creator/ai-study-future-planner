@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { AppPage } from "@/components/ui/app-page";
 import { Button } from "@/components/ui/button";
-import { Container } from "@/components/ui/container";
+import { PageHeader } from "@/components/ui/page-header";
 import { SettingsPanel } from "@/features/profile/settings-panel";
 import { createSupabaseServerClient, getAuthenticatedUser } from "@/lib/supabase/server";
 import { hasCompletedOnboarding } from "@/services/onboarding-status";
@@ -33,35 +34,29 @@ export default async function SettingsPage() {
   }
 
   return (
-    <Container className="py-8 sm:py-10">
-      <div className="flex w-full flex-col gap-8">
-        <header className="max-w-3xl">
-          <h1 className="page-heading">Settings</h1>
-          <p className="body-secondary mt-3">
-            Manage your account, preferences, security, and learning experience.
-          </p>
-        </header>
-        {loaded.status === "ready" ? (
-          <SettingsPanel profile={loaded.profile} />
-        ) : (
-          <section className="card card-elevated max-w-xl" aria-labelledby="settings-error-heading">
-            <h2 id="settings-error-heading" className="card-heading">
-              Unable to load settings
-            </h2>
-            <p className="body-secondary mt-3">{settingsErrorMessage(loaded)}</p>
-            <div className="mt-5 flex flex-wrap gap-3">
-              <Button href="/app/settings">Try Again</Button>
-              <Link
-                href="/app/profile"
-                className="inline-flex items-center text-sm font-medium text-accent-deep underline underline-offset-4"
-              >
-                Open profile
-              </Link>
-            </div>
-          </section>
-        )}
-      </div>
-    </Container>
+    <AppPage>
+      <PageHeader
+        eyebrow="Account"
+        title="Settings"
+        description="Manage your account, preferences, security, and learning experience."
+      />
+      {loaded.status === "ready" ? (
+        <SettingsPanel profile={loaded.profile} />
+      ) : (
+        <section className="card card-elevated max-w-xl" aria-labelledby="settings-error-heading">
+          <h2 id="settings-error-heading" className="card-heading">
+            Unable to load settings
+          </h2>
+          <p className="body-secondary mt-3">{settingsErrorMessage(loaded)}</p>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <Button href="/app/settings">Try Again</Button>
+            <Link href="/app/profile" className="text-link inline-flex items-center">
+              Open profile
+            </Link>
+          </div>
+        </section>
+      )}
+    </AppPage>
   );
 }
 

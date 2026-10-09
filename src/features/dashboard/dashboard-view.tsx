@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { PageHeader } from "@/components/ui/page-header";
 import {
   IconArrow,
   IconChart,
@@ -74,14 +75,11 @@ function DashboardHeader({
   signOutError?: string;
 }) {
   return (
-    <header className="max-w-3xl">
-      <p className="eyebrow">Learning home</p>
-      <h1 className="page-heading mt-2">
-        {dashboard.greeting}, {dashboard.firstName}
-      </h1>
-      <p className="body-secondary mt-3">
-        Your personalized learning journey is moving forward.
-      </p>
+    <PageHeader
+      eyebrow="Learning home"
+      title={`${dashboard.greeting}, ${dashboard.firstName}`}
+      description="Your personalized learning journey is moving forward."
+    >
       <ul className="mt-4 flex flex-wrap gap-2" aria-label="Learning context">
         {dashboard.careerGoal ? <ContextChip label="Goal" value={dashboard.careerGoal} /> : null}
         {dashboard.stageTitle ? <ContextChip label="Stage" value={dashboard.stageTitle} /> : null}
@@ -97,7 +95,7 @@ function DashboardHeader({
           Error: {signOutError}
         </p>
       ) : null}
-    </header>
+    </PageHeader>
   );
 }
 

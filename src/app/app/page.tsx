@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { AppPage } from "@/components/ui/app-page";
 import { Button } from "@/components/ui/button";
-import { Container } from "@/components/ui/container";
 import { DashboardViewPanel } from "@/features/dashboard/dashboard-view";
 import { authMessages } from "@/features/auth/messages";
 import { loadDashboard } from "@/services/dashboard";
@@ -28,7 +28,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
 
   if (loaded.status === "unavailable") {
     return (
-      <Container className="py-8 sm:py-10">
+      <AppPage>
         <section className="card card-elevated max-w-xl" aria-labelledby="dashboard-error-heading">
           <p className="eyebrow">Dashboard</p>
           <h1 id="dashboard-error-heading" className="card-heading mt-2">
@@ -39,21 +39,18 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
             <Button href="/app">Try Again</Button>
-            <Link
-              href="/app/profile"
-              className="inline-flex items-center text-sm font-medium text-accent-deep underline underline-offset-4"
-            >
+            <Link href="/app/profile" className="text-link inline-flex items-center">
               Open profile
             </Link>
           </div>
         </section>
-      </Container>
+      </AppPage>
     );
   }
 
   return (
-    <Container className="py-8 sm:py-10">
+    <AppPage>
       <DashboardViewPanel dashboard={loaded.dashboard} signOutError={signOutError} />
-    </Container>
+    </AppPage>
   );
 }

@@ -48,7 +48,7 @@ export function RoadmapCta({ hasGoal }: RoadmapCtaProps) {
         </p>
       ) : null}
       {state.message ? (
-        <p className="rounded-2xl bg-success-surface px-4 py-3 text-success" role="status">
+        <p className="status-banner status-banner-success" role="status">
           {state.message}
         </p>
       ) : null}

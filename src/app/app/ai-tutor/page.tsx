@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { AppPage } from "@/components/ui/app-page";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Container } from "@/components/ui/container";
 import { ErrorState } from "@/components/ui/feedback";
 import { Input } from "@/components/ui/form-controls";
+import { PageHeader } from "@/components/ui/page-header";
 import { DeleteConversationButton } from "@/features/tutor/delete-conversation-button";
 import { clearTutorConversationAction, renameTutorConversationAction } from "@/features/tutor/actions";
 import { TutorChat } from "@/features/tutor/tutor-chat";
@@ -49,13 +50,13 @@ export default async function AiTutorPage({ searchParams }: TutorPageProps) {
 
   if (loaded.status === "unavailable") {
     return (
-      <Container className="py-12 sm:py-16">
+      <AppPage>
         <ErrorState
           title="The tutor is unavailable"
           description="Your tutor could not be loaded. Please try again in a moment."
           action={<Button href="/app">Back to account</Button>}
         />
-      </Container>
+      </AppPage>
     );
   }
 
@@ -63,27 +64,25 @@ export default async function AiTutorPage({ searchParams }: TutorPageProps) {
   const notice = params.notice ? NOTICES[params.notice] : undefined;
 
   return (
-    <Container className="py-10 sm:py-14">
-      <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <p className="eyebrow">AI Tutor</p>
-          <h1 className="page-heading">Your personal study assistant</h1>
-          <p className="body-secondary max-w-2xl">
-            Ask about the work already on your plan. Replies stay on your goal, stage, and saved results.
-          </p>
-        </div>
-        <Button href="/app/ai-tutor" variant="secondary">
-          Start New Chat
-        </Button>
-      </div>
+    <AppPage>
+      <PageHeader
+        eyebrow="AI Tutor"
+        title="Your personal study assistant"
+        description="Ask about the work already on your plan. Replies stay on your goal, stage, and saved results."
+        actions={
+          <Button href="/app/ai-tutor" variant="secondary">
+            Start New Chat
+          </Button>
+        }
+      />
       {notice ? (
-        <p className="mb-4 rounded-2xl bg-success-surface px-4 py-3 text-success" role="status">
+        <p className="status-banner status-banner-success" role="status">
           {notice}
         </p>
       ) : null}
       {error ? (
-        <p className="field-error mb-4" role="alert">
-          {error}
+        <p className="field-error" role="alert">
+          Error: {error}
         </p>
       ) : null}
       <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_18rem]">
@@ -103,7 +102,11 @@ export default async function AiTutorPage({ searchParams }: TutorPageProps) {
                     >
                       <Link
                         href={`/app/ai-tutor?chat=${conversation.id}`}
-                        className={current ? "font-semibold text-accent" : "text-foreground"}
+                        className={
+                          current
+                            ? "font-semibold text-accent-deep"
+                            : "text-foreground hover:text-accent-deep"
+                        }
                         aria-current={current ? "page" : undefined}
                       >
                         {conversation.title}
@@ -152,7 +155,7 @@ export default async function AiTutorPage({ searchParams }: TutorPageProps) {
           </Card>
         </aside>
       </div>
-    </Container>
+    </AppPage>
   );
 }
 

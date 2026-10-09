@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { AppPage } from "@/components/ui/app-page";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Container } from "@/components/ui/container";
 import { EmptyState } from "@/components/ui/feedback";
+import { PageHeader } from "@/components/ui/page-header";
 import { QuizDashboard } from "@/features/quiz/quiz-dashboard";
 import { QuizPlayer } from "@/features/quiz/quiz-player";
 import type { QuizResult } from "@/features/quiz/types";
@@ -52,44 +53,39 @@ export default async function QuizPage({ searchParams }: QuizPageProps) {
   }
 
   return (
-    <Container className="py-12 sm:py-16">
-      <div className="mx-auto flex w-full max-w-5xl flex-col gap-8">
-        <div className="max-w-2xl">
-          <p className="eyebrow">AI Quiz</p>
-          <h1 className="page-heading mt-3">Practice what you studied</h1>
-          <p className="body-secondary mt-3">
-            Questions are written on this server from your roadmap and study plan. This page does
-            not call a paid AI provider, and it does not change your study plan.
-          </p>
-        </div>
-        {loaded.status === "no-roadmap" ? (
-          <EmptyState
-            title="No roadmap yet"
-            description="Generate a roadmap, then save a study task. A practice quiz is stored on that plan."
-            action={<Button href="/app/future-planner">Open Future Planner</Button>}
-          />
-        ) : null}
-        {loaded.status === "no-plan" ? (
-          <EmptyState
-            title="No study plan yet"
-            description="Save a study task before creating a quiz. The quiz is stored on your current study plan."
-            action={<Button href="/app/study-plan">Open Study Plan</Button>}
-          />
-        ) : null}
-        {loaded.status === "playing" ? <QuizPlayer quiz={loaded.quiz} /> : null}
-        {loaded.status === "result" ? <QuizResultView result={loaded.result} /> : null}
-        {loaded.status === "ready" ? (
-          <QuizDashboard dashboard={loaded.dashboard} formError={ERRORS[params.error ?? ""]} />
-        ) : null}
-      </div>
-    </Container>
+    <AppPage>
+      <PageHeader
+        eyebrow="AI Quiz"
+        title="Practice what you studied"
+        description="Questions are written on this server from your roadmap and study plan. This page does not call a paid AI provider, and it does not change your study plan."
+      />
+      {loaded.status === "no-roadmap" ? (
+        <EmptyState
+          title="No roadmap yet"
+          description="Generate a roadmap, then save a study task. A practice quiz is stored on that plan."
+          action={<Button href="/app/future-planner">Open Future Planner</Button>}
+        />
+      ) : null}
+      {loaded.status === "no-plan" ? (
+        <EmptyState
+          title="No study plan yet"
+          description="Save a study task before creating a quiz. The quiz is stored on your current study plan."
+          action={<Button href="/app/study-plan">Open Study Plan</Button>}
+        />
+      ) : null}
+      {loaded.status === "playing" ? <QuizPlayer quiz={loaded.quiz} /> : null}
+      {loaded.status === "result" ? <QuizResultView result={loaded.result} /> : null}
+      {loaded.status === "ready" ? (
+        <QuizDashboard dashboard={loaded.dashboard} formError={ERRORS[params.error ?? ""]} />
+      ) : null}
+    </AppPage>
   );
 }
 
 function QuizResultView({ result }: { result: QuizResult }) {
   return (
     <div className="flex flex-col gap-6">
-      <p className="rounded-2xl bg-success-surface px-4 py-3 text-success" role="status">
+      <p className="status-banner status-banner-success" role="status">
         Attempt saved.
       </p>
       <Card variant="elevated">
@@ -158,23 +154,21 @@ function Score({ label, value }: { label: string; value: string }) {
 
 function QuizError({ title, message, retry = false }: { title: string; message: string; retry?: boolean }) {
   return (
-    <Container className="py-12 sm:py-16">
-      <div className="mx-auto flex max-w-3xl flex-col items-start gap-4">
-        <h1 className="page-heading">{title}</h1>
-        <p className="field-error" role="alert">
-          Error: {message}
-        </p>
-        {retry ? (
-          <Link href="/app/quiz" className="font-medium text-accent-deep underline underline-offset-4">
-            Try again
-          </Link>
-        ) : (
-          <Button href="/app/quiz" variant="secondary">
-            Back to quizzes
-          </Button>
-        )}
-      </div>
-    </Container>
+    <AppPage>
+      <PageHeader title={title} />
+      <p className="field-error" role="alert">
+        Error: {message}
+      </p>
+      {retry ? (
+        <Link href="/app/quiz" className="text-link">
+          Try again
+        </Link>
+      ) : (
+        <Button href="/app/quiz" variant="secondary">
+          Back to quizzes
+        </Button>
+      )}
+    </AppPage>
   );
 }
 

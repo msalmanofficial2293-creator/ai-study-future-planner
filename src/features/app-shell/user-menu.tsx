@@ -45,7 +45,7 @@ export function UserMenu({ user }: UserMenuProps) {
     <div ref={rootRef} className="relative">
       <button
         type="button"
-        className="flex max-w-[14rem] items-center gap-2 rounded-xl border border-border bg-elevated px-2 py-1.5 text-left transition hover:bg-paper-raised"
+        className="flex max-w-[14rem] items-center gap-2 rounded-[var(--radius-control)] border border-border bg-elevated px-2 py-1.5 text-left transition hover:border-accent-deep hover:bg-surface"
         aria-expanded={open}
         aria-haspopup="menu"
         aria-controls={menuId}
