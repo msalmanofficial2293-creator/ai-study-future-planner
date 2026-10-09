@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AuthPanel } from "@/components/auth/auth-panel";
-import { authMessages } from "@/features/auth/messages";
+import { isUserEmailVerified } from "@/features/auth/email-status";
+import { loginInitialError } from "@/features/auth/messages";
 import { LoginForm } from "@/features/auth/login-form";
 import { authDestination, hasCompletedOnboarding } from "@/services/onboarding-status";
-import { createSupabaseServerClient, getAuthenticatedUser } from "@/lib/supabase/server";
+import { createSupabaseServerClient, getSessionUser } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "Log in",
@@ -17,20 +18,23 @@ type LoginPageProps = {
 };
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {
-  const user = await getAuthenticatedUser();
+  const user = await getSessionUser();
 
-  if (user) {
+  if (user && isUserEmailVerified(user)) {
     const supabase = await createSupabaseServerClient();
     redirect(authDestination(await hasCompletedOnboarding(supabase, user.id)));
   }
 
+  if (user && !isUserEmailVerified(user)) {
+    redirect("/verify-email");
+  }
+
   const params = await searchParams;
-  const initialError =
-    params.error === "callback"
-      ? authMessages.callbackError
-      : params.error === "signout"
-        ? authMessages.unexpected
-        : undefined;
+  const initialError = loginInitialError(params.error);
+  const showResend =
+    params.error === "callback" ||
+    params.error === "expired" ||
+    params.error === "unverified";
 
   return (
     <AuthPanel
@@ -45,7 +49,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
         </>
       }
     >
-      <LoginForm initialError={initialError} />
+      <LoginForm initialError={initialError} showResend={showResend} />
     </AuthPanel>
   );
 }

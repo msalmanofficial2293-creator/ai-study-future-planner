@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AuthPanel } from "@/components/auth/auth-panel";
+import { isUserEmailVerified } from "@/features/auth/email-status";
 import { SignupForm } from "@/features/auth/signup-form";
 import { authDestination, hasCompletedOnboarding } from "@/services/onboarding-status";
-import { createSupabaseServerClient, getAuthenticatedUser } from "@/lib/supabase/server";
+import { createSupabaseServerClient, getSessionUser } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "Create an account",
@@ -12,11 +13,15 @@ export const metadata: Metadata = {
 };
 
 export default async function SignupPage() {
-  const user = await getAuthenticatedUser();
+  const user = await getSessionUser();
 
-  if (user) {
+  if (user && isUserEmailVerified(user)) {
     const supabase = await createSupabaseServerClient();
     redirect(authDestination(await hasCompletedOnboarding(supabase, user.id)));
+  }
+
+  if (user && !isUserEmailVerified(user)) {
+    redirect("/verify-email");
   }
 
   return (

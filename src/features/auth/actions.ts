@@ -2,11 +2,13 @@
 
 import { redirect } from "next/navigation";
 import { env } from "@/config/env";
-import { allowAuthAttempt } from "@/features/auth/allowance";
+import { allowAuthAttempt, allowVerificationResend } from "@/features/auth/allowance";
+import { isUserEmailVerified, normalizeAuthEmail } from "@/features/auth/email-status";
 import { authMessages, mapAuthError, type AuthErrorInfo } from "@/features/auth/messages";
 import {
   readPassword,
   readText,
+  validateEmail,
   validateLogin,
   validateSignup,
   type AuthFormState,
@@ -15,6 +17,7 @@ import { authDestination, hasCompletedOnboarding } from "@/services/onboarding-s
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 const signupInFlight = new Map<string, Promise<AuthFormState>>();
+const resendInFlight = new Map<string, Promise<AuthFormState>>();
 
 function authErrorInfo(error: {
   message: string;
@@ -28,7 +31,10 @@ function authErrorInfo(error: {
   };
 }
 
-function logAuthDiagnostic(action: "login" | "signup", error: AuthErrorInfo) {
+function logAuthDiagnostic(
+  action: "login" | "signup" | "resend-verification" | "logout",
+  error: AuthErrorInfo,
+) {
   if (process.env.NODE_ENV === "production") {
     console.error(`[auth:${action}] ${error.code ?? "none"}`);
     return;
@@ -40,11 +46,15 @@ function logAuthDiagnostic(action: "login" | "signup", error: AuthErrorInfo) {
   });
 }
 
+function emailRedirectTo(): string {
+  return `${env.appUrl}/auth/callback`;
+}
+
 export async function loginAction(
   _state: AuthFormState,
   formData: FormData,
 ): Promise<AuthFormState> {
-  const email = readText(formData, "email");
+  const email = normalizeAuthEmail(readText(formData, "email"));
   const password = readPassword(formData, "password");
   const fieldErrors = validateLogin(email, password);
 
@@ -63,11 +73,26 @@ export async function loginAction(
     if (error) {
       const info = authErrorInfo(error);
       logAuthDiagnostic("login", info);
-      return { formError: mapAuthError(info) };
+      const mapped = mapAuthError(info);
+
+      if (mapped === authMessages.emailNotConfirmed) {
+        return { formError: mapped, pendingEmail: email, needsVerification: true };
+      }
+
+      return { formError: mapped };
     }
 
     if (!data.user) {
       return { formError: authMessages.unexpected };
+    }
+
+    if (!isUserEmailVerified(data.user)) {
+      await supabase.auth.signOut();
+      return {
+        formError: authMessages.emailNotConfirmed,
+        pendingEmail: email,
+        needsVerification: true,
+      };
     }
 
     redirect(authDestination(await hasCompletedOnboarding(supabase, data.user.id)));
@@ -85,7 +110,7 @@ export async function signupAction(
   formData: FormData,
 ): Promise<AuthFormState> {
   const fullName = readText(formData, "fullName");
-  const email = readText(formData, "email");
+  const email = normalizeAuthEmail(readText(formData, "email"));
   const password = readPassword(formData, "password");
   const confirmPassword = readPassword(formData, "confirmPassword");
   const fieldErrors = validateSignup(fullName, email, password, confirmPassword);
@@ -98,7 +123,7 @@ export async function signupAction(
     return { formError: "Too many attempts. Please wait a minute and try again." };
   }
 
-  const key = email.toLowerCase();
+  const key = email;
   const current = signupInFlight.get(key);
 
   if (current) {
@@ -132,7 +157,7 @@ async function runSignup(
       password,
       options: {
         data: { full_name: fullName },
-        emailRedirectTo: `${env.appUrl}/auth/callback`,
+        emailRedirectTo: emailRedirectTo(),
       },
     });
 
@@ -144,11 +169,16 @@ async function runSignup(
 
     const identities = data.user?.identities;
 
+    // Supabase returns a user with empty identities for an existing email (no overwrite).
     if (data.user && Array.isArray(identities) && identities.length === 0) {
       outcome = "registered";
-    } else if (data.session && data.user) {
+    } else if (data.session && data.user && isUserEmailVerified(data.user)) {
+      // Confirm email is likely disabled in the project — session granted as verified.
       outcome = "signed-in";
       signedInUserId = data.user.id;
+    } else if (data.session && data.user && !isUserEmailVerified(data.user)) {
+      await supabase.auth.signOut();
+      outcome = "confirm";
     } else {
       outcome = "confirm";
     }
@@ -161,11 +191,87 @@ async function runSignup(
   }
 
   if (outcome === "confirm") {
-    return { message: authMessages.confirmEmail };
+    return {
+      message: authMessages.confirmEmail,
+      pendingEmail: email,
+      needsVerification: true,
+    };
   }
 
   const supabase = await createSupabaseServerClient();
   redirect(authDestination(await hasCompletedOnboarding(supabase, signedInUserId)));
+}
+
+export async function resendVerificationAction(
+  _state: AuthFormState,
+  formData: FormData,
+): Promise<AuthFormState> {
+  const email = normalizeAuthEmail(readText(formData, "email"));
+  const emailError = validateEmail(email);
+
+  if (emailError) {
+    return { fieldErrors: { email: emailError } };
+  }
+
+  if (!allowVerificationResend(email)) {
+    return {
+      formError:
+        "Too many verification emails were requested. Please wait a few minutes and try again.",
+    };
+  }
+
+  const key = email;
+  const current = resendInFlight.get(key);
+
+  if (current) {
+    return current;
+  }
+
+  const pending = runResendVerification(email);
+  resendInFlight.set(key, pending);
+
+  try {
+    return await pending;
+  } finally {
+    if (resendInFlight.get(key) === pending) {
+      resendInFlight.delete(key);
+    }
+  }
+}
+
+async function runResendVerification(email: string): Promise<AuthFormState> {
+  try {
+    const supabase = await createSupabaseServerClient();
+    const { error } = await supabase.auth.resend({
+      type: "signup",
+      email,
+      options: {
+        emailRedirectTo: emailRedirectTo(),
+      },
+    });
+
+    if (error) {
+      const info = authErrorInfo(error);
+      logAuthDiagnostic("resend-verification", info);
+
+      // Avoid confirming whether the email exists when Auth returns a generic failure.
+      if (
+        info.code === "over_email_send_rate_limit" ||
+        info.message.toLowerCase().includes("rate limit")
+      ) {
+        return { formError: mapAuthError(info) };
+      }
+    }
+
+    // Same success copy whether or not the address needs verification (safe enumeration posture).
+    return {
+      message: authMessages.confirmEmailResent,
+      pendingEmail: email,
+      needsVerification: true,
+    };
+  } catch {
+    return { formError: authMessages.unexpected };
+  }
 }
 
 function isRedirectError(error: unknown): boolean {
@@ -183,6 +289,7 @@ export async function logoutAction(): Promise<void> {
   const { error } = await supabase.auth.signOut();
 
   if (error) {
+    logAuthDiagnostic("logout", authErrorInfo(error));
     redirect("/app?error=signout");
   }
 

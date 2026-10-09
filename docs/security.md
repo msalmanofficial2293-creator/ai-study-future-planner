@@ -48,13 +48,61 @@ Supabase Auth provides email and password accounts. The application does not sto
 - `src/proxy.ts` refreshes the session cookie on matched requests and applies login redirects for protected paths.
 - Auth cookies are written by `@supabase/ssr`. Do not copy access tokens or refresh tokens into page HTML, logs, or query strings.
 - Signup, login, and logout run as server actions. Validation runs again on the server. Friendly errors replace provider messages. Passwords and tokens are not logged.
-- Login and signup are limited to 10 attempts per email per minute on a single server instance.
-- Email confirmation depends on the Supabase project. If it is enabled, signup does not create a local session until the student confirms.
-- Protected routes: `/app`, `/app/future-planner`, `/app/study-plan`, `/app/daily-tasks`, `/app/quiz`, `/app/performance`, `/app/adaptive-plan`, `/app/ai-tutor`, `/app/personalization`, `/app/profile`, `/app/settings`, and `/onboarding`. Each page also checks authentication server-side.
-- Public routes: `/`, `/login`, `/signup`, `/auth/callback`, plus static assets and metadata routes.
+- Login and signup are limited to 10 attempts per email per minute on a single server instance. Verification resends are limited to 3 per email per five minutes on a single instance.
+- Email addresses are normalized to lowercase before signup and login. Supabase Auth enforces one Auth user per email; duplicate signup does not delete or overwrite an existing account.
+- Protected application access requires `auth.getUser()` **and** a verified email (`email_confirmed_at`). Unverified sessions are sent to `/verify-email` and cannot open `/app` or `/onboarding`.
+- Protected routes: `/app`, `/app/future-planner`, `/app/study-plan`, `/app/daily-tasks`, `/app/quiz`, `/app/performance`, `/app/adaptive-plan`, `/app/ai-tutor`, `/app/personalization`, `/app/profile`, `/app/settings`, and `/onboarding`. Each page (and study service) also checks authentication server-side.
+- Public routes: `/`, `/login`, `/signup`, `/verify-email`, `/auth/callback`, plus static assets and metadata routes.
 - Every study mutation verifies the authenticated user and scopes writes to that user's rows. Resource ids (task, conversation, quiz attempt, recommendation fingerprint) are checked for ownership before update or delete. Row level security is the second line of defense.
 - A signed-in student can change the password from `/app/profile`. The server checks the current password with that student's session, then updates Auth. The new password is not written to `profiles` and is not logged.
 - Password recovery and account deletion are not implemented. The profile page includes a delete control that does not delete the account.
+
+### Signup password policy
+
+Application signup (and password change validation) requires:
+
+1. At least 8 characters
+2. At least one uppercase English letter (A–Z)
+3. At least one lowercase English letter (a–z)
+4. At least one digit (0–9)
+5. At least one special character (aligned with Supabase Auth’s symbol set)
+
+The signup UI shows live requirement status. The server action re-validates before calling `signUp`. Passwords are never written to logs or returned in error text.
+
+**Manual Supabase Dashboard action (required for Auth-side enforcement):** this cannot be set from application code alone. In the linked Supabase project:
+
+1. Open **Authentication** → **Sign In / Providers** (or **Providers**) → **Email**.
+2. Set **Minimum password length** to **8** (or higher).
+3. Set **Password requirements** to the strongest option: **digits, lowercase and uppercase letters, and symbols**.
+4. Optionally enable **Prevent use of leaked passwords** on Pro plans and above.
+5. Save.
+
+Until that dashboard setting matches, Auth may still accept weaker passwords if a client bypassed the app UI; the Next.js server action still rejects them for this app’s signup path.
+
+### Email confirmation (required Dashboard setting)
+
+Application code expects Confirm email to be **enabled**. Without it, Supabase may mark new users verified immediately and grant a session.
+
+**Manual Supabase Dashboard actions:**
+
+1. Open **Authentication** → **Providers** → **Email**.
+2. Enable **Confirm email**.
+3. Under **URL configuration**, set **Site URL** to the app origin (for local: `http://localhost:3000`; for production: your public `https` origin matching `NEXT_PUBLIC_APP_URL`).
+4. Add the same origin’s `/auth/callback` to **Redirect URLs**, e.g. `http://localhost:3000/auth/callback` and the production callback URL.
+5. Review the **Confirm signup** email template so the link uses the project’s confirmation URL (PKCE / token hash flow supported by `/auth/callback`).
+6. Save.
+
+After signup, the UI asks the student to verify email and offers resend. Login before verification is rejected. Invalid or expired verification links redirect to login with a recovery message and resend option.
+
+### Sessions (access token vs refresh vs inactivity)
+
+| Concept | What it is | Current approach |
+| --- | --- | --- |
+| Access token lifetime | Short-lived JWT used for Auth API calls | Managed by Supabase Auth (Dashboard JWT expiry). Default is typically about one hour. Do not invent a shorter app-only JWT cut-off. |
+| Refresh session | Long-lived refresh token rotates/extends the session via `@supabase/ssr` cookie refresh in `src/proxy.ts` / `updateSession` | Keep enabled. Logout calls `signOut()` and clears the Auth session cookies. |
+| Inactivity timeout | App-defined idle logout after no user activity | **Not implemented.** Propose separately if product requires it; do not add an arbitrary short timeout that silently breaks returning students. |
+
+Configure JWT / refresh settings only through Supabase Auth Dashboard values that the project supports. Prefer the platform defaults unless a security review sets explicit values.
 
 ## Validation
 
@@ -97,6 +145,15 @@ Profile photos use the Supabase Storage bucket `avatars` and `profiles.avatar_pa
 - Signed-out requests cannot insert into `avatars` (Storage RLS rejects them). Another authenticated user cannot write under someone else's `{user_id}/` path.
 - Server validation rejects files over 5 MB, non-image MIME types, SVG, and payloads whose magic bytes do not match JPEG, PNG, or WebP.
 - Failures classify missing bucket/column separately from RLS denials. Full provider messages stay server-side; development may append a short diagnostic code.
+
+### Settings and account controls
+
+`/app/settings` reuses authenticated profile rows for preferences.
+
+- Password changes verify the current password through Supabase Auth, then call `updateUser`. Passwords are never written to application tables or logs.
+- Notification toggles persist only `notify_study_reminders` and `notify_product_updates` on `profiles`. Delivery is not implemented yet; the UI states that honestly.
+- Learning preference updates write only `skill_level`, `learning_style`, and `weekly_study_time` on the signed-in student's `profiles` row.
+- Account deletion remains unavailable until a secure server-side deletion flow exists. The UI does not delete Auth users or profile rows from the browser.
 
 ## AI security
 

@@ -4,6 +4,7 @@ import { useActionState, useEffect, useRef, useState, type FormEvent } from "rea
 import { signupAction } from "@/features/auth/actions";
 import { PasswordRequirements } from "@/features/auth/password-requirements";
 import { isPasswordPolicyMet } from "@/features/auth/password-policy";
+import { ResendVerificationForm } from "@/features/auth/resend-verification-form";
 import {
   validateEmail,
   validateFullName,
@@ -80,6 +81,13 @@ export function SignupForm() {
         <p className="rounded-2xl bg-success-surface px-4 py-3 text-success" role="status">
           {state.message}
         </p>
+      ) : null}
+      {state.needsVerification || state.message ? (
+        <ResendVerificationForm
+          key={state.pendingEmail ?? email}
+          initialEmail={state.pendingEmail ?? email}
+          compact
+        />
       ) : null}
       <Field
         id="full-name"

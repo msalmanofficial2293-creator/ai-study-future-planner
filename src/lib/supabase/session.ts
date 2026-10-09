@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { isUserEmailVerified } from "@/features/auth/email-status";
 import {
   hasSupabasePublicConfig,
   readSupabasePublicConfig,
@@ -8,6 +9,7 @@ import { hasSupabaseSessionCookie } from "@/lib/supabase/cookies";
 import { authDestination, hasCompletedOnboarding } from "@/services/onboarding-status";
 
 const AUTH_ROUTES = new Set(["/login", "/signup"]);
+const VERIFY_EMAIL_PATH = "/verify-email";
 
 export async function updateSession(request: NextRequest) {
   let response = passthroughWithPath(request);
@@ -23,6 +25,8 @@ export async function updateSession(request: NextRequest) {
     pathname === "/onboarding" ||
     pathname.startsWith("/onboarding/");
   const isAuthRoute = AUTH_ROUTES.has(pathname);
+  const isVerifyEmailRoute =
+    pathname === VERIFY_EMAIL_PATH || pathname.startsWith(`${VERIFY_EMAIL_PATH}/`);
   const isServerAction = request.headers.has("next-action");
 
   if (!hasSupabaseSessionCookie(request.cookies.getAll())) {
@@ -63,7 +67,19 @@ export async function updateSession(request: NextRequest) {
     return redirectWithSession(request, response, "/login");
   }
 
-  if (user && isAuthRoute) {
+  if (user && !isUserEmailVerified(user)) {
+    if (isProtected) {
+      return redirectWithSession(request, response, VERIFY_EMAIL_PATH);
+    }
+
+    if (isAuthRoute) {
+      return redirectWithSession(request, response, VERIFY_EMAIL_PATH);
+    }
+
+    return response;
+  }
+
+  if (user && isUserEmailVerified(user) && (isAuthRoute || isVerifyEmailRoute)) {
     const completed = await hasCompletedOnboarding(supabase, user.id);
     return redirectWithSession(request, response, authDestination(completed));
   }

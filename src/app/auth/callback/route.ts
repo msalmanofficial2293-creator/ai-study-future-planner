@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { isUserEmailVerified } from "@/features/auth/email-status";
 import { authDestination, hasCompletedOnboarding } from "@/services/onboarding-status";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -8,9 +9,11 @@ export async function GET(request: Request) {
   const tokenHash = url.searchParams.get("token_hash");
   const type = url.searchParams.get("type");
   const providerError = url.searchParams.get("error");
+  const errorCode = url.searchParams.get("error_code");
+  const errorDescription = url.searchParams.get("error_description");
 
   if (providerError || (!code && !tokenHash)) {
-    return NextResponse.redirect(new URL("/login?error=callback", url.origin));
+    return NextResponse.redirect(new URL(callbackFailurePath(errorCode, errorDescription), url.origin));
   }
 
   const supabase = await createSupabaseServerClient();
@@ -18,11 +21,17 @@ export async function GET(request: Request) {
   if (code) {
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
-    if (!error) {
-      return NextResponse.redirect(new URL(await destinationFor(supabase, data.user?.id), url.origin));
+    if (!error && data.user) {
+      if (!isUserEmailVerified(data.user)) {
+        return NextResponse.redirect(new URL("/verify-email", url.origin));
+      }
+
+      return NextResponse.redirect(
+        new URL(await destinationFor(supabase, data.user.id), url.origin),
+      );
     }
 
-    return NextResponse.redirect(new URL("/login?error=callback", url.origin));
+    return NextResponse.redirect(new URL(callbackFailurePath(error?.code, error?.message), url.origin));
   }
 
   if (tokenHash && isEmailOtpType(type)) {
@@ -31,9 +40,17 @@ export async function GET(request: Request) {
       token_hash: tokenHash,
     });
 
-    if (!error) {
-      return NextResponse.redirect(new URL(await destinationFor(supabase, data.user?.id), url.origin));
+    if (!error && data.user) {
+      if (!isUserEmailVerified(data.user)) {
+        return NextResponse.redirect(new URL("/verify-email", url.origin));
+      }
+
+      return NextResponse.redirect(
+        new URL(await destinationFor(supabase, data.user.id), url.origin),
+      );
     }
+
+    return NextResponse.redirect(new URL(callbackFailurePath(error?.code, error?.message), url.origin));
   }
 
   return NextResponse.redirect(new URL("/login?error=callback", url.origin));
@@ -48,6 +65,20 @@ async function destinationFor(
   }
 
   return authDestination(await hasCompletedOnboarding(supabase, userId));
+}
+
+function callbackFailurePath(code?: string | null, message?: string | null): string {
+  const haystack = `${code ?? ""} ${message ?? ""}`.toLowerCase();
+
+  if (
+    haystack.includes("expired") ||
+    haystack.includes("otp_expired") ||
+    haystack.includes("flow_state_expired")
+  ) {
+    return "/login?error=expired";
+  }
+
+  return "/login?error=callback";
 }
 
 function isEmailOtpType(

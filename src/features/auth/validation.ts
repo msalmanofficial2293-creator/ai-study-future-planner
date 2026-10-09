@@ -17,6 +17,9 @@ export type AuthFormState = {
   fieldErrors?: AuthFieldErrors;
   formError?: string;
   message?: string;
+  /** Prefill only — never log this as a secret. */
+  pendingEmail?: string;
+  needsVerification?: boolean;
 };
 
 export function readText(formData: FormData, name: string): string {

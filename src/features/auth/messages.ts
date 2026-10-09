@@ -15,6 +15,10 @@ export function mapAuthError(error: AuthErrorInfo): string {
     return "Too many attempts. Please wait and try again.";
   }
 
+  if (error.code === "email_not_confirmed") {
+    return authMessages.emailNotConfirmed;
+  }
+
   const normalized = error.message.toLowerCase();
 
   if (
@@ -27,9 +31,10 @@ export function mapAuthError(error: AuthErrorInfo): string {
   if (
     normalized.includes("already registered") ||
     normalized.includes("already been registered") ||
-    normalized.includes("user already exists")
+    normalized.includes("user already exists") ||
+    error.code === "user_already_exists"
   ) {
-    return "This email is already registered. Please log in instead.";
+    return authMessages.alreadyRegistered;
   }
 
   if (
@@ -70,7 +75,7 @@ export function mapAuthError(error: AuthErrorInfo): string {
   }
 
   if (normalized.includes("email not confirmed")) {
-    return "Confirm your email before logging in. Check your inbox for the confirmation message.";
+    return authMessages.emailNotConfirmed;
   }
 
   return UNEXPECTED;
@@ -81,8 +86,30 @@ export const authMessages = {
   passwordMismatch: "Passwords do not match.",
   weakPassword: "Please choose a stronger password.",
   confirmEmail:
-    "Check your email to confirm your account. You can log in after it is confirmed.",
+    "Check your email to verify your account before signing in. Open the verification link we sent, then log in.",
+  confirmEmailResent:
+    "If an account exists for that email and still needs verification, a new verification link has been sent. Check your inbox and spam folder.",
+  emailNotConfirmed:
+    "Confirm your email before logging in. Check your inbox for the verification link, or request a new one below.",
   callbackError:
-    "The sign-in link is invalid or has expired. Please try logging in again.",
-  alreadyRegistered: "This email is already registered. Please log in instead.",
+    "That verification link is invalid or has expired. Request a new verification email, then try again.",
+  callbackExpired:
+    "That verification link has expired. Request a new verification email, then try again.",
+  alreadyRegistered:
+    "If an account already exists for this email, please log in instead. No new account was created.",
 } as const;
+
+export function loginInitialError(code: string | undefined): string | undefined {
+  switch (code) {
+    case "callback":
+      return authMessages.callbackError;
+    case "expired":
+      return authMessages.callbackExpired;
+    case "unverified":
+      return authMessages.emailNotConfirmed;
+    case "signout":
+      return authMessages.unexpected;
+    default:
+      return undefined;
+  }
+}

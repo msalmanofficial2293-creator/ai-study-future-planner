@@ -1,5 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
+import type { User } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
+import { isUserEmailVerified } from "@/features/auth/email-status";
 import {
   hasSupabasePublicConfig,
   readSupabasePublicConfig,
@@ -28,7 +30,11 @@ export async function createSupabaseServerClient() {
   });
 }
 
-export async function getAuthenticatedUser() {
+/**
+ * Session user from Auth cookies via `getUser()` (not `getSession()` alone).
+ * Does not require a verified email — use for login/signup/verify-email routing.
+ */
+export async function getSessionUser(): Promise<User | null> {
   if (!hasSupabasePublicConfig()) {
     return null;
   }
@@ -47,4 +53,18 @@ export async function getAuthenticatedUser() {
   }
 
   return data.user;
+}
+
+/**
+ * Authenticated student allowed into protected app routes.
+ * Requires a valid Auth user with a verified email address.
+ */
+export async function getAuthenticatedUser(): Promise<User | null> {
+  const user = await getSessionUser();
+
+  if (!user || !isUserEmailVerified(user)) {
+    return null;
+  }
+
+  return user;
 }
