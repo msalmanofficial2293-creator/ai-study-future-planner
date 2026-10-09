@@ -174,7 +174,7 @@ function Meter({ label, percent }: { label: string; percent: number }) {
         aria-valuemax={100}
         aria-valuenow={width}
       >
-        <div className="h-full rounded-full bg-accent" style={{ width: `${width}%` }} />
+        <div className="progress-fill-blue h-full rounded-full" style={{ width: `${width}%` }} />
       </div>
       <p className="caption mt-2">{width}%</p>
     </div>
@@ -206,7 +206,7 @@ function TaskBars({ bars }: { bars: TaskBar[] }) {
               aria-valuemax={100}
               aria-valuenow={value}
             >
-              <div className="h-full rounded-full bg-accent-secondary" style={{ width: `${value}%` }} />
+              <div className="progress-fill-emerald h-full rounded-full" style={{ width: `${value}%` }} />
             </div>
           </li>
         );
@@ -227,7 +227,7 @@ function QuizTrend({ points }: { points: QuizTrendPoint[] }) {
           <p className="caption text-center">{formatPercent(point.score)}</p>
           <div className="flex min-h-16 flex-1 items-end">
             <div
-              className="w-full rounded-t-md bg-accent"
+              className="w-full rounded-t-md bg-blue"
               style={{ height: `${Math.max(point.score, 4)}%` }}
               title={`${point.title}: ${formatPercent(point.score)}`}
             />

@@ -178,7 +178,7 @@ function CurrentGoalCard({ dashboard }: { dashboard: DashboardView }) {
             <Button href={dashboard.continueHref}>{dashboard.continueLabel}</Button>
           </div>
         </div>
-        <div className="flex w-full shrink-0 flex-col justify-center rounded-2xl border border-border bg-paper-raised px-5 py-5 lg:w-52">
+        <div className="flex w-full shrink-0 flex-col justify-center rounded-2xl border border-border bg-soft-gold px-5 py-5 lg:w-52">
           <p className="caption">Roadmap progress</p>
           <p
             className="mt-2 text-4xl font-medium text-ink"
@@ -188,7 +188,7 @@ function CurrentGoalCard({ dashboard }: { dashboard: DashboardView }) {
           </p>
           {dashboard.roadmapProgress !== null ? (
             <div
-              className="mt-4 h-2 overflow-hidden rounded-full bg-line"
+              className="progress-track mt-4 h-2"
               role="progressbar"
               aria-label="Roadmap progress"
               aria-valuemin={0}
@@ -196,7 +196,7 @@ function CurrentGoalCard({ dashboard }: { dashboard: DashboardView }) {
               aria-valuenow={dashboard.roadmapProgress}
             >
               <div
-                className="h-full rounded-full bg-tide"
+                className="progress-fill-gold h-full rounded-full"
                 style={{ width: `${Math.min(100, Math.max(0, dashboard.roadmapProgress))}%` }}
               />
             </div>
@@ -210,11 +210,13 @@ function CurrentGoalCard({ dashboard }: { dashboard: DashboardView }) {
 }
 
 function MetricCard({ metric }: { metric: DashboardMetric }) {
+  const well = metricWellClass(metric.id);
+
   return (
-    <article className="card card-raised">
+    <article className="card card-elevated">
       <div className="flex items-start justify-between gap-3">
         <p className="caption">{metric.label}</p>
-        <span className="inline-flex size-9 items-center justify-center rounded-xl bg-info-surface text-tide" aria-hidden="true">
+        <span className={cn("icon-well", well)} aria-hidden="true">
           <MetricIcon id={metric.id} />
         </span>
       </div>
@@ -227,6 +229,20 @@ function MetricCard({ metric }: { metric: DashboardMetric }) {
       <p className="body-secondary mt-2">{metric.hint}</p>
     </article>
   );
+}
+
+function metricWellClass(id: DashboardMetric["id"]): string {
+  switch (id) {
+    case "overall":
+      return "icon-well-purple";
+    case "tasks":
+      return "icon-well-emerald";
+    case "quiz":
+    case "quizzes-count":
+      return "icon-well-blue";
+    default:
+      return "icon-well-teal";
+  }
 }
 
 function MetricIcon({ id }: { id: DashboardMetric["id"] }) {
@@ -276,14 +292,14 @@ function TodaysLearningCard({ dashboard }: { dashboard: DashboardView }) {
         <>
           <div className="mt-4">
             <div
-              className="h-2 overflow-hidden rounded-full bg-line"
+              className="progress-track h-2"
               role="progressbar"
               aria-label="Today's learning progress"
               aria-valuemin={0}
               aria-valuemax={100}
               aria-valuenow={percent}
             >
-              <div className="h-full rounded-full bg-tide" style={{ width: `${percent}%` }} />
+              <div className="progress-fill-emerald h-full rounded-full" style={{ width: `${percent}%` }} />
             </div>
             <p className="caption mt-2">
               {percent}% complete
@@ -437,7 +453,7 @@ function MiniQuizTrend({ points }: { points: QuizTrendPoint[] }) {
             <p className="caption text-center">{point.score}%</p>
             <div className="flex min-h-10 flex-1 items-end">
               <div
-                className="w-full rounded-t-md bg-accent"
+                className="w-full rounded-t-md bg-blue"
                 style={{ height: `${Math.max(point.score, 6)}%` }}
                 title={`${point.title}: ${point.score}%`}
               />
@@ -455,8 +471,8 @@ function RecommendationCard({ dashboard }: { dashboard: DashboardView }) {
   return (
     <section className="card card-elevated" aria-labelledby="recommended-heading">
       <div className="flex items-start gap-3">
-        <span className="mt-0.5 inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-info-surface text-tide">
-          <IconSpark className="size-4" aria-hidden="true" />
+        <span className="icon-well icon-well-teal mt-0.5 size-10" aria-hidden="true">
+          <IconSpark className="size-4" />
         </span>
         <div className="min-w-0 flex-1">
           <p className="eyebrow">Your personalized recommendation</p>
@@ -505,10 +521,34 @@ function RecommendationCard({ dashboard }: { dashboard: DashboardView }) {
 
 function QuickActions() {
   const actions = [
-    { href: "/app/daily-tasks", label: "Continue Study", detail: "Today's tasks", icon: IconCheckList },
-    { href: "/app/quiz", label: "Take AI Quiz", detail: "Check understanding", icon: IconQuiz },
-    { href: "/app/ai-tutor", label: "Ask AI Tutor", detail: "Get guided help", icon: IconTutor },
-    { href: "/app/future-planner", label: "View Roadmap", detail: "Career stages", icon: IconTarget },
+    {
+      href: "/app/daily-tasks",
+      label: "Continue Study",
+      detail: "Today's tasks",
+      icon: IconCheckList,
+      well: "icon-well-emerald",
+    },
+    {
+      href: "/app/quiz",
+      label: "Take AI Quiz",
+      detail: "Check understanding",
+      icon: IconQuiz,
+      well: "icon-well-blue",
+    },
+    {
+      href: "/app/ai-tutor",
+      label: "Ask AI Tutor",
+      detail: "Get guided help",
+      icon: IconTutor,
+      well: "icon-well-purple",
+    },
+    {
+      href: "/app/future-planner",
+      label: "View Roadmap",
+      detail: "Career stages",
+      icon: IconTarget,
+      well: "icon-well-gold",
+    },
   ] as const;
 
   return (
@@ -523,10 +563,10 @@ function QuickActions() {
             <li key={action.href}>
               <Link
                 href={action.href}
-                className="card card-quiet flex h-full items-start gap-3 transition hover:border-horizon/35 hover:bg-elevated"
+                className="card card-elevated flex h-full items-start gap-3 transition hover:border-purple/40"
               >
-                <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-paper-raised text-ink">
-                  <Icon className="size-4" aria-hidden="true" />
+                <span className={cn("icon-well size-10", action.well)} aria-hidden="true">
+                  <Icon className="size-4" />
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="block text-sm font-medium text-ink">{action.label}</span>

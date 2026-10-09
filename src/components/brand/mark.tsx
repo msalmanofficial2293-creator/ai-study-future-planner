@@ -12,20 +12,20 @@ export function Mark({ className, title }: MarkProps) {
       className={className}
     >
       {title ? <title>{title}</title> : null}
-      <rect width="32" height="32" rx="8" fill="var(--ink)" />
+      <rect width="32" height="32" rx="8" fill="var(--navy)" />
       <path
         d="M7 21.5h18"
-        stroke="var(--paper)"
+        stroke="var(--on-primary)"
         strokeWidth="1.5"
         strokeLinecap="round"
       />
       <path
         d="M9.5 21.5c1.6-5.4 3.6-8 6.5-8s4.9 2.6 6.5 8"
-        stroke="var(--horizon)"
+        stroke="var(--purple)"
         strokeWidth="1.75"
         strokeLinecap="round"
       />
-      <circle cx="16" cy="13.5" r="1.7" fill="var(--elevated)" />
+      <circle cx="16" cy="13.5" r="1.7" fill="var(--blue)" />
     </svg>
   );
 }

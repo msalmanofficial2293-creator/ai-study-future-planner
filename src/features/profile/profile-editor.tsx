@@ -407,7 +407,7 @@ function ProfileHeader({
       </div>
       <div className="mt-5">
         <div className="h-2 overflow-hidden rounded-full bg-line" aria-hidden="true">
-          <div className="h-full rounded-full bg-tide" style={{ width: `${completion}%` }} />
+          <div className="progress-fill-purple h-full rounded-full" style={{ width: `${completion}%` }} />
         </div>
       </div>
     </section>

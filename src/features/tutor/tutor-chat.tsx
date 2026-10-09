@@ -115,7 +115,7 @@ export function TutorChat({ conversationId, messages }: TutorChatProps) {
             <button
               key={action.label}
               type="button"
-              className="rounded-full bg-info-surface px-3 py-1.5 text-sm font-medium text-accent-secondary disabled:opacity-60"
+              className="rounded-full bg-soft-lavender px-3 py-1.5 text-sm font-medium text-purple-deep disabled:opacity-60"
               disabled={pending}
               onClick={() => send(action.prompt)}
             >
@@ -162,11 +162,11 @@ function MessageBubble({ message }: { message: TutorMessage }) {
       <div
         className={
           isUser
-            ? "rounded-2xl bg-accent px-4 py-3 text-elevated"
-            : "rounded-2xl border border-border bg-surface px-4 py-3"
+            ? "rounded-2xl bg-purple px-4 py-3 text-white"
+            : "rounded-2xl border border-border bg-soft-lavender/60 px-4 py-3"
         }
       >
-        <p className={isUser ? "text-sm font-semibold text-elevated" : "text-sm font-semibold text-accent-secondary"}>
+        <p className={isUser ? "text-sm font-semibold text-white" : "text-sm font-semibold text-purple-deep"}>
           {isUser ? "You" : "Tutor"}
         </p>
         {reply ? <TutorReply reply={reply} /> : <p className="mt-2 whitespace-pre-wrap">{message.content}</p>}

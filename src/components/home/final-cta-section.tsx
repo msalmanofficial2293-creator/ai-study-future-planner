@@ -7,7 +7,7 @@ export function FinalCtaSection() {
   return (
     <Section id="start" labelledBy="start-heading" tone="plain">
       <Container>
-        <Card variant="elevated" className="card-band">
+        <Card variant="elevated" className="card-band border-purple/20 bg-gradient-to-br from-elevated via-soft-lavender/40 to-soft-blue/50">
           <p className="eyebrow">Next step</p>
           <h2 id="start-heading" className="section-heading mt-3 max-w-xl">
             Ready to turn your goal into a real study plan?

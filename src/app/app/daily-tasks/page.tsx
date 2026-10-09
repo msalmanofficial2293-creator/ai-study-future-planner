@@ -80,14 +80,14 @@ function DailyProgress({
         finished today.
       </p>
       <div
-        className="mt-4 h-2 overflow-hidden rounded-full bg-border"
+        className="progress-track mt-4 h-2"
         role="progressbar"
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={percent}
         aria-label="Daily task progress"
       >
-        <div className="h-full bg-accent" style={{ width: `${percent}%` }} />
+        <div className="progress-fill-emerald h-full rounded-full" style={{ width: `${percent}%` }} />
       </div>
       <p className="caption mt-3">{percent}% complete today.</p>
       <dl className="mt-4 grid gap-3 sm:grid-cols-2">

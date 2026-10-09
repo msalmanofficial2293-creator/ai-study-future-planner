@@ -2,34 +2,56 @@
 
 :root {
   color-scheme: light;
-  --ink: #102033;
-  --ink-soft: #243447;
-  --paper: #f3efe7;
-  --paper-raised: #fbf9f5;
-  --elevated: #fffdf9;
-  --line: #e3dcd0;
-  --foreground: #102033;
-  --foreground-soft: #314155;
-  --foreground-muted: #3f4d5c;
-  --horizon: #b85a28;
-  --horizon-deep: #8d431c;
-  --tide: #1d5f5b;
-  --success: #1b6b3a;
-  --success-surface: #e7f3ea;
-  --warning: #8a5a10;
-  --warning-surface: #f8efd8;
-  --danger: #9d2c2c;
-  --danger-hover: #7f2424;
-  --danger-surface: #f8e8e6;
-  --info-surface: #e5f1f0;
-  --focus: #8d431c;
+  /* Core brand */
+  --navy: #101b35;
+  --purple: #7048e8;
+  --purple-deep: #5a34d4;
+  --blue: #3478f6;
+  --blue-deep: #2663d9;
+  --emerald: #079669;
+  --teal: #0d9488;
+  --gold: #d9a441;
+  --gold-deep: #a67a28;
+  --coral: #f07868;
+  --coral-deep: #d45c4d;
+  /* Soft tints */
+  --soft-lavender: #f0ecff;
+  --soft-blue: #eaf2ff;
+  --soft-mint: #e5f8ef;
+  --soft-peach: #fff0e8;
+  --soft-gold: #fbf4e4;
+  /* Neutrals */
+  --ink: #101b35;
+  --ink-soft: #24324f;
+  --paper: #f7f8fc;
+  --paper-raised: #ffffff;
+  --elevated: #ffffff;
+  --line: #e6eaf2;
+  --foreground: #172033;
+  --foreground-soft: #667085;
+  --foreground-muted: #667085;
+  --on-primary: #ffffff;
+  /* Semantic aliases (legacy + new) */
+  --horizon: var(--purple);
+  --horizon-deep: var(--purple-deep);
+  --tide: var(--teal);
+  --success: var(--emerald);
+  --success-surface: var(--soft-mint);
+  --warning: var(--gold-deep);
+  --warning-surface: var(--soft-gold);
+  --danger: #c23b3b;
+  --danger-hover: #a32f2f;
+  --danger-surface: #fdecec;
+  --info: var(--blue);
+  --info-surface: var(--soft-blue);
+  --focus: var(--purple);
   --background: var(--paper);
   --surface: var(--paper-raised);
   --border: var(--line);
-  --accent: var(--horizon);
-  --accent-deep: var(--horizon-deep);
-  --accent-secondary: var(--tide);
-  --shadow-soft: 0 1px 2px rgb(16 32 51 / 0.05), 0 16px 36px -28px rgb(16 32 51 / 0.45);
+  --accent: var(--purple);
+  --accent-deep: var(--purple-deep);
+  --accent-secondary: var(--teal);
+  --shadow-soft: 0 1px 2px rgb(16 27 53 / 0.04), 0 18px 40px -28px rgb(112 72 232 / 0.35);
   --space-section: 4rem;
   --space-app-page: 2rem;
   --space-app-page-sm: 2.5rem;
@@ -46,6 +68,7 @@
 @theme inline {
   --color-ink: var(--ink);
   --color-ink-soft: var(--ink-soft);
+  --color-navy: var(--navy);
   --color-paper: var(--paper);
   --color-paper-raised: var(--paper-raised);
   --color-elevated: var(--elevated);
@@ -57,19 +80,33 @@
   --color-foreground-soft: var(--foreground-soft);
   --color-foreground-muted: var(--foreground-muted);
   --color-muted: var(--foreground-muted);
+  --color-purple: var(--purple);
+  --color-purple-deep: var(--purple-deep);
+  --color-blue: var(--blue);
+  --color-blue-deep: var(--blue-deep);
+  --color-emerald: var(--emerald);
+  --color-teal: var(--teal);
+  --color-gold: var(--gold);
+  --color-gold-deep: var(--gold-deep);
+  --color-coral: var(--coral);
+  --color-soft-lavender: var(--soft-lavender);
+  --color-soft-blue: var(--soft-blue);
+  --color-soft-mint: var(--soft-mint);
+  --color-soft-peach: var(--soft-peach);
+  --color-soft-gold: var(--soft-gold);
   --color-horizon: var(--horizon);
   --color-horizon-deep: var(--horizon-deep);
-  --color-accent: var(--horizon);
-  --color-accent-deep: var(--horizon-deep);
+  --color-accent: var(--accent);
+  --color-accent-deep: var(--accent-deep);
   --color-tide: var(--tide);
-  --color-accent-secondary: var(--tide);
+  --color-accent-secondary: var(--accent-secondary);
   --color-success: var(--success);
   --color-success-surface: var(--success-surface);
   --color-warning: var(--warning);
   --color-warning-surface: var(--warning-surface);
   --color-danger: var(--danger);
   --color-danger-surface: var(--danger-surface);
-  --color-info: var(--tide);
+  --color-info: var(--info);
   --color-info-surface: var(--info-surface);
   --font-sans: var(--font-outfit), sans-serif;
   --font-display: var(--font-fraunces), serif;
@@ -87,8 +124,9 @@ html {
 
 body {
   background:
-    radial-gradient(980px 420px at 100% -10%, rgb(184 90 40 / 0.09), transparent 58%),
-    radial-gradient(760px 380px at -12% 8%, rgb(29 95 91 / 0.07), transparent 55%),
+    radial-gradient(980px 420px at 100% -10%, rgb(112 72 232 / 0.1), transparent 58%),
+    radial-gradient(760px 380px at -12% 8%, rgb(52 120 246 / 0.08), transparent 55%),
+    radial-gradient(640px 320px at 50% 100%, rgb(13 148 136 / 0.05), transparent 60%),
     var(--background);
   color: var(--foreground);
   overflow-x: clip;
@@ -100,7 +138,7 @@ body {
 }
 
 ::selection {
-  background: rgb(184 90 40 / 0.22);
+  background: rgb(112 72 232 / 0.2);
   color: var(--foreground);
 }
 
@@ -208,7 +246,7 @@ body {
 }
 
 .eyebrow {
-  color: var(--accent-secondary);
+  color: var(--purple-deep);
   font-size: 0.8125rem;
   font-weight: 600;
   letter-spacing: 0.12em;
@@ -272,32 +310,33 @@ body {
 }
 
 .button-primary {
-  background: var(--ink);
-  color: var(--paper);
+  background: var(--purple);
+  color: var(--on-primary);
 }
 
 .button-primary:hover:not(:disabled):not([aria-disabled="true"]) {
-  background: var(--ink-soft);
+  background: var(--purple-deep);
 }
 
 .button-secondary {
-  background: var(--surface);
+  background: var(--elevated);
   border-color: var(--border);
   color: var(--foreground);
 }
 
 .button-secondary:hover:not(:disabled):not([aria-disabled="true"]) {
-  border-color: var(--accent-deep);
+  border-color: var(--purple);
+  background: var(--soft-lavender);
 }
 
 .button-outline {
   background: transparent;
-  border-color: var(--ink);
-  color: var(--foreground);
+  border-color: var(--purple);
+  color: var(--purple-deep);
 }
 
 .button-outline:hover:not(:disabled):not([aria-disabled="true"]) {
-  background: var(--surface);
+  background: var(--soft-lavender);
 }
 
 .button-ghost {
@@ -306,13 +345,13 @@ body {
 }
 
 .button-ghost:hover:not(:disabled):not([aria-disabled="true"]) {
-  background: var(--surface);
+  background: var(--soft-blue);
   color: var(--foreground);
 }
 
 .button-destructive {
   background: var(--danger);
-  color: var(--paper);
+  color: var(--on-primary);
 }
 
 .button-destructive:hover:not(:disabled):not([aria-disabled="true"]) {
@@ -320,11 +359,11 @@ body {
 }
 
 .skip-link {
-  background: var(--ink);
+  background: var(--purple);
   border: 0;
   border-radius: 999px;
   clip: rect(0, 0, 0, 0);
-  color: var(--paper);
+  color: var(--on-primary);
   font-family: var(--font-sans);
   font-size: 0.9375rem;
   font-weight: 600;
@@ -438,13 +477,14 @@ body {
 }
 
 .icon-button:hover {
-  background: var(--surface);
-  border-color: var(--accent-deep);
+  background: var(--soft-lavender);
+  border-color: var(--purple);
+  color: var(--purple-deep);
 }
 
 .app-nav-link {
   align-items: center;
-  border-radius: 0.5rem;
+  border-radius: 0.625rem;
   color: var(--ink-soft);
   display: flex;
   font-size: 0.875rem;
@@ -452,22 +492,24 @@ body {
   gap: 0.625rem;
   min-height: 2.5rem;
   padding: 0.5rem 0.625rem;
-  transition: background-color 160ms ease, color 160ms ease;
+  transition: background-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
 }
 
 .app-nav-link:hover {
-  background: var(--paper-raised);
+  background: var(--soft-blue);
   color: var(--ink);
 }
 
 .app-nav-link-active {
-  background: var(--ink);
-  color: var(--paper);
+  background: var(--soft-lavender);
+  box-shadow: inset 3px 0 0 var(--purple);
+  color: var(--purple-deep);
+  font-weight: 600;
 }
 
 .app-nav-link-active:hover {
-  background: var(--ink-soft);
-  color: var(--paper);
+  background: var(--soft-lavender);
+  color: var(--purple-deep);
 }
 
 .shell-title {
@@ -485,7 +527,7 @@ body {
 }
 
 .text-link {
-  color: var(--accent-deep);
+  color: var(--purple-deep);
   font-size: 0.875rem;
   font-weight: 600;
   text-decoration: underline;
@@ -493,7 +535,73 @@ body {
 }
 
 .text-link:hover {
-  color: var(--horizon-deep);
+  color: var(--blue-deep);
+}
+
+.icon-well {
+  align-items: center;
+  border-radius: 0.75rem;
+  display: inline-flex;
+  flex-shrink: 0;
+  height: 2.25rem;
+  justify-content: center;
+  width: 2.25rem;
+}
+
+.icon-well-purple {
+  background: var(--soft-lavender);
+  color: var(--purple-deep);
+}
+
+.icon-well-blue {
+  background: var(--soft-blue);
+  color: var(--blue-deep);
+}
+
+.icon-well-emerald {
+  background: var(--soft-mint);
+  color: var(--emerald);
+}
+
+.icon-well-teal {
+  background: rgb(13 148 136 / 0.12);
+  color: var(--teal);
+}
+
+.icon-well-gold {
+  background: var(--soft-gold);
+  color: var(--gold-deep);
+}
+
+.icon-well-coral {
+  background: var(--soft-peach);
+  color: var(--coral-deep);
+}
+
+.progress-track {
+  background: var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-fill-purple {
+  background: linear-gradient(90deg, var(--purple), var(--blue));
+}
+
+.progress-fill-blue {
+  background: var(--blue);
+}
+
+.progress-fill-emerald {
+  background: var(--emerald);
+}
+
+.progress-fill-teal {
+  background: var(--teal);
+}
+
+.progress-fill-gold {
+  background: var(--gold);
 }
 
 .status-banner {
@@ -561,8 +669,8 @@ body {
 }
 
 .badge-accent {
-  background: rgb(184 90 40 / 0.12);
-  color: var(--accent-deep);
+  background: var(--soft-lavender);
+  color: var(--purple-deep);
 }
 
 .badge-neutral {
@@ -571,8 +679,8 @@ body {
 }
 
 .badge-secondary {
-  background: var(--info-surface);
-  color: var(--accent-secondary);
+  background: var(--soft-blue);
+  color: var(--blue-deep);
 }
 
 .field {
@@ -626,6 +734,12 @@ select.field-control {
   color: var(--foreground-muted);
 }
 
+.field-control:focus {
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px rgb(112 72 232 / 0.16);
+  outline: none;
+}
+
 .field-control[aria-invalid="true"] {
   border-color: var(--danger);
   box-shadow: inset 3px 0 0 var(--danger);
@@ -651,7 +765,7 @@ select.field-control {
 }
 
 .choice input {
-  accent-color: var(--accent-secondary);
+  accent-color: var(--purple);
   height: 1.125rem;
   margin-top: 0.15rem;
   width: 1.125rem;
@@ -681,10 +795,10 @@ select.field-control {
 }
 
 .tooltip-bubble {
-  background: var(--ink);
+  background: var(--navy);
   border-radius: 0.5rem;
   bottom: calc(100% + 0.5rem);
-  color: var(--paper);
+  color: var(--on-primary);
   font-size: 0.8125rem;
   left: 50%;
   line-height: 1.4;

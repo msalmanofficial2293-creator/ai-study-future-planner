@@ -11,7 +11,10 @@ export function HeroSection() {
       <Container className="grid items-center gap-12 lg:grid-cols-[minmax(0,1.12fr)_minmax(18rem,0.88fr)] lg:gap-16">
         <div>
           <p className="eyebrow">AI Study Future Planner</p>
-          <div aria-hidden="true" className="mt-5 h-px w-16 bg-accent" />
+          <div
+            aria-hidden="true"
+            className="mt-5 h-1 w-16 rounded-full bg-gradient-to-r from-purple via-blue to-teal"
+          />
           <h1 id="hero-heading" className="display-heading mt-5 max-w-xl">
             Turn Your Career Goal Into a Personalized Study Journey
           </h1>
@@ -39,7 +42,7 @@ export function HeroSection() {
           </p>
         </div>
         <aside aria-labelledby="path-heading" className="min-w-0">
-          <Card variant="elevated">
+          <Card variant="elevated" className="border-purple/15 bg-gradient-to-b from-soft-lavender/50 to-elevated">
             <div>
               <p id="path-heading" className="principle-heading">
                 The learning journey

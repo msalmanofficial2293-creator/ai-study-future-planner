@@ -57,7 +57,7 @@ export function AppShell({ user, children }: AppShellProps) {
     <div className="app-shell min-h-[100dvh] bg-transparent">
       <div className="mx-auto flex min-h-[100dvh] w-full max-w-[90rem]">
         <aside
-          className="sticky top-0 hidden h-[100dvh] w-56 shrink-0 flex-col border-r border-border bg-elevated/90 backdrop-blur-sm lg:flex"
+          className="sticky top-0 hidden h-[100dvh] w-56 shrink-0 flex-col border-r border-border bg-elevated shadow-[var(--shadow-soft)] lg:flex"
           aria-label="Application"
         >
           <SidebarBrand />
@@ -66,7 +66,7 @@ export function AppShell({ user, children }: AppShellProps) {
         </aside>
 
         <div className="flex min-w-0 flex-1 flex-col">
-          <header className="sticky top-0 z-30 border-b border-border bg-paper/90 backdrop-blur-sm">
+          <header className="sticky top-0 z-30 border-b border-border bg-elevated/95 backdrop-blur-sm">
             <div className="flex h-14 items-center justify-between gap-3 px-4 sm:h-16 sm:px-6">
               <div className="flex min-w-0 items-center gap-2">
                 <button

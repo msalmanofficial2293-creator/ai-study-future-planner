@@ -104,14 +104,14 @@ function PlanSummary({ plan }: { plan: Extract<Awaited<ReturnType<typeof loadStu
           {plan.weekCompleted} of {plan.weekTotal} tasks
         </p>
         <div
-          className="mt-4 h-2 overflow-hidden rounded-full bg-border"
+          className="progress-track mt-4 h-2"
           role="progressbar"
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={percent}
           aria-label="Weekly task progress"
         >
-          <div className="h-full bg-accent" style={{ width: `${percent}%` }} />
+          <div className="progress-fill-teal h-full rounded-full" style={{ width: `${percent}%` }} />
         </div>
         <p className="caption mt-3">{percent}% of this week&apos;s tasks are complete.</p>
       </Card>

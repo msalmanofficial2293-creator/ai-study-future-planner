@@ -86,7 +86,7 @@ export function QuizPlayer({ quiz }: { quiz: QuizPlay }) {
         aria-valuenow={index + 1}
         aria-label="Quiz progress"
       >
-        <div className="h-full bg-accent" style={{ width: `${percent}%` }} />
+        <div className="progress-fill-purple h-full rounded-full" style={{ width: `${percent}%` }} />
       </div>
       <form action={action} onSubmit={onSubmit} className="mt-6" aria-busy={pending}>
         <input type="hidden" name="attemptId" value={quiz.attemptId} />
