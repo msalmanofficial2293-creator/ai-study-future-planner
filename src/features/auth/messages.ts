@@ -86,11 +86,11 @@ export const authMessages = {
   passwordMismatch: "Passwords do not match.",
   weakPassword: "Please choose a stronger password.",
   confirmEmail:
-    "Check your email to verify your account before signing in. Open the verification link we sent, then log in.",
+    "Please check your email and verify your account before signing in.",
   confirmEmailResent:
     "If an account exists for that email and still needs verification, a new verification link has been sent. Check your inbox and spam folder.",
   emailNotConfirmed:
-    "Confirm your email before logging in. Check your inbox for the verification link, or request a new one below.",
+    "Please check your email and verify your account before signing in. You can request a new verification link below.",
   callbackError:
     "That verification link is invalid or has expired. Request a new verification email, then try again.",
   callbackExpired:

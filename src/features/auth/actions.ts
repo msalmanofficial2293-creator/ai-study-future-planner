@@ -3,7 +3,11 @@
 import { redirect } from "next/navigation";
 import { env } from "@/config/env";
 import { allowAuthAttempt, allowVerificationResend } from "@/features/auth/allowance";
-import { isUserEmailVerified, normalizeAuthEmail } from "@/features/auth/email-status";
+import {
+  EMAIL_VERIFICATION_REQUIRED_KEY,
+  isUserEmailVerified,
+  normalizeAuthEmail,
+} from "@/features/auth/email-status";
 import { authMessages, mapAuthError, type AuthErrorInfo } from "@/features/auth/messages";
 import {
   readPassword,
@@ -32,7 +36,7 @@ function authErrorInfo(error: {
 }
 
 function logAuthDiagnostic(
-  action: "login" | "signup" | "resend-verification" | "logout",
+  action: "login" | "signup" | "resend-verification" | "logout" | "signup-config",
   error: AuthErrorInfo,
 ) {
   if (process.env.NODE_ENV === "production") {
@@ -44,6 +48,12 @@ function logAuthDiagnostic(
     code: error.code ?? null,
     status: error.status ?? null,
   });
+}
+
+function logConfirmEmailLikelyDisabled() {
+  console.error(
+    "[auth:signup-config] signUp returned an immediately confirmed session. Enable Authentication → Providers → Email → Confirm email in the Supabase Dashboard, and add /auth/callback to Redirect URLs.",
+  );
 }
 
 function emailRedirectTo(): string {
@@ -147,16 +157,17 @@ async function runSignup(
   email: string,
   password: string,
 ): Promise<AuthFormState> {
-  let outcome: "signed-in" | "confirm" | "registered" = "confirm";
-  let signedInUserId = "";
-
   try {
     const supabase = await createSupabaseServerClient();
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        data: { full_name: fullName },
+        data: {
+          full_name: fullName,
+          // Cleared only in /auth/callback after a successful verification exchange.
+          [EMAIL_VERIFICATION_REQUIRED_KEY]: true,
+        },
         emailRedirectTo: emailRedirectTo(),
       },
     });
@@ -171,35 +182,34 @@ async function runSignup(
 
     // Supabase returns a user with empty identities for an existing email (no overwrite).
     if (data.user && Array.isArray(identities) && identities.length === 0) {
-      outcome = "registered";
-    } else if (data.session && data.user && isUserEmailVerified(data.user)) {
-      // Confirm email is likely disabled in the project — session granted as verified.
-      outcome = "signed-in";
-      signedInUserId = data.user.id;
-    } else if (data.session && data.user && !isUserEmailVerified(data.user)) {
-      await supabase.auth.signOut();
-      outcome = "confirm";
-    } else {
-      outcome = "confirm";
+      if (data.session) {
+        await supabase.auth.signOut();
+      }
+
+      return { formError: authMessages.alreadyRegistered };
     }
-  } catch {
-    return { formError: authMessages.unexpected };
-  }
 
-  if (outcome === "registered") {
-    return { formError: authMessages.alreadyRegistered };
-  }
+    // Never open the authenticated app from signup. Clear any provisional session.
+    if (data.session) {
+      if (data.user?.email_confirmed_at) {
+        logConfirmEmailLikelyDisabled();
+        logAuthDiagnostic("signup-config", {
+          message: "immediate_confirmed_session",
+          code: "confirm_email_likely_disabled",
+        });
+      }
 
-  if (outcome === "confirm") {
+      await supabase.auth.signOut();
+    }
+
     return {
       message: authMessages.confirmEmail,
       pendingEmail: email,
       needsVerification: true,
     };
+  } catch {
+    return { formError: authMessages.unexpected };
   }
-
-  const supabase = await createSupabaseServerClient();
-  redirect(authDestination(await hasCompletedOnboarding(supabase, signedInUserId)));
 }
 
 export async function resendVerificationAction(

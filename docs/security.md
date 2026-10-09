@@ -81,18 +81,28 @@ Until that dashboard setting matches, Auth may still accept weaker passwords if 
 
 ### Email confirmation (required Dashboard setting)
 
-Application code expects Confirm email to be **enabled**. Without it, Supabase may mark new users verified immediately and grant a session.
+**Root cause when signup skips verification:** if **Confirm email** is disabled, `signUp` returns a session with `email_confirmed_at` already set. Older app code treated that as verified and redirected into `/app`.
+
+**Application enforcement now:**
+
+- Signup never redirects into the authenticated app. Any provisional session is signed out and the UI shows: “Please check your email and verify your account before signing in.”
+- New signups set Auth user metadata `email_verification_required: true`. Protected access requires both `email_confirmed_at` and that flag cleared to `false` by `/auth/callback` after a successful verification exchange.
+- Existing accounts without that metadata flag keep working.
+- Resend verification remains available with rate limiting.
+
+**You must still enable Confirm email in the Dashboard.** Without it, Supabase does not send a confirmation email, so new users stay blocked at `/verify-email` until the setting is fixed.
 
 **Manual Supabase Dashboard actions:**
 
 1. Open **Authentication** → **Providers** → **Email**.
-2. Enable **Confirm email**.
-3. Under **URL configuration**, set **Site URL** to the app origin (for local: `http://localhost:3000`; for production: your public `https` origin matching `NEXT_PUBLIC_APP_URL`).
-4. Add the same origin’s `/auth/callback` to **Redirect URLs**, e.g. `http://localhost:3000/auth/callback` and the production callback URL.
-5. Review the **Confirm signup** email template so the link uses the project’s confirmation URL (PKCE / token hash flow supported by `/auth/callback`).
-6. Save.
+2. Turn **Confirm email** **ON** (required).
+3. Open **Authentication** → **URL configuration**.
+4. Set **Site URL** to the app origin (`http://localhost:3000` locally; production must match `NEXT_PUBLIC_APP_URL`).
+5. Add Redirect URLs: `http://localhost:3000/auth/callback` and your production `{origin}/auth/callback`.
+6. Open **Authentication** → **Email templates** → **Confirm signup** and ensure the link uses the project confirmation URL (compatible with `/auth/callback`).
+7. Save.
 
-After signup, the UI asks the student to verify email and offers resend. Login before verification is rejected. Invalid or expired verification links redirect to login with a recovery message and resend option.
+After signup, login before verification is rejected. Invalid or expired verification links redirect to login with a recovery message and resend option.
 
 ### Sessions (access token vs refresh vs inactivity)
 
