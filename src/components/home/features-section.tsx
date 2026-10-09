@@ -20,7 +20,7 @@ function featureAccentClass(index: number): string {
 
 export function FeaturesSection() {
   return (
-    <Section id="features" labelledBy="features-heading" tone="raised">
+    <Section id="features" labelledBy="features-heading" tone="cool">
       <Container>
         <SectionHeading
           id="features-heading"

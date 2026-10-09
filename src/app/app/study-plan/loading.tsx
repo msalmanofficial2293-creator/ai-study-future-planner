@@ -3,7 +3,7 @@ import { LoadingState } from "@/components/ui/feedback";
 
 export default function StudyPlanLoading() {
   return (
-    <AppPage>
+    <AppPage scene="study">
       <LoadingState label="Loading your Study Plan" />
     </AppPage>
   );

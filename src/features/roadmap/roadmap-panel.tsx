@@ -34,7 +34,7 @@ export function RoadmapPanel({ roadmap, unavailable = false }: RoadmapPanelProps
 
   return (
     <section aria-labelledby="roadmap-heading" className="flex flex-col gap-5">
-      <Card variant="elevated">
+      <Card variant="elevated" className="border-blue/20 bg-gradient-to-br from-soft-blue to-elevated">
         <p className="eyebrow">Roadmap</p>
         <h2 id="roadmap-heading" className="section-heading mt-3">
           {roadmap.title}
@@ -60,7 +60,14 @@ export function RoadmapPanel({ roadmap, unavailable = false }: RoadmapPanelProps
       <ol className="grid gap-4">
         {roadmap.stages.map((stage, index) => (
           <li key={`${stage.title}-${index}`}>
-            <Card variant="raised">
+            <Card
+              variant="raised"
+              className={
+                index % 2 === 0
+                  ? "border-purple/15 bg-gradient-to-br from-soft-lavender/80 to-elevated"
+                  : "border-blue/15 bg-gradient-to-br from-soft-blue/80 to-elevated"
+              }
+            >
               <p className="caption">Stage {index + 1}</p>
               <h3 className="card-heading mt-2">{stage.title}</h3>
               <p className="caption mt-4">Skills</p>
@@ -71,8 +78,10 @@ export function RoadmapPanel({ roadmap, unavailable = false }: RoadmapPanelProps
                   </li>
                 ))}
               </ul>
-              <p className="caption mt-4">Milestone</p>
-              <p className="body mt-1">{stage.milestone}</p>
+              <div className="mt-4 rounded-xl border border-gold/25 bg-soft-gold px-3 py-3">
+                <p className="caption text-gold-deep">Milestone</p>
+                <p className="body mt-1">{stage.milestone}</p>
+              </div>
             </Card>
           </li>
         ))}

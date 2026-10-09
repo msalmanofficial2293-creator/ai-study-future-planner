@@ -28,7 +28,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
 
   if (loaded.status === "unavailable") {
     return (
-      <AppPage>
+      <AppPage scene="dashboard">
         <section className="card card-elevated max-w-xl" aria-labelledby="dashboard-error-heading">
           <p className="eyebrow">Dashboard</p>
           <h1 id="dashboard-error-heading" className="card-heading mt-2">
@@ -49,7 +49,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   }
 
   return (
-    <AppPage>
+    <AppPage scene="dashboard">
       <DashboardViewPanel dashboard={loaded.dashboard} signOutError={signOutError} />
     </AppPage>
   );

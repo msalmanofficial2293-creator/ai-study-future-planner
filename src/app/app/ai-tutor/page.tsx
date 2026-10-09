@@ -50,7 +50,7 @@ export default async function AiTutorPage({ searchParams }: TutorPageProps) {
 
   if (loaded.status === "unavailable") {
     return (
-      <AppPage>
+      <AppPage scene="tutor">
         <ErrorState
           title="The tutor is unavailable"
           description="Your tutor could not be loaded. Please try again in a moment."
@@ -64,7 +64,7 @@ export default async function AiTutorPage({ searchParams }: TutorPageProps) {
   const notice = params.notice ? NOTICES[params.notice] : undefined;
 
   return (
-    <AppPage>
+    <AppPage scene="tutor">
       <PageHeader
         eyebrow="AI Tutor"
         title="Your personal study assistant"

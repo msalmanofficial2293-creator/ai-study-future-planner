@@ -53,7 +53,7 @@ export default async function QuizPage({ searchParams }: QuizPageProps) {
   }
 
   return (
-    <AppPage>
+    <AppPage scene="quiz">
       <PageHeader
         eyebrow="AI Quiz"
         title="Practice what you studied"
@@ -154,7 +154,7 @@ function Score({ label, value }: { label: string; value: string }) {
 
 function QuizError({ title, message, retry = false }: { title: string; message: string; retry?: boolean }) {
   return (
-    <AppPage>
+    <AppPage scene="quiz">
       <PageHeader title={title} />
       <p className="field-error" role="alert">
         Error: {message}

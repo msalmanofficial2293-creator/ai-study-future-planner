@@ -7,7 +7,7 @@ import { SectionHeading } from "@/components/ui/section-heading";
 
 export function JourneySection() {
   return (
-    <Section id="journey" labelledBy="journey-heading" tone="raised">
+    <Section id="journey" labelledBy="journey-heading" tone="lavender">
       <Container>
         <SectionHeading
           id="journey-heading"

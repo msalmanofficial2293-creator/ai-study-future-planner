@@ -5,7 +5,7 @@ import { Section } from "@/components/ui/section";
 
 export function FinalCtaSection() {
   return (
-    <Section id="start" labelledBy="start-heading" tone="plain">
+    <Section id="start" labelledBy="start-heading" tone="lavender">
       <Container>
         <Card variant="elevated" className="card-band border-purple/20 bg-gradient-to-br from-elevated via-soft-lavender/40 to-soft-blue/50">
           <p className="eyebrow">Next step</p>

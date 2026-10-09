@@ -46,7 +46,7 @@ export default async function PersonalizationPage({ searchParams }: Personalizat
 
   if (loaded.status === "unavailable") {
     return (
-      <AppPage>
+      <AppPage scene="personalization">
         <PageHeader title="Personalized Learning Overview" />
         <p className="field-error" role="alert">
           Error: Something went wrong. Please try again.
@@ -62,7 +62,7 @@ export default async function PersonalizationPage({ searchParams }: Personalizat
   const error = typeof params.error === "string" ? ERRORS[params.error] : undefined;
 
   return (
-    <AppPage>
+    <AppPage scene="personalization">
       <PageHeader
         eyebrow="AI Personalization"
         title="Personalized Learning Overview"

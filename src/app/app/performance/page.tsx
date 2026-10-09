@@ -26,7 +26,7 @@ export default async function PerformancePage() {
 
   if (loaded.status === "unavailable") {
     return (
-      <AppPage>
+      <AppPage scene="performance">
         <PageHeader title="Performance" />
         <p className="field-error" role="alert">
           Error: Something went wrong. Please try again.
@@ -39,7 +39,7 @@ export default async function PerformancePage() {
   }
 
   return (
-    <AppPage>
+    <AppPage scene="performance">
       <PageHeader
         eyebrow="Performance"
         title="Progress from your saved work"

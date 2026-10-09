@@ -153,7 +153,7 @@ function CurrentGoalCard({ dashboard }: { dashboard: DashboardView }) {
   }
 
   return (
-    <section className="card card-elevated" aria-labelledby="current-goal-heading">
+    <section className="card surface-goal-premium" aria-labelledby="current-goal-heading">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-stretch lg:justify-between">
         <div className="min-w-0 flex-1">
           <p className="eyebrow">Current goal</p>

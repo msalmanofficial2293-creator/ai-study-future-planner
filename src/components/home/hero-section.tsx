@@ -7,7 +7,7 @@ import { Section } from "@/components/ui/section";
 
 export function HeroSection() {
   return (
-    <Section labelledBy="hero-heading">
+    <Section labelledBy="hero-heading" tone="plain" className="page-scene-landing-hero">
       <Container className="grid items-center gap-12 lg:grid-cols-[minmax(0,1.12fr)_minmax(18rem,0.88fr)] lg:gap-16">
         <div>
           <p className="eyebrow">AI Study Future Planner</p>
@@ -42,7 +42,7 @@ export function HeroSection() {
           </p>
         </div>
         <aside aria-labelledby="path-heading" className="min-w-0">
-          <Card variant="elevated" className="border-purple/15 bg-gradient-to-b from-soft-lavender/50 to-elevated">
+          <Card variant="elevated" className="surface-hero-card">
             <div>
               <p id="path-heading" className="principle-heading">
                 The learning journey
@@ -52,15 +52,15 @@ export function HeroSection() {
                 review.
               </p>
             </div>
-            <ol className="max-h-[28rem] overflow-y-auto border-l border-border pr-1">
+            <ol className="max-h-[28rem] overflow-y-auto border-l border-white/20 pr-1">
               {heroPath.map((step, index) => (
                 <li key={step.title} className="relative py-2 pl-5">
                   <span
                     aria-hidden="true"
                     className={
                       index === 0
-                        ? "absolute top-4 -left-1.5 size-2.5 rounded-full bg-accent"
-                        : "absolute top-5 -left-1 size-2 rounded-full bg-accent-secondary"
+                        ? "absolute top-4 -left-1.5 size-2.5 rounded-full bg-purple"
+                        : "absolute top-5 -left-1 size-2 rounded-full bg-blue"
                     }
                   />
                   <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">

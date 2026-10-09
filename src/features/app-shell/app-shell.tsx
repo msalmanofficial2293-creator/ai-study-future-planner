@@ -57,7 +57,7 @@ export function AppShell({ user, children }: AppShellProps) {
     <div className="app-shell min-h-[100dvh] bg-transparent">
       <div className="mx-auto flex min-h-[100dvh] w-full max-w-[90rem]">
         <aside
-          className="sticky top-0 hidden h-[100dvh] w-56 shrink-0 flex-col border-r border-border bg-elevated shadow-[var(--shadow-soft)] lg:flex"
+          className="app-sidebar sticky top-0 hidden h-[100dvh] w-56 shrink-0 flex-col border-r lg:flex"
           aria-label="Application"
         >
           <SidebarBrand />
@@ -65,8 +65,8 @@ export function AppShell({ user, children }: AppShellProps) {
           <SidebarFooter pathname={pathname} />
         </aside>
 
-        <div className="flex min-w-0 flex-1 flex-col">
-          <header className="sticky top-0 z-30 border-b border-border bg-elevated/95 backdrop-blur-sm">
+        <div className="flex min-w-0 flex-1 flex-col bg-cool-gray">
+          <header className="sticky top-0 z-30 border-b border-border bg-elevated/90 backdrop-blur-md">
             <div className="flex h-14 items-center justify-between gap-3 px-4 sm:h-16 sm:px-6">
               <div className="flex min-w-0 items-center gap-2">
                 <button
@@ -105,22 +105,22 @@ export function AppShell({ user, children }: AppShellProps) {
         <div className="fixed inset-0 z-40 lg:hidden">
           <button
             type="button"
-            className="absolute inset-0 bg-ink/40"
+            className="absolute inset-0 bg-navy/50"
             aria-label="Close navigation overlay"
             onClick={() => setMobileOpen(false)}
           />
           <div
             id={drawerId}
-            className="absolute inset-y-0 left-0 flex w-[min(20rem,88vw)] flex-col border-r border-border bg-elevated shadow-[var(--shadow-soft)]"
+            className="app-sidebar absolute inset-y-0 left-0 flex w-[min(20rem,88vw)] flex-col border-r shadow-[var(--shadow-soft)]"
             role="dialog"
             aria-modal="true"
             aria-label="Application navigation"
           >
-            <div className="flex items-center justify-between border-b border-border px-4 py-3">
+            <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
               <SidebarBrand compact />
               <button
                 type="button"
-                className="icon-button"
+                className="icon-button border-white/20 bg-white/10 text-white hover:bg-white/15"
                 aria-label="Close navigation"
                 onClick={() => setMobileOpen(false)}
               >
@@ -138,9 +138,11 @@ export function AppShell({ user, children }: AppShellProps) {
 
 function SidebarBrand({ compact = false }: { compact?: boolean }) {
   return (
-    <div className={cn("border-b border-border px-3", compact ? "py-0" : "py-4")}>
+    <div className={cn("border-b border-white/10 px-3", compact ? "py-0" : "py-4")}>
       <Link href="/app" className="flex items-center gap-2.5 rounded-xl">
-        <Mark className="size-8 shrink-0" />
+        <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-white/10 ring-1 ring-white/15">
+          <Mark className="size-8" />
+        </span>
         <span className="min-w-0">
           <span className="nav-brand block truncate text-sm leading-tight">{siteConfig.name}</span>
           {!compact ? <span className="caption">Learning workspace</span> : null}
@@ -189,7 +191,7 @@ function SidebarFooter({
   onNavigate?: () => void;
 }) {
   return (
-    <div className="mt-auto border-t border-border px-2.5 py-3">
+    <div className="mt-auto border-t border-white/10 px-2.5 py-3">
       <ul className="flex flex-col gap-0.5">
         {utilityAppNav.map((item) => {
           const active = isNavItemActive(pathname, item);

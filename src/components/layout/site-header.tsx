@@ -11,7 +11,7 @@ export async function SiteHeader() {
   const isAuthenticated = Boolean(user);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background">
+    <header className="sticky top-0 z-40 border-b border-border bg-elevated/95 backdrop-blur-md">
       <Container className="relative flex h-16 items-center justify-between gap-3">
         <Link
           href="/"

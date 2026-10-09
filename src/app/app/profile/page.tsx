@@ -33,7 +33,7 @@ export default async function ProfilePage() {
   }
 
   return (
-    <AppPage dense>
+    <AppPage dense scene="profile">
       <PageHeader
         eyebrow="Account"
         title="Profile"

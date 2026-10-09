@@ -28,41 +28,40 @@ export default async function OnboardingPage() {
   }
 
   return (
-    <Container className="flex flex-1 items-center py-12 sm:py-16">
-      <Card variant="elevated" className="mx-auto w-full max-w-3xl">
-        <Link
-          href="/"
-          className="inline-flex min-w-0 items-center gap-3 rounded-full"
-          aria-label={`${siteConfig.name}, home`}
-        >
-          <Mark className="size-9 shrink-0" />
-          <span className="nav-brand">{siteConfig.name}</span>
-        </Link>
-        <p className="eyebrow mt-6">Onboarding</p>
-        <h1 className="page-heading mt-3">Start with your goal</h1>
-        <p className="body-secondary mt-3">
-          Tell us where you are studying from and the future you want to reach. This
-          becomes your first Goal.
-        </p>
-        <div className="mt-8">
-          {loaded.status === "unavailable" ? (
-            <div className="flex flex-col items-start gap-4">
-              <p className="field-error" role="alert">
-                Error: Something went wrong. Please try again.
-              </p>
-              <Link
-                href="/onboarding"
-                className="text-link"
-              >
-                Try again
-              </Link>
-            </div>
-          ) : (
-            <OnboardingForm draft={loaded.draft} />
-          )}
-        </div>
-      </Card>
-    </Container>
+    <div className="page-scene-auth flex min-h-full flex-1">
+      <Container className="flex flex-1 items-center py-12 sm:py-16">
+        <Card variant="elevated" className="mx-auto w-full max-w-3xl shadow-[var(--shadow-soft)]">
+          <Link
+            href="/"
+            className="inline-flex min-w-0 items-center gap-3 rounded-full"
+            aria-label={`${siteConfig.name}, home`}
+          >
+            <Mark className="size-9 shrink-0" />
+            <span className="nav-brand">{siteConfig.name}</span>
+          </Link>
+          <p className="eyebrow mt-6">Onboarding</p>
+          <h1 className="page-heading mt-3">Start with your goal</h1>
+          <p className="body-secondary mt-3">
+            Tell us where you are studying from and the future you want to reach. This
+            becomes your first Goal.
+          </p>
+          <div className="mt-8">
+            {loaded.status === "unavailable" ? (
+              <div className="flex flex-col items-start gap-4">
+                <p className="field-error" role="alert">
+                  Error: Something went wrong. Please try again.
+                </p>
+                <Link href="/onboarding" className="text-link">
+                  Try again
+                </Link>
+              </div>
+            ) : (
+              <OnboardingForm draft={loaded.draft} />
+            )}
+          </div>
+        </Card>
+      </Container>
+    </div>
   );
 }
 

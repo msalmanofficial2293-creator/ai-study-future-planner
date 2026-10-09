@@ -42,7 +42,7 @@ export default async function AdaptivePlanPage({ searchParams }: AdaptivePagePro
 
   if (loaded.status === "unavailable") {
     return (
-      <AppPage>
+      <AppPage scene="adaptive">
         <PageHeader title="Adaptive Study Plan" />
         <p className="field-error" role="alert">
           Error: Something went wrong. Please try again.
@@ -58,7 +58,7 @@ export default async function AdaptivePlanPage({ searchParams }: AdaptivePagePro
   const error = typeof params.error === "string" ? ERRORS[params.error] : undefined;
 
   return (
-    <AppPage>
+    <AppPage scene="adaptive">
       <PageHeader
         eyebrow="Adaptive Study Plan"
         title="Adjust later work from saved results"

@@ -2,7 +2,7 @@ import { AppPage } from "@/components/ui/app-page";
 
 export default function SettingsLoading() {
   return (
-    <AppPage>
+    <AppPage scene="settings">
       <div aria-busy="true" aria-live="polite">
         <div className="page-header space-y-3">
           <div className="h-3 w-20 animate-pulse rounded-full bg-line" />

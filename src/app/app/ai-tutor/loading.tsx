@@ -3,7 +3,7 @@ import { LoadingState } from "@/components/ui/feedback";
 
 export default function AiTutorLoading() {
   return (
-    <AppPage>
+    <AppPage scene="tutor">
       <LoadingState label="Loading your tutor" />
     </AppPage>
   );

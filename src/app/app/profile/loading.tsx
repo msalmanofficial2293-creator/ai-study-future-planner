@@ -3,7 +3,7 @@ import { LoadingState } from "@/components/ui/feedback";
 
 export default function ProfileLoading() {
   return (
-    <AppPage>
+    <AppPage scene="profile">
       <LoadingState label="Loading your profile" />
     </AppPage>
   );

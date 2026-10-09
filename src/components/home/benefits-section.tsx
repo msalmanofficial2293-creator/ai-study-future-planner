@@ -5,7 +5,7 @@ import { SectionHeading } from "@/components/ui/section-heading";
 
 export function BenefitsSection() {
   return (
-    <Section id="benefits" labelledBy="benefits-heading">
+    <Section id="benefits" labelledBy="benefits-heading" tone="peach">
       <Container>
         <SectionHeading
           id="benefits-heading"

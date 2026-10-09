@@ -6,7 +6,7 @@ import { SectionHeading } from "@/components/ui/section-heading";
 
 export function WhySection() {
   return (
-    <Section id="why" labelledBy="why-heading" tone="plain">
+    <Section id="why" labelledBy="why-heading" tone="mint">
       <Container>
         <SectionHeading
           id="why-heading"

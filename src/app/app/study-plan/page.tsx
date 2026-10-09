@@ -28,7 +28,7 @@ export default async function StudyPlanPage() {
 
   if (loaded.status === "unavailable") {
     return (
-      <AppPage>
+      <AppPage scene="study">
         <PageHeader title="Study Plan" />
         <p className="field-error" role="alert">
           Error: Something went wrong. Please try again.
@@ -41,7 +41,7 @@ export default async function StudyPlanPage() {
   }
 
   return (
-    <AppPage>
+    <AppPage scene="study">
       <PageHeader
         eyebrow="Study Plan"
         title="Your study plan"

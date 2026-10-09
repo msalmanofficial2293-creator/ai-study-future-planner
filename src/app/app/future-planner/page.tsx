@@ -29,7 +29,7 @@ export default async function FuturePlannerPage() {
 
   if (loaded.status === "unavailable") {
     return (
-      <AppPage>
+      <AppPage scene="planner">
         <PageHeader title="Future Planner" />
         <p className="field-error" role="alert">
           Error: Something went wrong. Please try again.
@@ -49,7 +49,7 @@ export default async function FuturePlannerPage() {
   }
 
   return (
-    <AppPage>
+    <AppPage scene="planner">
       <PageHeader
         eyebrow="Future Planner"
         title="Your goal"

@@ -3,7 +3,7 @@ import { LoadingState } from "@/components/ui/feedback";
 
 export default function DailyTasksLoading() {
   return (
-    <AppPage>
+    <AppPage scene="tasks">
       <LoadingState label="Loading your Daily Tasks" />
     </AppPage>
   );

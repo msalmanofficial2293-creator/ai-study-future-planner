@@ -27,7 +27,7 @@ export default async function DailyTasksPage() {
 
   if (loaded.status === "unavailable") {
     return (
-      <AppPage>
+      <AppPage scene="tasks">
         <PageHeader title="Daily Tasks" />
         <p className="field-error" role="alert">
           Error: Something went wrong. Please try again.
@@ -40,7 +40,7 @@ export default async function DailyTasksPage() {
   }
 
   return (
-    <AppPage>
+    <AppPage scene="tasks">
       <PageHeader
         eyebrow="Daily Tasks"
         title="Today's work"

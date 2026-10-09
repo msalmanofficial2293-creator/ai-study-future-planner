@@ -3,7 +3,7 @@ import { LoadingState } from "@/components/ui/feedback";
 
 export default function PersonalizationLoading() {
   return (
-    <AppPage>
+    <AppPage scene="personalization">
       <LoadingState label="Loading personalization" />
     </AppPage>
   );

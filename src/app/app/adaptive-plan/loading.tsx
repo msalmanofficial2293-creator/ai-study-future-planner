@@ -3,7 +3,7 @@ import { LoadingState } from "@/components/ui/feedback";
 
 export default function AdaptivePlanLoading() {
   return (
-    <AppPage>
+    <AppPage scene="adaptive">
       <LoadingState label="Loading your Adaptive Study Plan" />
     </AppPage>
   );

@@ -5,7 +5,7 @@ import { SectionHeading } from "@/components/ui/section-heading";
 
 export function FaqSection() {
   return (
-    <Section id="faq" labelledBy="faq-heading" tone="raised">
+    <Section id="faq" labelledBy="faq-heading" tone="sky">
       <Container>
         <div className="max-w-3xl">
           <SectionHeading

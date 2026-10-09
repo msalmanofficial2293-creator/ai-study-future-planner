@@ -34,7 +34,7 @@ export default async function SettingsPage() {
   }
 
   return (
-    <AppPage>
+    <AppPage scene="settings">
       <PageHeader
         eyebrow="Account"
         title="Settings"
