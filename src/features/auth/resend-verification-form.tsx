@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useRef, useState, type FormEvent } from "react";
 import { resendVerificationAction } from "@/features/auth/actions";
 import type { AuthFormState } from "@/features/auth/validation";
 import { Button } from "@/components/ui/button";
@@ -18,7 +18,28 @@ export function ResendVerificationForm({
   compact = false,
 }: ResendVerificationFormProps) {
   const [state, formAction, pending] = useActionState(resendVerificationAction, initialState);
+  const submitLock = useRef(false);
   const [email, setEmail] = useState(initialEmail);
+
+  useEffect(() => {
+    if (!pending) {
+      submitLock.current = false;
+    }
+  }, [pending]);
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    if (submitLock.current || pending) {
+      event.preventDefault();
+      return;
+    }
+
+    if (!email.trim()) {
+      event.preventDefault();
+      return;
+    }
+
+    submitLock.current = true;
+  }
 
   return (
     <form
@@ -26,6 +47,7 @@ export function ResendVerificationForm({
       className={compact ? "mt-4 flex flex-col gap-3" : "flex flex-col gap-4"}
       aria-busy={pending}
       noValidate
+      onSubmit={handleSubmit}
     >
       <p className="caption">
         Did not get the email? Enter the same address and resend the verification link.

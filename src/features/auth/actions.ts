@@ -8,7 +8,14 @@ import {
   isUserEmailVerified,
   normalizeAuthEmail,
 } from "@/features/auth/email-status";
-import { authMessages, mapAuthError, type AuthErrorInfo } from "@/features/auth/messages";
+import {
+  authErrorOffersResend,
+  authMessages,
+  classifyAuthError,
+  mapAuthError,
+  sanitizeAuthDiagnosticMessage,
+  type AuthErrorInfo,
+} from "@/features/auth/messages";
 import {
   readPassword,
   readText,
@@ -39,14 +46,15 @@ function logAuthDiagnostic(
   action: "login" | "signup" | "resend-verification" | "logout" | "signup-config",
   error: AuthErrorInfo,
 ) {
-  if (process.env.NODE_ENV === "production") {
-    console.error(`[auth:${action}] ${error.code ?? "none"}`);
-    return;
-  }
+  const kind = classifyAuthError(error);
+  const safeMessage = sanitizeAuthDiagnosticMessage(error.message);
 
+  // Safe fields only: never log passwords, tokens, or raw redirect URLs with secrets.
   console.error(`[auth:${action}]`, {
     code: error.code ?? null,
+    kind,
     status: error.status ?? null,
+    message: safeMessage,
   });
 }
 
@@ -83,13 +91,19 @@ export async function loginAction(
     if (error) {
       const info = authErrorInfo(error);
       logAuthDiagnostic("login", info);
+      const errorKind = classifyAuthError(info);
       const mapped = mapAuthError(info);
 
-      if (mapped === authMessages.emailNotConfirmed) {
-        return { formError: mapped, pendingEmail: email, needsVerification: true };
+      if (errorKind === "email-not-confirmed") {
+        return {
+          formError: mapped,
+          errorKind,
+          pendingEmail: email,
+          needsVerification: true,
+        };
       }
 
-      return { formError: mapped };
+      return { formError: mapped, errorKind };
     }
 
     if (!data.user) {
@@ -100,6 +114,7 @@ export async function loginAction(
       await supabase.auth.signOut();
       return {
         formError: authMessages.emailNotConfirmed,
+        errorKind: "email-not-confirmed",
         pendingEmail: email,
         needsVerification: true,
       };
@@ -175,7 +190,13 @@ async function runSignup(
     if (error) {
       const info = authErrorInfo(error);
       logAuthDiagnostic("signup", info);
-      return { formError: mapAuthError(info) };
+      const errorKind = classifyAuthError(info);
+      return {
+        formError: mapAuthError(info),
+        errorKind,
+        pendingEmail: email,
+        needsVerification: authErrorOffersResend(errorKind),
+      };
     }
 
     const identities = data.user?.identities;
@@ -186,7 +207,11 @@ async function runSignup(
         await supabase.auth.signOut();
       }
 
-      return { formError: authMessages.alreadyRegistered };
+      return {
+        formError: authMessages.alreadyRegistered,
+        errorKind: "already-registered",
+        pendingEmail: email,
+      };
     }
 
     // Never open the authenticated app from signup. Clear any provisional session.
@@ -263,17 +288,26 @@ async function runResendVerification(email: string): Promise<AuthFormState> {
     if (error) {
       const info = authErrorInfo(error);
       logAuthDiagnostic("resend-verification", info);
+      const errorKind = classifyAuthError(info);
 
-      // Avoid confirming whether the email exists when Auth returns a generic failure.
-      if (
-        info.code === "over_email_send_rate_limit" ||
-        info.message.toLowerCase().includes("rate limit")
-      ) {
-        return { formError: mapAuthError(info) };
+      // Surface delivery/rate-limit failures honestly — do not claim an email was sent.
+      if (authErrorOffersResend(errorKind) || errorKind === "request-rate-limit") {
+        return {
+          formError: mapAuthError(info),
+          errorKind,
+          pendingEmail: email,
+          needsVerification: true,
+        };
       }
+
+      // Generic Auth failures: avoid confirming whether the address exists.
+      return {
+        message: authMessages.confirmEmailResent,
+        pendingEmail: email,
+        needsVerification: true,
+      };
     }
 
-    // Same success copy whether or not the address needs verification (safe enumeration posture).
     return {
       message: authMessages.confirmEmailResent,
       pendingEmail: email,

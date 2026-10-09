@@ -1,4 +1,4 @@
-import { authMessages } from "@/features/auth/messages";
+import { authMessages, type AuthErrorKind } from "@/features/auth/messages";
 import { firstUnmetPasswordMessage } from "@/features/auth/password-policy";
 
 export { PASSWORD_MIN_LENGTH } from "@/features/auth/password-policy";
@@ -20,6 +20,8 @@ export type AuthFormState = {
   /** Prefill only — never log this as a secret. */
   pendingEmail?: string;
   needsVerification?: boolean;
+  /** Classified Auth failure for recovery UI (never includes secrets). */
+  errorKind?: AuthErrorKind;
 };
 
 export function readText(formData: FormData, name: string): string {

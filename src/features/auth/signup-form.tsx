@@ -2,6 +2,7 @@
 
 import { useActionState, useEffect, useRef, useState, type FormEvent } from "react";
 import { signupAction } from "@/features/auth/actions";
+import { authErrorOffersResend } from "@/features/auth/messages";
 import { PasswordRequirements } from "@/features/auth/password-requirements";
 import { isPasswordPolicyMet } from "@/features/auth/password-policy";
 import { ResendVerificationForm } from "@/features/auth/resend-verification-form";
@@ -44,9 +45,13 @@ export function SignupForm() {
 
   const passwordError = clientErrors?.password ?? state.fieldErrors?.password;
   const confirmError = clientErrors?.confirmPassword ?? state.fieldErrors?.confirmPassword;
+  const showResend =
+    Boolean(state.needsVerification) ||
+    Boolean(state.message) ||
+    authErrorOffersResend(state.errorKind);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    if (submitLock.current) {
+    if (submitLock.current || pending) {
       event.preventDefault();
       return;
     }
@@ -56,7 +61,6 @@ export function SignupForm() {
     if (Object.keys(fieldErrors).length > 0) {
       event.preventDefault();
       setClientErrors(fieldErrors);
-      submitLock.current = false;
       return;
     }
 
@@ -82,9 +86,9 @@ export function SignupForm() {
           {state.message}
         </p>
       ) : null}
-      {state.needsVerification || state.message ? (
+      {showResend ? (
         <ResendVerificationForm
-          key={state.pendingEmail ?? email}
+          key={`${state.pendingEmail ?? email}-${state.errorKind ?? "ok"}`}
           initialEmail={state.pendingEmail ?? email}
           compact
         />
