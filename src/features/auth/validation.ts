@@ -1,6 +1,7 @@
 import { authMessages } from "@/features/auth/messages";
+import { firstUnmetPasswordMessage } from "@/features/auth/password-policy";
 
-export const PASSWORD_MIN_LENGTH = 8;
+export { PASSWORD_MIN_LENGTH } from "@/features/auth/password-policy";
 export const FULL_NAME_MAX_LENGTH = 80;
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -45,11 +46,8 @@ export function validatePassword(password: string): string | undefined {
     return "Password is required.";
   }
 
-  if (password.length < PASSWORD_MIN_LENGTH) {
-    return authMessages.weakPassword;
-  }
-
-  return undefined;
+  // Do not echo the password value in the returned message.
+  return firstUnmetPasswordMessage(password);
 }
 
 export function validateFullName(fullName: string): string | undefined {
