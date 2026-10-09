@@ -2,6 +2,7 @@ import { howItWorks } from "@/config/home-content";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { SectionHeading } from "@/components/ui/section-heading";
+import { cn } from "@/lib/cn";
 
 export function HowItWorksSection() {
   return (
@@ -15,7 +16,15 @@ export function HowItWorksSection() {
         />
         <ol className="mt-12 grid gap-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-5">
           {howItWorks.map((step, index) => (
-            <li key={step.title} className="card card-quiet">
+            <li
+              key={step.title}
+              className={cn(
+                "card",
+                index % 2 === 0
+                  ? "card-elevated border-blue/20"
+                  : "card-raised border-purple/15 bg-elevated",
+              )}
+            >
               <p className="index-label">
                 <span className="sr-only">Step </span>
                 {String(index + 1).padStart(2, "0")}

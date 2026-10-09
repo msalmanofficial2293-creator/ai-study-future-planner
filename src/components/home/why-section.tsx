@@ -6,7 +6,7 @@ import { SectionHeading } from "@/components/ui/section-heading";
 
 export function WhySection() {
   return (
-    <Section id="why" labelledBy="why-heading" tone="mint">
+    <Section id="why" labelledBy="why-heading" tone="navy" className="section-on-dark">
       <Container>
         <SectionHeading
           id="why-heading"
@@ -17,8 +17,8 @@ export function WhySection() {
         <ul className="mt-12 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
           {reasons.map((reason, index) => (
             <li key={reason.title}>
-              <Divider />
-              <p className="index-label mt-4">
+              <Divider className="border-white/20" />
+              <p className="index-label mt-4 text-[#a78bfa]">
                 <span className="sr-only">Point </span>
                 {String(index + 1).padStart(2, "0")}
               </p>

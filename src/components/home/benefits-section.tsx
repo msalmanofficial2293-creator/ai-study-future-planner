@@ -5,7 +5,7 @@ import { SectionHeading } from "@/components/ui/section-heading";
 
 export function BenefitsSection() {
   return (
-    <Section id="benefits" labelledBy="benefits-heading" tone="peach">
+    <Section id="benefits" labelledBy="benefits-heading" tone="mint">
       <Container>
         <SectionHeading
           id="benefits-heading"
@@ -13,13 +13,13 @@ export function BenefitsSection() {
           title="What a clear path helps you do."
           description="These outcomes describe how the current product is meant to support study. They are not claims about measured results from other users."
         />
-        <ol className="mt-12 divide-y divide-border border-y border-border">
+        <ol className="mt-12 divide-y divide-border/80 overflow-hidden rounded-2xl border border-emerald/20 bg-elevated shadow-[var(--shadow-soft)]">
           {benefits.map((benefit, index) => (
             <li
               key={benefit.title}
-              className="grid gap-2 py-6 sm:grid-cols-[5.5rem_minmax(0,1fr)] sm:gap-8 sm:py-7"
+              className="grid gap-2 px-5 py-6 sm:grid-cols-[5.5rem_minmax(0,1fr)] sm:gap-8 sm:px-7 sm:py-7"
             >
-              <p className="index-label">
+              <p className="index-label text-emerald">
                 <span className="sr-only">Benefit </span>
                 {String(index + 1).padStart(2, "0")}
               </p>

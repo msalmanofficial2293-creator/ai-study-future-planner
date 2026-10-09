@@ -4,20 +4,32 @@ import { cn } from "@/lib/cn";
 type SectionProps = {
   id?: string;
   labelledBy?: string;
-  tone?: "default" | "raised" | "plain" | "lavender" | "sky" | "mint" | "peach" | "cool";
+  tone?:
+    | "default"
+    | "raised"
+    | "plain"
+    | "lavender"
+    | "sky"
+    | "mint"
+    | "peach"
+    | "cool"
+    | "navy"
+    | "cta";
   className?: string;
   children: ReactNode;
 };
 
 const tones = {
-  default: "border-b border-border bg-cool-gray",
+  default: "border-b border-border bg-[#F5F6FC]",
   raised: "border-b border-border bg-elevated",
   plain: "",
   lavender: "border-b border-border bg-soft-lavender",
   sky: "border-b border-border bg-soft-blue",
   mint: "border-b border-border bg-soft-mint",
   peach: "border-b border-border bg-soft-peach",
-  cool: "border-b border-border bg-cool-gray",
+  cool: "border-b border-border bg-[#F5F6FC]",
+  navy: "border-b border-white/10 bg-navy text-white",
+  cta: "border-b border-transparent bg-gradient-to-br from-[#24185f] via-purple to-blue text-white",
 } as const;
 
 export function Section({

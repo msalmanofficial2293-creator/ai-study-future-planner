@@ -5,7 +5,7 @@ import { footerNav, siteConfig } from "@/config/site";
 
 export function SiteFooter() {
   return (
-    <footer className="mt-auto border-t border-border">
+    <footer className="section-on-dark mt-auto border-t border-white/10 bg-navy">
       <Container className="grid gap-10 py-12 sm:py-16 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
         <div className="max-w-md">
           <Link
@@ -47,7 +47,7 @@ export function SiteFooter() {
             </ul>
           </nav>
         </div>
-        <div className="flex flex-col gap-3 border-t border-border pt-6 sm:flex-row sm:items-end sm:justify-between lg:col-span-2">
+        <div className="flex flex-col gap-3 border-t border-white/15 pt-6 sm:flex-row sm:items-end sm:justify-between lg:col-span-2">
           <p className="caption max-w-md">
             Study data stays on the signed-in student account. Privacy and terms
             will be published before a public production launch.

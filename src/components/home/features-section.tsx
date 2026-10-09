@@ -6,12 +6,12 @@ import { Section } from "@/components/ui/section";
 import { SectionHeading } from "@/components/ui/section-heading";
 
 const FEATURE_ACCENTS = [
-  "border-purple/25 bg-gradient-to-br from-soft-lavender/70 to-elevated",
-  "border-blue/25 bg-gradient-to-br from-soft-blue/70 to-elevated",
-  "border-teal/25 bg-gradient-to-br from-soft-mint/50 to-elevated",
-  "border-gold/30 bg-gradient-to-br from-soft-gold/70 to-elevated",
-  "border-coral/25 bg-gradient-to-br from-soft-peach/70 to-elevated",
-  "border-purple/20 bg-gradient-to-br from-elevated to-soft-blue/40",
+  "border-l-4 border-l-purple border-border",
+  "border-l-4 border-l-blue border-border",
+  "border-l-4 border-l-teal border-border",
+  "border-l-4 border-l-emerald border-border",
+  "border-l-4 border-l-gold border-border",
+  "border-l-4 border-l-coral border-border",
 ] as const;
 
 function featureAccentClass(index: number): string {

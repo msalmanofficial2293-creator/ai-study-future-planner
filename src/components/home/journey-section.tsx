@@ -7,7 +7,7 @@ import { SectionHeading } from "@/components/ui/section-heading";
 
 export function JourneySection() {
   return (
-    <Section id="journey" labelledBy="journey-heading" tone="lavender">
+    <Section id="journey" labelledBy="journey-heading" tone="raised">
       <Container>
         <SectionHeading
           id="journey-heading"
@@ -18,7 +18,7 @@ export function JourneySection() {
         <ol className="relative mx-auto mt-12 max-w-3xl">
           <span
             aria-hidden="true"
-            className="absolute top-4 bottom-4 left-[7px] w-px bg-border"
+            className="absolute top-4 bottom-4 left-[7px] w-px bg-gradient-to-b from-purple via-blue to-emerald"
           />
           {journeySteps.map((step, index) => (
             <li key={step.title} className="relative pb-4 pl-8 last:pb-0 sm:pl-10">
@@ -26,11 +26,13 @@ export function JourneySection() {
                 aria-hidden="true"
                 className={
                   index === 0
-                    ? "absolute top-5 left-0 size-4 rounded-full border-2 border-background bg-accent"
-                    : "absolute top-5 left-0.5 size-3 rounded-full border-2 border-background bg-accent-secondary"
+                    ? "absolute top-5 left-0 size-4 rounded-full border-2 border-elevated bg-purple"
+                    : index % 3 === 1
+                      ? "absolute top-5 left-0.5 size-3 rounded-full border-2 border-elevated bg-blue"
+                      : "absolute top-5 left-0.5 size-3 rounded-full border-2 border-elevated bg-emerald"
                 }
               />
-              <Card variant={index % 2 === 0 ? "elevated" : "quiet"}>
+              <Card variant="elevated" className="border-border shadow-[var(--shadow-soft)]">
                 <div className="flex flex-wrap items-center gap-3">
                   <Badge tone={index === 0 ? "accent" : "secondary"}>
                     <span className="sr-only">Stage </span>

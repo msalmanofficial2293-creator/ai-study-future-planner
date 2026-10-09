@@ -4,7 +4,7 @@ import { SectionHeading } from "@/components/ui/section-heading";
 
 export function ValueSection() {
   return (
-    <Section id="product" labelledBy="product-heading" tone="lavender">
+    <Section id="product" labelledBy="product-heading" tone="raised">
       <Container>
         <div className="max-w-3xl">
           <SectionHeading
