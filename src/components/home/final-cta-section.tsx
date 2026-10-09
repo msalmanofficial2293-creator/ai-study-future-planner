@@ -4,9 +4,9 @@ import { Section } from "@/components/ui/section";
 
 export function FinalCtaSection() {
   return (
-    <Section id="start" labelledBy="start-heading" tone="cta" className="section-on-dark">
+    <Section id="start" labelledBy="start-heading" tone="cta">
       <Container>
-        <div className="mx-auto flex max-w-3xl flex-col items-start text-left sm:items-center sm:text-center">
+        <div className="mx-auto flex max-w-3xl flex-col items-start rounded-2xl border border-white/15 bg-white/[0.06] p-6 text-left shadow-[var(--shadow-soft)] sm:items-center sm:p-10 sm:text-center">
           <p className="eyebrow">Next step</p>
           <h2 id="start-heading" className="section-heading mt-3 max-w-xl">
             Ready to turn your goal into a real study plan?

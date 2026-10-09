@@ -3,9 +3,11 @@ import { Mark } from "@/components/brand/mark";
 import { Container } from "@/components/ui/container";
 import { footerNav, siteConfig } from "@/config/site";
 
+const LINK_ACCENTS = ["hover:text-[#c4b5fd]", "hover:text-[#93c5fd]", "hover:text-[#5eead4]"] as const;
+
 export function SiteFooter() {
   return (
-    <footer className="section-on-dark mt-auto border-t border-white/10 bg-navy">
+    <footer className="section-on-dark section-scene-footer mt-auto border-t border-white/10">
       <Container className="grid gap-10 py-12 sm:py-16 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
         <div className="max-w-md">
           <Link
@@ -20,14 +22,23 @@ export function SiteFooter() {
             A personalized learning platform that turns a career goal into
             roadmap, study plan, daily work, practice, progress, and guidance.
           </p>
+          <div className="mt-5 flex gap-2" aria-hidden="true">
+            <span className="size-2 rounded-full bg-purple" />
+            <span className="size-2 rounded-full bg-blue" />
+            <span className="size-2 rounded-full bg-teal" />
+            <span className="size-2 rounded-full bg-emerald" />
+          </div>
         </div>
         <div className="grid gap-8 sm:grid-cols-2">
           <nav aria-label="Product">
-            <p className="field-label">Product</p>
+            <p className="field-label text-[#c4b5fd]">Product</p>
             <ul className="mt-3 flex flex-col">
-              {footerNav.product.map((item) => (
+              {footerNav.product.map((item, index) => (
                 <li key={item.href}>
-                  <Link href={item.href} className="nav-link nav-link-flush">
+                  <Link
+                    href={item.href}
+                    className={`nav-link nav-link-flush ${LINK_ACCENTS[index % LINK_ACCENTS.length]}`}
+                  >
                     {item.label}
                   </Link>
                 </li>
@@ -35,11 +46,14 @@ export function SiteFooter() {
             </ul>
           </nav>
           <nav aria-label="Resources">
-            <p className="field-label">Resources</p>
+            <p className="field-label text-[#93c5fd]">Resources</p>
             <ul className="mt-3 flex flex-col">
-              {footerNav.resources.map((item) => (
+              {footerNav.resources.map((item, index) => (
                 <li key={item.href}>
-                  <Link href={item.href} className="nav-link nav-link-flush">
+                  <Link
+                    href={item.href}
+                    className={`nav-link nav-link-flush ${LINK_ACCENTS[(index + 1) % LINK_ACCENTS.length]}`}
+                  >
                     {item.label}
                   </Link>
                 </li>

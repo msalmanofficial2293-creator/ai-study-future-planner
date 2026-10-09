@@ -13,23 +13,26 @@ type SectionProps = {
     | "mint"
     | "peach"
     | "cool"
+    | "journey"
     | "navy"
     | "cta";
   className?: string;
   children: ReactNode;
 };
 
+/** Each tone maps to a multi-color layered scene (see globals.css). */
 const tones = {
-  default: "border-b border-border bg-[#F5F6FC]",
-  raised: "border-b border-border bg-elevated",
+  default: "border-b border-border section-scene-neutral",
+  raised: "border-b border-border section-scene-product",
   plain: "",
-  lavender: "border-b border-border bg-soft-lavender",
-  sky: "border-b border-border bg-soft-blue",
-  mint: "border-b border-border bg-soft-mint",
-  peach: "border-b border-border bg-soft-peach",
-  cool: "border-b border-border bg-[#F5F6FC]",
-  navy: "border-b border-white/10 bg-navy text-white",
-  cta: "border-b border-transparent bg-gradient-to-br from-[#24185f] via-purple to-blue text-white",
+  lavender: "border-b border-border section-scene-faq",
+  sky: "border-b border-border section-scene-how",
+  mint: "border-b border-border section-scene-path",
+  peach: "border-b border-border section-scene-peach",
+  cool: "border-b border-border section-scene-features",
+  journey: "border-b border-border section-scene-journey",
+  navy: "border-b border-white/10 section-scene-benefits section-on-dark",
+  cta: "border-b border-transparent section-scene-cta section-on-dark",
 } as const;
 
 export function Section({

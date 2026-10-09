@@ -414,82 +414,180 @@ body {
 
 .page-scene-dashboard {
   background:
-    radial-gradient(920px 420px at 100% -5%, rgb(112 72 232 / 0.16), transparent 55%),
-    radial-gradient(720px 380px at -8% 18%, rgb(52 120 246 / 0.14), transparent 52%),
-    linear-gradient(165deg, var(--soft-lavender) 0%, var(--soft-blue) 48%, var(--cool-gray) 100%);
+    radial-gradient(920px 420px at 100% -5%, rgb(112 72 232 / 0.22), transparent 55%),
+    radial-gradient(720px 380px at -8% 18%, rgb(52 120 246 / 0.18), transparent 52%),
+    radial-gradient(560px 280px at 55% 100%, rgb(13 148 136 / 0.1), transparent 50%),
+    linear-gradient(165deg, var(--soft-lavender) 0%, var(--soft-blue) 42%, var(--cool-gray) 100%);
 }
 
 .page-scene-planner {
   background:
-    radial-gradient(780px 360px at 100% 0%, rgb(112 72 232 / 0.14), transparent 55%),
-    linear-gradient(180deg, var(--soft-lavender) 0%, #f6f3ff 55%, var(--cool-gray) 100%);
+    radial-gradient(780px 360px at 100% 0%, rgb(112 72 232 / 0.2), transparent 55%),
+    radial-gradient(520px 280px at 0% 80%, rgb(52 120 246 / 0.12), transparent 50%),
+    linear-gradient(180deg, var(--soft-lavender) 0%, #eef2ff 48%, var(--cool-gray) 100%);
 }
 
 .page-scene-study {
   background:
-    radial-gradient(700px 340px at 0% 0%, rgb(13 148 136 / 0.12), transparent 55%),
-    linear-gradient(165deg, var(--soft-mint) 0%, #eaf8f6 50%, var(--cool-gray) 100%);
+    radial-gradient(700px 340px at 0% 0%, rgb(13 148 136 / 0.16), transparent 55%),
+    radial-gradient(640px 300px at 100% 20%, rgb(52 120 246 / 0.1), transparent 50%),
+    linear-gradient(165deg, var(--soft-mint) 0%, #eaf8f6 42%, var(--soft-blue) 100%);
 }
 
 .page-scene-tasks {
   background:
-    radial-gradient(680px 300px at 100% 10%, rgb(7 150 105 / 0.1), transparent 55%),
-    linear-gradient(165deg, var(--soft-mint) 0%, #eefaf4 45%, var(--cool-gray) 100%);
+    radial-gradient(680px 300px at 100% 10%, rgb(7 150 105 / 0.14), transparent 55%),
+    radial-gradient(520px 260px at 0% 90%, rgb(112 72 232 / 0.08), transparent 50%),
+    linear-gradient(165deg, var(--soft-mint) 0%, #eefaf4 40%, var(--soft-lavender) 100%);
 }
 
 .page-scene-quiz {
   background:
-    radial-gradient(760px 360px at 0% 0%, rgb(112 72 232 / 0.12), transparent 50%),
-    linear-gradient(165deg, var(--soft-lavender) 0%, var(--soft-blue) 55%, var(--cool-gray) 100%);
+    radial-gradient(760px 360px at 0% 0%, rgb(112 72 232 / 0.18), transparent 50%),
+    radial-gradient(600px 300px at 100% 30%, rgb(52 120 246 / 0.12), transparent 50%),
+    linear-gradient(165deg, var(--soft-lavender) 0%, var(--soft-blue) 48%, var(--cool-gray) 100%);
 }
 
 .page-scene-performance {
   background:
-    radial-gradient(820px 380px at 100% 0%, rgb(52 120 246 / 0.14), transparent 55%),
-    linear-gradient(165deg, var(--soft-blue) 0%, #eef4ff 50%, var(--cool-gray) 100%);
+    radial-gradient(820px 380px at 100% 0%, rgb(52 120 246 / 0.18), transparent 55%),
+    radial-gradient(560px 280px at 0% 70%, rgb(7 150 105 / 0.1), transparent 50%),
+    linear-gradient(165deg, var(--soft-blue) 0%, #eef4ff 42%, var(--soft-mint) 100%);
 }
 
 .page-scene-adaptive {
   background:
-    radial-gradient(700px 320px at 0% 20%, rgb(112 72 232 / 0.12), transparent 50%),
-    linear-gradient(165deg, var(--soft-lavender) 0%, #f5f2ff 50%, var(--cool-gray) 100%);
+    radial-gradient(700px 320px at 0% 20%, rgb(112 72 232 / 0.16), transparent 50%),
+    radial-gradient(580px 280px at 100% 80%, rgb(13 148 136 / 0.1), transparent 50%),
+    linear-gradient(165deg, var(--soft-lavender) 0%, #f0edff 45%, var(--soft-mint) 100%);
 }
 
 .page-scene-tutor {
   background:
-    radial-gradient(880px 400px at 90% -10%, rgb(112 72 232 / 0.16), transparent 55%),
-    radial-gradient(640px 320px at 0% 40%, rgb(52 120 246 / 0.1), transparent 50%),
-    linear-gradient(165deg, var(--soft-lavender) 0%, var(--soft-blue) 60%, var(--cool-gray) 100%);
+    radial-gradient(880px 400px at 90% -10%, rgb(112 72 232 / 0.2), transparent 55%),
+    radial-gradient(640px 320px at 0% 40%, rgb(52 120 246 / 0.14), transparent 50%),
+    radial-gradient(480px 240px at 50% 100%, rgb(13 148 136 / 0.08), transparent 50%),
+    linear-gradient(165deg, var(--soft-lavender) 0%, var(--soft-blue) 55%, var(--cool-gray) 100%);
 }
 
 .page-scene-personalization {
   background:
+    radial-gradient(640px 300px at 0% 0%, rgb(112 72 232 / 0.14), transparent 50%),
+    radial-gradient(560px 280px at 100% 100%, rgb(7 150 105 / 0.12), transparent 50%),
     linear-gradient(135deg, var(--soft-lavender) 0%, var(--soft-mint) 55%, var(--cool-gray) 100%);
 }
 
 .page-scene-profile {
   background:
-    radial-gradient(700px 340px at 100% 0%, rgb(52 120 246 / 0.12), transparent 55%),
-    linear-gradient(165deg, var(--soft-blue) 0%, var(--soft-lavender) 50%, var(--cool-gray) 100%);
+    radial-gradient(700px 340px at 100% 0%, rgb(52 120 246 / 0.16), transparent 55%),
+    radial-gradient(520px 260px at 0% 80%, rgb(112 72 232 / 0.1), transparent 50%),
+    linear-gradient(165deg, var(--soft-blue) 0%, var(--soft-lavender) 48%, var(--cool-gray) 100%);
 }
 
 .page-scene-settings {
   background:
-    linear-gradient(180deg, var(--cool-gray) 0%, var(--soft-lavender) 42%, var(--cool-gray) 100%);
+    radial-gradient(640px 300px at 100% 0%, rgb(112 72 232 / 0.12), transparent 55%),
+    radial-gradient(520px 260px at 0% 100%, rgb(52 120 246 / 0.1), transparent 50%),
+    linear-gradient(180deg, var(--cool-gray) 0%, var(--soft-lavender) 42%, var(--soft-blue) 100%);
 }
 
 .page-scene-auth {
   background:
     radial-gradient(900px 480px at 15% 10%, rgb(112 72 232 / 0.45), transparent 55%),
     radial-gradient(760px 420px at 90% 80%, rgb(52 120 246 / 0.35), transparent 50%),
+    radial-gradient(480px 280px at 50% 50%, rgb(13 148 136 / 0.18), transparent 55%),
     linear-gradient(145deg, var(--navy) 0%, #24185f 46%, #2f5fd4 100%);
 }
 
 .page-scene-landing-hero {
   background:
-    radial-gradient(900px 480px at 85% 15%, rgb(112 72 232 / 0.45), transparent 55%),
-    radial-gradient(700px 400px at 10% 80%, rgb(52 120 246 / 0.32), transparent 50%),
+    radial-gradient(900px 480px at 85% 15%, rgb(112 72 232 / 0.5), transparent 55%),
+    radial-gradient(700px 400px at 10% 80%, rgb(52 120 246 / 0.36), transparent 50%),
+    radial-gradient(520px 280px at 70% 90%, rgb(13 148 136 / 0.22), transparent 55%),
     linear-gradient(145deg, #0b1428 0%, #101b35 28%, #2a1870 68%, #3b2a9a 100%);
+}
+
+/* Landing section scenes — multiple complementary colors per section */
+.section-scene-neutral {
+  background:
+    radial-gradient(640px 280px at 0% 0%, rgb(52 120 246 / 0.08), transparent 55%),
+    radial-gradient(560px 240px at 100% 100%, rgb(112 72 232 / 0.06), transparent 50%),
+    linear-gradient(180deg, var(--cool-gray) 0%, #eef1fa 100%);
+}
+
+.section-scene-product {
+  background:
+    radial-gradient(720px 320px at 100% 0%, rgb(52 120 246 / 0.12), transparent 55%),
+    radial-gradient(600px 280px at 0% 100%, rgb(112 72 232 / 0.1), transparent 50%),
+    linear-gradient(165deg, #ffffff 0%, var(--soft-blue) 48%, var(--soft-lavender) 100%);
+}
+
+.section-scene-how {
+  background:
+    radial-gradient(680px 300px at 0% 20%, rgb(52 120 246 / 0.14), transparent 55%),
+    radial-gradient(640px 280px at 100% 80%, rgb(112 72 232 / 0.12), transparent 50%),
+    linear-gradient(165deg, var(--soft-blue) 0%, var(--soft-lavender) 55%, #eef2ff 100%);
+}
+
+.section-scene-features {
+  background:
+    radial-gradient(700px 300px at 10% 0%, rgb(112 72 232 / 0.1), transparent 50%),
+    radial-gradient(640px 280px at 90% 30%, rgb(52 120 246 / 0.1), transparent 50%),
+    radial-gradient(520px 240px at 50% 100%, rgb(13 148 136 / 0.08), transparent 50%),
+    linear-gradient(180deg, var(--cool-gray) 0%, #eef3fb 50%, var(--soft-mint) 100%);
+}
+
+.section-scene-benefits {
+  background:
+    radial-gradient(880px 420px at 90% 10%, rgb(112 72 232 / 0.4), transparent 55%),
+    radial-gradient(640px 320px at 0% 90%, rgb(52 120 246 / 0.28), transparent 50%),
+    radial-gradient(480px 240px at 50% 50%, rgb(13 148 136 / 0.12), transparent 55%),
+    linear-gradient(145deg, #0b1428 0%, #101b35 40%, #24185f 100%);
+  color: var(--on-primary);
+}
+
+.section-scene-journey {
+  background:
+    radial-gradient(640px 280px at 0% 0%, rgb(112 72 232 / 0.1), transparent 50%),
+    radial-gradient(600px 260px at 100% 100%, rgb(52 120 246 / 0.1), transparent 50%),
+    linear-gradient(180deg, #ffffff 0%, var(--soft-lavender) 45%, var(--soft-blue) 100%);
+}
+
+.section-scene-path {
+  background:
+    radial-gradient(680px 300px at 0% 30%, rgb(7 150 105 / 0.14), transparent 55%),
+    radial-gradient(600px 280px at 100% 70%, rgb(52 120 246 / 0.12), transparent 50%),
+    linear-gradient(165deg, var(--soft-mint) 0%, #e8f7f4 42%, var(--soft-blue) 100%);
+}
+
+.section-scene-faq {
+  background:
+    radial-gradient(640px 280px at 100% 0%, rgb(112 72 232 / 0.12), transparent 55%),
+    radial-gradient(520px 240px at 0% 100%, rgb(240 120 104 / 0.06), transparent 50%),
+    linear-gradient(180deg, var(--soft-lavender) 0%, #f4f1ff 50%, var(--cool-gray) 100%);
+}
+
+.section-scene-peach {
+  background:
+    radial-gradient(560px 240px at 0% 0%, rgb(240 120 104 / 0.1), transparent 50%),
+    radial-gradient(520px 220px at 100% 100%, rgb(112 72 232 / 0.08), transparent 50%),
+    linear-gradient(165deg, var(--soft-peach) 0%, var(--soft-lavender) 100%);
+}
+
+.section-scene-cta {
+  background:
+    radial-gradient(720px 360px at 85% 20%, rgb(13 148 136 / 0.28), transparent 55%),
+    radial-gradient(640px 320px at 10% 80%, rgb(52 120 246 / 0.35), transparent 50%),
+    linear-gradient(135deg, #24185f 0%, var(--purple) 48%, var(--blue) 100%);
+  color: var(--on-primary);
+}
+
+.section-scene-footer {
+  background:
+    radial-gradient(640px 280px at 90% 0%, rgb(112 72 232 / 0.22), transparent 55%),
+    radial-gradient(520px 240px at 0% 100%, rgb(52 120 246 / 0.16), transparent 50%),
+    linear-gradient(180deg, #0b1428 0%, var(--navy) 100%);
+  color: var(--on-primary);
 }
 
 .page-scene-landing-hero .hero-copy .display-heading {

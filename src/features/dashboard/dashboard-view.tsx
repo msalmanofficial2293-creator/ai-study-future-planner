@@ -211,9 +211,10 @@ function CurrentGoalCard({ dashboard }: { dashboard: DashboardView }) {
 
 function MetricCard({ metric }: { metric: DashboardMetric }) {
   const well = metricWellClass(metric.id);
+  const surface = metricSurfaceClass(metric.id);
 
   return (
-    <article className="card card-elevated">
+    <article className={cn("card card-elevated", surface)}>
       <div className="flex items-start justify-between gap-3">
         <p className="caption">{metric.label}</p>
         <span className={cn("icon-well", well)} aria-hidden="true">
@@ -245,6 +246,20 @@ function metricWellClass(id: DashboardMetric["id"]): string {
   }
 }
 
+function metricSurfaceClass(id: DashboardMetric["id"]): string {
+  switch (id) {
+    case "overall":
+      return "border-purple/20 bg-gradient-to-br from-elevated to-soft-lavender/80";
+    case "tasks":
+      return "border-emerald/20 bg-gradient-to-br from-elevated to-soft-mint/80";
+    case "quiz":
+    case "quizzes-count":
+      return "border-blue/20 bg-gradient-to-br from-elevated to-soft-blue/80";
+    default:
+      return "border-teal/20 bg-gradient-to-br from-elevated to-[rgb(13_148_136/0.08)]";
+  }
+}
+
 function MetricIcon({ id }: { id: DashboardMetric["id"] }) {
   switch (id) {
     case "overall":
@@ -267,7 +282,10 @@ function TodaysLearningCard({ dashboard }: { dashboard: DashboardView }) {
       : 0;
 
   return (
-    <section className="card card-raised" aria-labelledby="todays-learning-heading">
+    <section
+      className="card card-raised border-emerald/20 bg-gradient-to-br from-elevated to-soft-mint/60"
+      aria-labelledby="todays-learning-heading"
+    >
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
           <h2 id="todays-learning-heading" className="card-heading">
@@ -330,7 +348,10 @@ function TodaysLearningCard({ dashboard }: { dashboard: DashboardView }) {
 
 function ContinueLearningCard({ dashboard }: { dashboard: DashboardView }) {
   return (
-    <section className="card card-raised" aria-labelledby="continue-learning-heading">
+    <section
+      className="card card-raised border-purple/20 bg-gradient-to-br from-elevated to-soft-lavender/70"
+      aria-labelledby="continue-learning-heading"
+    >
       <h2 id="continue-learning-heading" className="card-heading">
         Continue Learning
       </h2>
@@ -375,7 +396,10 @@ function PerformancePreviewCard({ dashboard }: { dashboard: DashboardView }) {
     dashboard.quizTrend.length > 0;
 
   return (
-    <section className="card card-raised" aria-labelledby="performance-preview-heading">
+    <section
+      className="card card-raised border-blue/20 bg-gradient-to-br from-elevated to-soft-blue/70"
+      aria-labelledby="performance-preview-heading"
+    >
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <h2 id="performance-preview-heading" className="card-heading">
           Performance snapshot
@@ -469,7 +493,10 @@ function RecommendationCard({ dashboard }: { dashboard: DashboardView }) {
   const hasRecommendation = Boolean(dashboard.recommendation);
 
   return (
-    <section className="card card-elevated" aria-labelledby="recommended-heading">
+    <section
+      className="card card-elevated border-teal/20 bg-gradient-to-br from-elevated to-[rgb(13_148_136/0.08)]"
+      aria-labelledby="recommended-heading"
+    >
       <div className="flex items-start gap-3">
         <span className="icon-well icon-well-teal mt-0.5 size-10" aria-hidden="true">
           <IconSpark className="size-4" />

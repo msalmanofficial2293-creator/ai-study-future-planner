@@ -3,10 +3,17 @@ import { Container } from "@/components/ui/container";
 import { Divider } from "@/components/ui/divider";
 import { Section } from "@/components/ui/section";
 import { SectionHeading } from "@/components/ui/section-heading";
+import { cn } from "@/lib/cn";
+
+const REASON_ACCENTS = [
+  "text-[#c4b5fd]",
+  "text-[#93c5fd]",
+  "text-[#5eead4]",
+] as const;
 
 export function WhySection() {
   return (
-    <Section id="why" labelledBy="why-heading" tone="navy" className="section-on-dark">
+    <Section id="why" labelledBy="why-heading" tone="navy">
       <Container>
         <SectionHeading
           id="why-heading"
@@ -16,9 +23,17 @@ export function WhySection() {
         />
         <ul className="mt-12 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
           {reasons.map((reason, index) => (
-            <li key={reason.title}>
+            <li
+              key={reason.title}
+              className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 sm:p-6"
+            >
               <Divider className="border-white/20" />
-              <p className="index-label mt-4 text-[#a78bfa]">
+              <p
+                className={cn(
+                  "index-label mt-4",
+                  REASON_ACCENTS[index % REASON_ACCENTS.length],
+                )}
+              >
                 <span className="sr-only">Point </span>
                 {String(index + 1).padStart(2, "0")}
               </p>

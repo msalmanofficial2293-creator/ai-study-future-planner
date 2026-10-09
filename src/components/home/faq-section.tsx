@@ -5,7 +5,7 @@ import { SectionHeading } from "@/components/ui/section-heading";
 
 export function FaqSection() {
   return (
-    <Section id="faq" labelledBy="faq-heading" tone="cool">
+    <Section id="faq" labelledBy="faq-heading" tone="lavender">
       <Container>
         <div className="max-w-3xl">
           <SectionHeading
@@ -14,11 +14,26 @@ export function FaqSection() {
             title="Common questions about the product."
             description="Short answers about what the planner does today, how AI features work in development mode, and how your account data is handled."
           />
-          <div className="mt-10 overflow-hidden rounded-2xl border border-border bg-elevated shadow-[var(--shadow-soft)]">
-            {faqs.map((item) => (
-              <details key={item.question} className="faq-item group border-b border-border last:border-b-0">
+          <div className="mt-10 overflow-hidden rounded-2xl border border-purple/15 bg-elevated shadow-[var(--shadow-soft)]">
+            {faqs.map((item, index) => (
+              <details
+                key={item.question}
+                className="faq-item group border-b border-border last:border-b-0"
+              >
                 <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-4 px-5 py-4 sm:px-6">
-                  <h3 className="card-heading">{item.question}</h3>
+                  <div className="flex min-w-0 items-start gap-3">
+                    <span
+                      className={
+                        index % 3 === 0
+                          ? "mt-1.5 size-2 shrink-0 rounded-full bg-purple"
+                          : index % 3 === 1
+                            ? "mt-1.5 size-2 shrink-0 rounded-full bg-blue"
+                            : "mt-1.5 size-2 shrink-0 rounded-full bg-teal"
+                      }
+                      aria-hidden="true"
+                    />
+                    <h3 className="card-heading">{item.question}</h3>
+                  </div>
                   <span className="caption shrink-0 text-purple-deep group-open:hidden" aria-hidden="true">
                     Show
                   </span>
@@ -29,7 +44,9 @@ export function FaqSection() {
                     Hide
                   </span>
                 </summary>
-                <p className="body-secondary max-w-2xl px-5 pb-5 sm:px-6">{item.answer}</p>
+                <p className="body-secondary max-w-2xl px-5 pb-5 pl-10 sm:px-6 sm:pl-11">
+                  {item.answer}
+                </p>
               </details>
             ))}
           </div>
